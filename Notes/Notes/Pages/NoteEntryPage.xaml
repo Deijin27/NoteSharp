@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Notes.Pages.NoteEntryPage"
+             Title="Note Entry">
+
+    <ContentPage.Resources>
+        <!-- Implicit styles -->
+        
+        
+        <!--
+        <Style TargetType="Button"
+               ApplyToDerivedTypes="True"
+               CanCascade="True">
+            <Setter Property="FontSize" Value="Medium" />
+            <Setter Property="BackgroundColor" Value="#1976D2" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="CornerRadius" Value="5" />
+        </Style>
+        -->
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Clicked="OnSaveButtonClicked" Order="Primary">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                                 Glyph="{StaticResource IconGlyph_Floppy}"
+                                 Size="24"
+                                 Color="{DynamicResource ToolbarIconColor}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Text="MarkdownView" Clicked="MarkdownView_Clicked" Order="Primary">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                                 Glyph="{StaticResource IconGlyph_Eye}"
+                                 Size="24"
+                                 Color="{DynamicResource ToolbarIconColor}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Text="Delete" Clicked="OnDeleteButtonClicked" Order="Secondary"/>
+        <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
+        <ToolbarItem Text="HtmlPreview" Clicked="HtmlPreview_Clicked" Order="Secondary" />
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+    <ScrollView>
+            <StackLayout>
+        <Editor Placeholder="Enter you   "
+                Text="{Binding Text}"
+                VerticalOptions="FillAndExpand"
+                FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
+                Margin="10, 10, 10, 10">
+        </Editor>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+    <!--
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Text="Save" Clicked="OnSaveButtonClicked" />
+
+            <Button Grid.Column="1" Text="Delete" Clicked="OnDeleteButtonClicked" />
+
+        </Grid>
+        -->
+    
+</ContentPage>

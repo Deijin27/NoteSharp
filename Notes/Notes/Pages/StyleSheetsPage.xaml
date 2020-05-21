@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Notes.Pages"
+             x:Class="Notes.Pages.StyleSheetsPage"
+             Title=" Cascading Style Sheets">
+
+    <ContentPage.Resources>
+        <!-- Implicit Styles -->
+        <!--<Style TargetType="{x:Type ListView}">
+            <Setter Property="BackgroundColor" Value="{DynamicResource AppSecondaryBackgroundColor}" />
+        </Style>-->
+
+        <ResourceDictionary>
+            <DataTemplate x:Key="cssTemplate">
+                <ViewCell>
+                    <Grid Margin="10,10,10,10">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0"
+                               Text="{StaticResource IconGlyph_CSS}"
+                               FontSize="24"
+                               TextColor="{DynamicResource FileListIconColor}"
+                               HorizontalOptions="Center"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               VerticalOptions="Center">
+                        </Label>
+                        <Label Grid.Column="1"
+                               Text="{Binding Name}" 
+                               TextColor="{DynamicResource PrimaryContentTextColor}"
+                               FontSize="Small"
+                               WidthRequest="24"
+                               VerticalOptions="Center"
+                               MaxLines="1"
+                               Margin="10, 0, 0, 0"/>
+                        <!--<Label Grid.Column="1"
+                                   Grid.Row="1"
+                                   Text="{Binding ContentNote.DateModified, StringFormat='Mod:{0:MM/dd/yy H:mm:ss}'}"
+                                   TextColor="{DynamicResource SecondaryContentTextColor}"
+                                   FontSize="Micro"
+                                   VerticalOptions="End"/>-->
+                        <!--<Label Grid.Column="1"
+                               Grid.Row="2"
+                               Text="{Binding DateAccessed, StringFormat='Acc:{0:MM/dd/yy H:mm:ss}'}"
+                               TextColor="#999999"
+                               FontSize="Micro"
+                               VerticalOptions="End"/>-->
+                        <!--<Label Grid.Column="1"
+                                   Grid.Row="2"
+                                   Text="{Binding ContentNote.DateCreated, StringFormat='Cre:{0:MM/dd/yy H:mm:ss}'}"
+                                   TextColor="#999999"
+                                   FontSize="Micro"
+                                   VerticalOptions="End"/>-->
+
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add File" Clicked="OnCSSAddedClicked" Order="Primary" >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                                 Glyph="{StaticResource IconGlyph_Plus}"
+                                 Size="24"
+                                 Color="{DynamicResource ToolbarIconColor}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
+    </ContentPage.ToolbarItems>
+
+    <ListView x:Name="listView" 
+              ItemTemplate="{StaticResource cssTemplate}" 
+              ItemSelected="OnListViewItemSelected"
+              HasUnevenRows="True"
+              SeparatorVisibility="None"
+              BackgroundColor="{DynamicResource AppBackgroundColor}"
+              Margin="0,0,0,0">
+        <ListView.Header>
+            <Label HeightRequest="250" BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}"/>
+        </ListView.Header>
+    </ListView>
+
+
+</ContentPage>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Notes.Themes.DarkTheme">
+
+    <Color x:Key="AppBackgroundColor">#181818</Color>
+    <Color x:Key="AppSecondaryBackgroundColor">#121212</Color>
+    <Color x:Key="NavigationBarColor">#212121</Color>
+    <Color x:Key="NavigationBarTextColor">#E0E0E0</Color>
+    <Color x:Key="PrimaryContentTextColor">#E0E0E0</Color>
+    <Color x:Key="SecondaryContentTextColor">#A0A0A0</Color>
+    <Color x:Key="MasterDetailIconColor">#007ACC</Color>
+    <Color x:Key="FolderListIconColor">#686868</Color>
+    <Color x:Key="FileListIconColor">#48AEF0</Color>
+    <Color x:Key="ToolbarIconColor">#FFFFFF</Color>
+    <Color x:Key="SliderMinTrackColor">#FFFFFF</Color>
+    <Color x:Key="SliderMaxTrackColor">#FFFFFF</Color>
+    <Color x:Key="SliderThumbColor">#FFFFFF</Color>
+
+</ResourceDictionary>

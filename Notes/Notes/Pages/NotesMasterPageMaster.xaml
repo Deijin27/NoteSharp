@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Notes.Pages.NotesMasterPageMaster"
+             Title="Master"
+             BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}">
+
+    <ContentPage.Resources>
+        <!-- Implicit Styles -->
+        <!--<Style TargetType="{x:Type ListView}">
+            <Setter Property="BackgroundColor" Value="{DynamicResource AppSecondaryBackgroundColor}" />
+        </Style>-->
+
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Spacing="0">
+            <StackLayout BackgroundColor="{DynamicResource NavigationBarColor}"
+                         Padding="10,10,10,10"
+                         Margin="0,0,0,0"
+                         Spacing="0">
+                <Label HeightRequest="100"/>
+                <Label Text="Notes App"
+                       TextColor="{DynamicResource NavigationBarTextColor}"
+                       FontSize="Title"
+                       FontAttributes="Bold"
+                       FontFamily="{StaticResource FontFamily_ProductSans}"
+                       Margin="0,0,0,0">
+                </Label>
+                <Label Text="{StaticResource VersionNumber}"
+                       TextColor="{DynamicResource NavigationBarTextColor}"
+                       FontSize="Small"
+                       Margin="0,0,0,0"/>
+            </StackLayout>
+            <ListView x:Name="menu"
+                      x:FieldModifier="public"
+                      HasUnevenRows="True"
+                      SeparatorVisibility="None"
+                      BackgroundColor="{DynamicResource AppBackgroundColor}"
+                      Margin="0,0,0,0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="10,10,10,10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Column="0"
+                                       Text="{Binding Icon}"
+                                       FontSize="24"
+                                       TextColor="{DynamicResource MasterDetailIconColor}"
+                                       HorizontalOptions="Center"
+                                       FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                                       Margin="0, 0, 10, 0">
+                                </Label>
+                                <Label Grid.Column="1"
+                                       Text="{Binding Text}"
+                                       TextColor="{DynamicResource PrimaryContentTextColor}"
+                                       FontSize="Small"
+                                       VerticalOptions="Center"
+                                       MaxLines="1"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <!--<ListView.Header>
+                    
+                </ListView.Header>-->
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,70 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\TemplatesPage.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Pages\TemplatesPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amporis.Xamarin.Forms.ColorPicker" Version="1.0.23" />
+    <PackageReference Include="Markdig" Version="0.20.0" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.726" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Pages\MardownViewPage.xaml.cs">
+      <DependentUpon>MardownViewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\HtmlPreviewPage.xaml.cs">
+      <DependentUpon>HtmlPreviewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\StyleSheetEntryPage.xaml.cs">
+      <DependentUpon>StyleSheetEntryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\StyleSheetsPage.xaml.cs">
+      <DependentUpon>StyleSheetsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Themes\DarkTheme.xaml.cs">
+      <DependentUpon>DarkTheme.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Themes\LightTheme.xaml.cs">
+      <DependentUpon>LightTheme.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Pages\NoteEntryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\NotesMasterPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\NotesMasterPageMaster.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\NotesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\SettingsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\LightTheme.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
