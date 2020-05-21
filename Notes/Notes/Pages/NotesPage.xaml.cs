@@ -141,10 +141,10 @@ namespace Notes.Pages
                     case "Name":
                         sortingMode = SortingMode.Name;
                         break;
-                    case "DateCreated":
+                    case "Date Created":
                         sortingMode = SortingMode.DateCreated;
                         break;
-                    case "DateModified":
+                    case "Date Modified":
                         sortingMode = SortingMode.DateModified;
                         break;
                     default:

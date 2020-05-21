@@ -39,34 +39,15 @@
         </ToolbarItem>
         <ToolbarItem Text="Delete" Clicked="OnDeleteButtonClicked" Order="Secondary"/>
         <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
-        <ToolbarItem Text="HtmlPreview" Clicked="HtmlPreview_Clicked" Order="Secondary" />
+        <ToolbarItem Text="Html Preview" Clicked="HtmlPreview_Clicked" Order="Secondary" />
+        <ToolbarItem Text="Rename" Clicked="Rename_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 
-    <Grid>
-    <ScrollView>
-            <StackLayout>
-        <Editor Placeholder="Enter you   "
-                Text="{Binding Text}"
-                VerticalOptions="FillAndExpand"
-                FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
-                Margin="10, 10, 10, 10">
-        </Editor>
-            </StackLayout>
-        </ScrollView>
-    </Grid>
-    <!--
-        <Grid>
+    <Editor Placeholder="Enter you   "
+            Text="{Binding Text}"
+            VerticalOptions="FillAndExpand"
+            FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
+            Margin="10, 10, 10, 10">
+    </Editor>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Button Text="Save" Clicked="OnSaveButtonClicked" />
-
-            <Button Grid.Column="1" Text="Delete" Clicked="OnDeleteButtonClicked" />
-
-        </Grid>
-        -->
-    
 </ContentPage>

@@ -58,10 +58,13 @@ namespace Notes.Pages
 
         async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("DEBUG: OnDeleteButtonClicked executed.");  // DEBUG
-            var note = (Note)BindingContext;
-            await App.Database.DeleteNoteAsync(note);
-            await Navigation.PopAsync();
+            bool answer = await DisplayAlert("Delete?", "The note will be deleted permanently.", "Delete", "Cancel");
+            if (answer) 
+            {
+                var note = (Note)BindingContext;
+                await App.Database.DeleteNoteAsync(note);
+                await Navigation.PopAsync();
+            }
         }
 
         async void OnSettingsButtonClicked(object sender, EventArgs e)
@@ -93,8 +96,12 @@ namespace Notes.Pages
         {
             var note = (Note)BindingContext;
             string markdownText = note.Text;
-            
             await Navigation.PushAsync(new MarkdownViewPage(markdownText));
+        }
+
+        private void Rename_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 }
