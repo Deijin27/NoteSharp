@@ -11,7 +11,9 @@ namespace Notes.Pages
 {
     public class FolderContentDataTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate FolderTemplate { get; set; }
+        public DataTemplate FolderTemplate_NameOnly { get; set; }
+        public DataTemplate FolderTemplate_NameDateModified { get; set; }
+        public DataTemplate FolderTemplate_NameDateCreated { get; set; }
         public DataTemplate FileTemplate_NameOnly { get; set; }
         public DataTemplate FileTemplate_NameDateModified { get; set; }
         public DataTemplate FileTemplate_NameDateCreated { get; set; }
@@ -19,10 +21,23 @@ namespace Notes.Pages
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
             var contentItem = (FolderContentItem)item;
-            if (contentItem.Identifier == "Folder")
-                return FolderTemplate;
 
             SortingMode sortingMode = App.GetSortingMode();
+
+            if (contentItem.Identifier == "Folder")
+            {
+                switch (sortingMode)
+                {
+                    case SortingMode.Name:
+                        return FolderTemplate_NameOnly;
+                    case SortingMode.DateCreated:
+                        return FolderTemplate_NameDateCreated;
+                    case SortingMode.DateModified:
+                        return FolderTemplate_NameDateModified;
+                    default:
+                        return FolderTemplate_NameOnly;
+                }
+            }
 
             switch (sortingMode)
             {
@@ -106,6 +121,7 @@ namespace Notes.Pages
                         FolderID = FolderID
                     });
                 }
+                listView.SelectedItem = null;
             }
         }
 
@@ -113,9 +129,16 @@ namespace Notes.Pages
         {
             string result = await DisplayPromptAsync("Create Folder", "Input folder name", "Create");
 
-            if (result != null)
+            DateTime dateTime = DateTime.UtcNow;
+            if (!string.IsNullOrWhiteSpace(result))
             {
-                await App.Database.CreateFolderAsync(new Folder { Name = result, ParentID = FolderID });
+                await App.Database.CreateFolderAsync(new Folder 
+                { 
+                    Name = result, 
+                    ParentID = FolderID, 
+                    DateCreated = dateTime,
+                    DateModified = dateTime
+                });
                 await UpdateListView();
             }
 
@@ -131,8 +154,9 @@ namespace Notes.Pages
             string[] options =  { "Name", "Date Created", "Date Modified" };
 
             string selected = await DisplayActionSheet("Order By:", "Cancel", null, options);
-            
-            if (selected != "Cancel")
+
+            Console.WriteLine($"--+-+-+-+-+-+ Action [{selected}] -+-++-+-+");
+            if (!string.IsNullOrEmpty(selected) && selected != "Cancel")
             {
                 SortingMode sortingMode;
 
@@ -152,6 +176,67 @@ namespace Notes.Pages
                         break;
                 }
                 App.SetSortingMode(sortingMode);
+                await UpdateListView();
+            }
+        }
+
+        private async void RenameFolder_Clicked(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Folder folder = folderContentItem.ContentFolder;
+
+            string result  = await DisplayPromptAsync("Rename Folder", "What should the folder be renamed to?", initialValue: folder.Name);
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                folder.Name = result;
+                folder.DateModified = DateTime.UtcNow;
+                await App.Database.SaveFolderAsync(folder);
+                await UpdateListView();
+            }
+        }
+
+        private async void MoveFolder_Clicked(object sender, EventArgs e)
+        {
+            await DisplayAlert("MoveFolder_Clicked", "The other one", "OK");
+        }
+
+        private async void DeleteFolder_Clicked(object sender, EventArgs e)
+        {
+            await DisplayAlert("DeleteFolder_Clicked", "Delete Folder Invoked", "OK");
+        }
+
+        private async void RenameNote_Clicked(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Note note = folderContentItem.ContentNote;
+
+            string result = await DisplayPromptAsync("Rename Note", "What should the folder be renamed to?", initialValue: note.Name);
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                note.Name = result;
+                note.DateModified = DateTime.UtcNow;
+                await App.Database.SaveNoteAsync(note);
+                await UpdateListView();
+            }
+        }
+
+        private async void MoveNote_Clicked(object sender, EventArgs e)
+        {
+            await DisplayAlert("MoveNote_Clicked", "The other one", "OK");
+        }
+
+        private async void DeleteNote_Clicked(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Note note = folderContentItem.ContentNote;
+
+            bool answer = await DisplayAlert("Delete Note?", "Are you sure you want to permanently delete this note?", "Yes", "No");
+            if (answer)
+            {
+                await App.Database.DeleteNoteAsync(note);
                 await UpdateListView();
             }
         }

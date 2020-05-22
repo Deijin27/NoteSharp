@@ -50,7 +50,7 @@ namespace Notes.Pages
                     BindingContext = sheet,
                     OriginalSheetName = sheet.Name
                 });
-                
+                listView.SelectedItem = null;
             }
         }
 

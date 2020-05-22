@@ -11,8 +11,19 @@
         </Style>-->
 
         <ResourceDictionary>
-            <DataTemplate x:Key="folderTemplate">
+            <DataTemplate x:Key="folderTemplate_NameOnly">
                 <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Clicked="RenameFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Rename" />
+                        <MenuItem Clicked="MoveFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Move" />
+                        <MenuItem Clicked="DeleteFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Delete" IsDestructive="True"/>
+                    </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
                         <Grid.RowDefinitions>
@@ -41,8 +52,125 @@
                     </Grid>
                 </ViewCell>
             </DataTemplate>
+            <DataTemplate x:Key="folderTemplate_NameDateCreated">
+                <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Clicked="RenameFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Rename" />
+                        <MenuItem Clicked="MoveFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Move" />
+                        <MenuItem Clicked="DeleteFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Delete" IsDestructive="True"/>
+                    </ViewCell.ContextActions>
+                    <Grid Margin="10,10,10,10">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0"
+                               Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Text="{StaticResource IconGlyph_Folder}"
+                               FontSize="24"
+                               TextColor="{DynamicResource FolderListIconColor}"
+                               HorizontalOptions="Center"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               VerticalOptions="Center">
+                        </Label>
+                        <Label Grid.Column="1"
+                               Grid.Row="0"
+                               Text="{Binding ContentFolder.Name}" 
+                               TextColor="{DynamicResource PrimaryContentTextColor}"
+                               FontSize="Small"
+                               VerticalOptions="Center"
+                               MaxLines="1"
+                               Margin="10, 0, 0, 0"/>
+                        <Label Grid.Column="1"
+                               Grid.Row="1"
+                               Text="{Binding ContentFolder.DateCreated, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
+                               TextColor="{DynamicResource SecondaryContentTextColor}"
+                               FontSize="Micro"
+                               VerticalOptions="End"
+                               Margin="10, 0, 0, 0"/>
+
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="folderTemplate_NameDateModified">
+                <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Clicked="RenameFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Rename" />
+                        <MenuItem Clicked="MoveFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Move" />
+                        <MenuItem Clicked="DeleteFolder_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Delete" IsDestructive="True"/>
+                    </ViewCell.ContextActions>
+                    <Grid Margin="10,10,10,10">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0"
+                               Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Text="{StaticResource IconGlyph_Folder}"
+                               FontSize="24"
+                               TextColor="{DynamicResource FolderListIconColor}"
+                               HorizontalOptions="Center"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               VerticalOptions="Center">
+                        </Label>
+                        <Label Grid.Column="1"
+                               Grid.Row="0"
+                               Text="{Binding ContentFolder.Name}" 
+                               TextColor="{DynamicResource PrimaryContentTextColor}"
+                               FontSize="Small"
+                               VerticalOptions="Center"
+                               MaxLines="1"
+                               Margin="10, 0, 0, 0"/>
+                        <Label Grid.Column="1"
+                               Grid.Row="1"
+                               Text="{Binding ContentFolder.DateModified, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
+                               TextColor="{DynamicResource SecondaryContentTextColor}"
+                               FontSize="Micro"
+                               VerticalOptions="End"
+                               Margin="10, 0, 0, 0"/>
+
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
             <DataTemplate x:Key="fileTemplate_NameOnly">
                 <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Clicked="RenameNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Rename" />
+                        <MenuItem Clicked="MoveNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Move" />
+                        <MenuItem Clicked="DeleteNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Delete" IsDestructive="True"/>
+                    </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
                         <Grid.RowDefinitions>
@@ -75,6 +203,17 @@
             </DataTemplate>
             <DataTemplate x:Key="fileTemplate_NameDateCreated">
                 <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Clicked="RenameNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Rename" />
+                        <MenuItem Clicked="MoveNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Move" />
+                        <MenuItem Clicked="DeleteNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Delete" IsDestructive="True"/>
+                    </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
                         <Grid.RowDefinitions>
@@ -117,6 +256,17 @@
             </DataTemplate>
             <DataTemplate x:Key="fileTemplate_NameDateModified">
                 <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Clicked="RenameNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Rename" />
+                        <MenuItem Clicked="MoveNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Move" />
+                        <MenuItem Clicked="DeleteNote_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Delete" IsDestructive="True"/>
+                    </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
                         <Grid.RowDefinitions>
@@ -159,7 +309,9 @@
                 </ViewCell>
             </DataTemplate>
             <local:FolderContentDataTemplateSelector x:Key="folderContentDataTemplateSelector"
-                                                     FolderTemplate="{StaticResource folderTemplate}"
+                                                     FolderTemplate_NameOnly="{StaticResource folderTemplate_NameOnly}"
+                                                     FolderTemplate_NameDateCreated="{StaticResource folderTemplate_NameDateCreated}"
+                                                     FolderTemplate_NameDateModified="{StaticResource folderTemplate_NameDateModified}"
                                                      FileTemplate_NameOnly="{StaticResource fileTemplate_NameOnly}" 
                                                      FileTemplate_NameDateModified="{StaticResource fileTemplate_NameDateModified}"
                                                      FileTemplate_NameDateCreated="{StaticResource fileTemplate_NameDateCreated}"

@@ -67,10 +67,28 @@ namespace Notes.Data
 
         public Task<List<Folder>> GetFoldersAsync(int folderID)
         {
-            return _database.Table<Folder>()
-                            .Where(i => i.ParentID == folderID)
-                            .OrderBy(i => i.Name)
-                            .ToListAsync();
+            var query = _database.Table<Folder>()
+                            .Where(i => i.ParentID == folderID);
+
+            SortingMode sortingMode = App.GetSortingMode();
+
+            switch (sortingMode)
+            {
+                case SortingMode.Name:
+                    query = query.OrderBy(i => i.Name);
+                    break;
+                case SortingMode.DateCreated:
+                    query = query.OrderByDescending(i => i.DateCreated);
+                    break;
+                case SortingMode.DateModified:
+                    query = query.OrderByDescending(i => i.DateModified);
+                    break;
+                default:
+                    query = query.OrderBy(i => i.Name);
+                    break;
+            }
+
+            return query.ToListAsync();
         }
 
         public Task<Note> GetNoteAsync(int id)
@@ -96,6 +114,18 @@ namespace Notes.Data
             else
             {
                 return _database.InsertAsync(note);
+            }
+        }
+
+        public Task<int> SaveFolderAsync(Folder folder)
+        {
+            if (folder.ID != 0)
+            {
+                return _database.UpdateAsync(folder);
+            }
+            else
+            {
+                return _database.InsertAsync(folder);
             }
         }
 

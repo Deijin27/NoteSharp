@@ -106,6 +106,7 @@ namespace Notes.Pages
         private async void CopyButton_Clicked(object sender, EventArgs e)
         {
             await Clipboard.SetTextAsync(TextEditor.Text);
+            await DisplayAlert("Copied CSS", "Style text copied to clipboard", "OK");
         }
 
         private async void ColorPickerButton_Clicked(object sender, EventArgs e)

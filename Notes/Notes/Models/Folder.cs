@@ -9,5 +9,7 @@ namespace Notes.Models
         public int ID { get; set; }
         public int ParentID { get; set; }
         public string Name { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateModified { get; set; }
     }
 }
