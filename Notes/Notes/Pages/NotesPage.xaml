@@ -16,13 +16,16 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" />
+                                  Text="Rename"
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" />
+                                  Text="Move"
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"/>
+                                  Text="Delete" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
@@ -57,13 +60,16 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" />
+                                  Text="Rename" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" />
+                                  Text="Move" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"/>
+                                  Text="Delete" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
@@ -110,13 +116,16 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" />
+                                  Text="Rename" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" />
+                                  Text="Move" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"/>
+                                  Text="Delete" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
@@ -163,13 +172,16 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" />
+                                  Text="Rename" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" />
+                                  Text="Move" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"/>
+                                  Text="Delete" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
@@ -206,13 +218,16 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" />
+                                  Text="Rename" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" />
+                                  Text="Move" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"/>
+                                  Text="Delete" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
@@ -259,13 +274,16 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" />
+                                  Text="Rename" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" />
+                                  Text="Move" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"/>
+                                  Text="Delete" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                     <Grid Margin="10,10,10,10">
 
@@ -321,14 +339,8 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add File" Clicked="OnNoteAddedClicked" Order="Primary" >
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                                 Glyph="{StaticResource IconGlyph_FilePlus}"
-                                 Size="24"
-                                 Color="{DynamicResource ToolbarIconColor}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
+        <ToolbarItem Text="Add File" Clicked="OnNoteAddedClicked" Order="Primary" 
+                     IconImageSource="{StaticResource FontImageSource_FilePlus}"/>
         <ToolbarItem Text="Add Folder" Clicked="OnFolderAddedClicked" Order="Secondary" />
         <ToolbarItem Text="Order By" Clicked="OrderBy_Clicked" Order="Secondary"/>
         <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />

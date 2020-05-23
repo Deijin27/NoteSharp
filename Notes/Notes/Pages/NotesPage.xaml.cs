@@ -203,7 +203,16 @@ namespace Notes.Pages
 
         private async void DeleteFolder_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("DeleteFolder_Clicked", "Delete Folder Invoked", "OK");
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Folder folder = folderContentItem.ContentFolder;
+
+            bool answer = await DisplayAlert("Delete Folder?", "Permanently delete folder and all contents?", "Yes", "No");
+            if (answer)
+            {
+                await App.Database.DeleteFolderAndAllContentsAsync(folder);
+                await UpdateListView();
+            }
         }
 
         private async void RenameNote_Clicked(object sender, EventArgs e)

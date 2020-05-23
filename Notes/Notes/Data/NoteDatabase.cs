@@ -7,6 +7,7 @@ using Xamarin.Forms.Internals;
 using System.Linq;
 using System.Collections;
 using SQLitePCL;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Notes.Data
 {
@@ -149,6 +150,22 @@ namespace Notes.Data
         public Task<int> DeleteNoteAsync(Note note)
         {
             return _database.DeleteAsync(note);
+        }
+
+        public async Task<int> DeleteFolderAndAllContentsAsync(Folder folder)
+        {
+            List<Folder> query = await _database.Table<Folder>().Where(i => i.ParentID == folder.ID).ToListAsync();
+
+            foreach (Folder subfolder in query)
+            {
+                await DeleteFolderAndAllContentsAsync(subfolder);
+            }
+
+            await _database.Table<Note>().Where(i => i.FolderID == folder.ID).DeleteAsync();
+
+            await _database.DeleteAsync(folder);
+
+            return default;
         }
 
         public Task<int> CreateFolderAsync(Folder folder)

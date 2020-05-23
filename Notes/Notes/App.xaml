@@ -9,12 +9,6 @@
 
         <Thickness x:Key="PageMargin" Left="15" Top="15" Right="15" Bottom="15" />
 
-        <!-- Colors -->
-        <!--<ResourceDictionary Source="Themes/Light.xaml" />-->
-        <!--<Color x:Key="AppBackgroundColor">#F8F8F8</Color>
-        <Color x:Key="NavigationBarColor">#333333</Color>
-        <Color x:Key="NavigationBarTextColor">#F8F8F8</Color>-->
-        
         <!-- Implicit styles -->
         <Style TargetType="{x:Type NavigationPage}">
             <Setter Property="BarBackgroundColor" Value="{DynamicResource NavigationBarColor}" />
@@ -63,6 +57,31 @@
         <x:String x:Key="IconGlyph_Eye">&#xf15c;</x:String>
         <x:String x:Key="IconGlyph_Copy">&#xf237;</x:String>
         <x:String x:Key="IconGlyph_EyeDropper">&#xf15d;</x:String>
+        <x:String x:Key="IconGlyph_SquareRight">&#xf309;</x:String>
+        <x:String x:Key="IconGlyph_Edit">&#xf158;</x:String>
+        <x:String x:Key="IconGlyph_Delete">&#xf154;</x:String>
+        
+        <!-- FontImageSources-->
+        <FontImageSource x:Key="FontImageSource_FilePlus"  
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_FilePlus}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_SquareRight"  
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_SquareRight}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Edit"  
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Edit}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Delete"  
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Delete}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
 
     </Application.Resources>
     
