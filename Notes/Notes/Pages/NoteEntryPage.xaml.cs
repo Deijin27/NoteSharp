@@ -5,9 +5,11 @@ using Notes.Models;
 using System.Text.RegularExpressions;
 using Markdig;
 using System.Threading.Tasks;
+using Notes.Data;
 
 namespace Notes.Pages
 {
+
     public partial class NoteEntryPage : ContentPage
     {
         public bool NewNote = false;
@@ -19,53 +21,75 @@ namespace Notes.Pages
             InitializeComponent();
         }
 
-        /*protected override async void OnAppearing()
+        /*        async void OnSaveButtonClicked(object sender, EventArgs e)
         {
-            base.OnAppearing();
+            Note note = (Note)BindingContext;
+            note.FolderID = FolderID;
 
-            if (!newNote) activeNote = (Note)BindingContext;
-            
-            activeNote.DateAccessed = DateTime.UtcNow;
-
-            Console.WriteLine("On Appearing is being executed.");
-            if (!newNote)
+            if (NewNote)
             {
-                await App.Database.SaveNoteAsync(activeNote);
-                Console.WriteLine("Data Accessed Update executed.");
+                string result = await DisplayPromptAsync("Name", "Input name for file");
+
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    while (await App.Database.DoesNoteNameExistAsync(result, note.FolderID))
+                    {
+                        result = await DisplayPromptAsync
+                        (
+                            "Name",
+                            "A file of that name already exists in the current folder; please input a different name",
+                            initialValue: result
+                        );
+
+                        if (string.IsNullOrWhiteSpace(result)) break;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                        note.Name = result;
+                        note.DateModified = DateTime.UtcNow;
+                        note.DateCreated = note.DateModified;
+                        await App.Database.SaveNoteAsync(note);
+                        await Navigation.PopAsync();
+                    }
+                }
+            }
+            else
+            {
+                note.DateModified = DateTime.UtcNow;
+                await App.Database.SaveNoteAsync(note);
+                await Navigation.PopAsync();
             }
         }*/
 
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("DEBUG: OnSaveButtonClicked executed.");  // DEBUG
-            var note = (Note)BindingContext;
-            note.DateModified = DateTime.UtcNow;
+            Note note = (Note)BindingContext;
+            note.FolderID = FolderID;
+
             if (NewNote)
             {
-                note.DateCreated = note.DateModified;
+                (Option option, string result) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Name Note");
+                    
+                if (option == Option.OK)
+                {
+                    note.Name = result;
+                    note.DateModified = DateTime.UtcNow;
+                    note.DateCreated = note.DateModified;
+                    await App.Database.SaveNoteAsync(note);
+                    await Navigation.PopAsync();
+                }
+                
             }
-
-            // For now, infer note name from first line in Text
-            string firstLine = new StringReader(note.Text).ReadLine();
-            firstLine = Regex.Replace(firstLine, "[#*~_^$`]", string.Empty).Trim(); // remove markdown sytax characters
-            note.Name = firstLine;
-
-            //note.FileIcon = "FileIcon";
-            note.FolderID = FolderID;
-            await App.Database.SaveNoteAsync(note);
-            await Navigation.PopAsync();
-        }
-
-        async void OnDeleteButtonClicked(object sender, EventArgs e)
-        {
-            bool answer = await DisplayAlert("Delete?", "The note will be deleted permanently.", "Delete", "Cancel");
-            if (answer) 
+            else
             {
-                var note = (Note)BindingContext;
-                await App.Database.DeleteNoteAsync(note);
+                note.DateModified = DateTime.UtcNow;
+                await App.Database.SaveNoteAsync(note);
                 await Navigation.PopAsync();
             }
         }
+
+        
 
         async void OnSettingsButtonClicked(object sender, EventArgs e)
         {
@@ -97,11 +121,6 @@ namespace Notes.Pages
             var note = (Note)BindingContext;
             string markdownText = note.Text;
             await Navigation.PushAsync(new MarkdownViewPage(markdownText));
-        }
-
-        private void Rename_Clicked(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections;
 using SQLitePCL;
 using System.Runtime.InteropServices.ComTypes;
+using Xamarin.Forms;
 
 namespace Notes.Data
 {
@@ -97,6 +98,24 @@ namespace Notes.Data
             return _database.Table<Note>()
                             .Where(i => i.ID == id)
                             .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> DoesNoteNameExistAsync(string name, int folderID)
+        {
+            int count = await _database.Table<Note>()
+                                       .Where(i => i.FolderID == folderID && i.Name == name)
+                                       .CountAsync();
+
+            return count > 0;
+        }
+
+        public async Task<bool> DoesFolderNameExistAsync(string name, int parentID)
+        {
+            int count = await _database.Table<Folder>()
+                                       .Where(i => i.ParentID == parentID && i.Name == name)
+                                       .CountAsync();
+
+            return count > 0;
         }
 
         public Task<CSS> GetSheetAsync(int id)

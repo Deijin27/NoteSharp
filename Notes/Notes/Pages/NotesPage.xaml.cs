@@ -89,6 +89,8 @@ namespace Notes.Pages
 
         async void OnNoteAddedClicked(object sender, EventArgs e)
         {
+
+
             await Navigation.PushAsync(new NoteEntryPage
             {
                 BindingContext = new Note(),
@@ -127,11 +129,11 @@ namespace Notes.Pages
 
         async void OnFolderAddedClicked(object sender, EventArgs e)
         {
-            string result = await DisplayPromptAsync("Create Folder", "Input folder name", "Create");
+            (Option option, string result) = await NameValidation.GetUniqueFolderName(this, FolderID, "New Folder");
 
-            DateTime dateTime = DateTime.UtcNow;
-            if (!string.IsNullOrWhiteSpace(result))
+            if (option == Option.OK)
             {
+                DateTime dateTime = DateTime.UtcNow;
                 await App.Database.CreateFolderAsync(new Folder 
                 { 
                     Name = result, 
@@ -155,7 +157,6 @@ namespace Notes.Pages
 
             string selected = await DisplayActionSheet("Order By:", "Cancel", null, options);
 
-            Console.WriteLine($"--+-+-+-+-+-+ Action [{selected}] -+-++-+-+");
             if (!string.IsNullOrEmpty(selected) && selected != "Cancel")
             {
                 SortingMode sortingMode;
@@ -186,8 +187,8 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Folder folder = folderContentItem.ContentFolder;
 
-            string result  = await DisplayPromptAsync("Rename Folder", "What should the folder be renamed to?", initialValue: folder.Name);
-            if (!string.IsNullOrWhiteSpace(result))
+            (Option option, string result) = await NameValidation.GetUniqueFolderName(this, folder.ParentID, "Rename Folder", initialValue: folder.Name);
+            if (option == Option.OK)
             {
                 folder.Name = result;
                 folder.DateModified = DateTime.UtcNow;
@@ -221,8 +222,8 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Note note = folderContentItem.ContentNote;
 
-            string result = await DisplayPromptAsync("Rename Note", "What should the folder be renamed to?", initialValue: note.Name);
-            if (!string.IsNullOrWhiteSpace(result))
+            (Option option, string result) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Rename Note", initialValue: note.Name);
+            if (option == Option.OK)
             {
                 note.Name = result;
                 note.DateModified = DateTime.UtcNow;

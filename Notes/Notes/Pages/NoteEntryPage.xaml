@@ -37,10 +37,8 @@
                                  Color="{DynamicResource ToolbarIconColor}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        <ToolbarItem Text="Delete" Clicked="OnDeleteButtonClicked" Order="Secondary"/>
         <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
         <ToolbarItem Text="Html Preview" Clicked="HtmlPreview_Clicked" Order="Secondary" />
-        <ToolbarItem Text="Rename" Clicked="Rename_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 
     <Editor Placeholder="Enter you   "
