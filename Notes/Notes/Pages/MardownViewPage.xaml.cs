@@ -64,7 +64,7 @@ namespace Notes.Pages
             if (sheetName != "Cancel")
             { 
                 CSS sheet = sheetList.Where(i => i.Name == sheetName).FirstOrDefault();
-                App.SetStyleSheetID(sheet.ID);
+                App.StyleSheetID = sheet.ID;
                 UpdateWebView();
             }
         }

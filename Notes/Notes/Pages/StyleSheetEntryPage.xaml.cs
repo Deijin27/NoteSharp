@@ -50,11 +50,6 @@ namespace Notes.Pages
             // So that if it's a new sheet, the name checks always occurr.
             if (sheet.Name != OriginalSheetName)
             {
-                Console.WriteLine("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+");
-                Console.WriteLine(sheet.Name);
-                Console.WriteLine(OriginalSheetName);
-                Console.WriteLine("-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+");
-                
                 if (sheet.Name == "Cancel") // Ensure no interference with Cancel button of the dodgy picker dialog.
                 {
                     sheet.Name = "Cancel_";
@@ -80,9 +75,9 @@ namespace Notes.Pages
             await Navigation.PopAsync();
 
             // If this sheet is set as the current sheet, then reset that to default.
-            if (sheet.ID == App.GetStyleSheetID())
+            if (sheet.ID == App.StyleSheetID)
             {
-                App.SetStyleSheetID(App.DefaultStyleSheetID);
+                App.StyleSheetID = App.DefaultStyleSheetID;
             }
         }
 
@@ -115,9 +110,6 @@ namespace Notes.Pages
             {
                 OkButtonText = "Copy",
                 // More Settings Can Go Here
-                
-                
-                
             };
 
             Color color = await ColorPickerDialog.Show(ColorPickerUtils.GetRootParent<Layout<View>>((View)NameEntry), 

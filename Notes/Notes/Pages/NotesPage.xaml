@@ -102,7 +102,7 @@
                                Margin="10, 0, 0, 0"/>
                         <Label Grid.Column="1"
                                Grid.Row="1"
-                               Text="{Binding ContentFolder.DateCreated, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
+                               Text="{Binding ContentFolder.DateCreatedLocal, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
                                TextColor="{DynamicResource SecondaryContentTextColor}"
                                FontSize="Micro"
                                VerticalOptions="End"
@@ -158,7 +158,7 @@
                                Margin="10, 0, 0, 0"/>
                         <Label Grid.Column="1"
                                Grid.Row="1"
-                               Text="{Binding ContentFolder.DateModified, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
+                               Text="{Binding ContentFolder.DateModifiedLocal, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
                                TextColor="{DynamicResource SecondaryContentTextColor}"
                                FontSize="Micro"
                                VerticalOptions="End"
@@ -260,7 +260,7 @@
                                Margin="10, 0, 0, 0"/>
                         <Label Grid.Column="1"
                                Grid.Row="1"
-                               Text="{Binding ContentNote.DateCreated, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
+                               Text="{Binding ContentNote.DateCreatedLocal, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
                                TextColor="{DynamicResource SecondaryContentTextColor}"
                                FontSize="Micro"
                                VerticalOptions="End"
@@ -317,7 +317,7 @@
                                Margin="10, 0, 0, 0"/>
                         <Label Grid.Column="1"
                                Grid.Row="1"
-                               Text="{Binding ContentNote.DateModified, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
+                               Text="{Binding ContentNote.DateModifiedLocal, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
                                TextColor="{DynamicResource SecondaryContentTextColor}"
                                FontSize="Micro"
                                VerticalOptions="End"

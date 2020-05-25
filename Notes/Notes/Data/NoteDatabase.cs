@@ -29,7 +29,7 @@ namespace Notes.Data
             var query = _database.Table<Note>()
                                  .Where(i => i.FolderID == folderID);
 
-            SortingMode sortingMode = App.GetSortingMode();
+            SortingMode sortingMode = App.SortingMode;
 
             switch (sortingMode)
             {
@@ -72,7 +72,7 @@ namespace Notes.Data
             var query = _database.Table<Folder>()
                             .Where(i => i.ParentID == folderID);
 
-            SortingMode sortingMode = App.GetSortingMode();
+            SortingMode sortingMode = App.SortingMode;
 
             switch (sortingMode)
             {

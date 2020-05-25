@@ -16,7 +16,7 @@ namespace Notes.Pages
         {
             
             InitializeComponent();
-            if (App.GetTheme() == AppTheme.Dark)
+            if (App.Theme == AppTheme.Dark)
             {
                 ThemeSwitch.IsToggled = true;
             }
@@ -30,11 +30,11 @@ namespace Notes.Pages
         {
             if (e.Value)
             {
-                App.SetTheme(AppTheme.Dark);
+                App.Theme = AppTheme.Dark;
             }
             else
             {
-                App.SetTheme(AppTheme.Light);
+                App.Theme = AppTheme.Light;
             }
         }
     }

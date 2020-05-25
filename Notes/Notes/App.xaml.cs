@@ -39,7 +39,7 @@ namespace Notes
             MainPage = new NotesMasterPage();
 
             // Set theme from stored preferences, default to light if not previously set
-            SetTheme(GetTheme());
+            Theme = Theme;
 
             CreateDefaultStyleSheets();
 
@@ -101,40 +101,46 @@ namespace Notes
             return styleSheets;
         }
 
-        public static void SetTheme(AppTheme theme)
+        public static AppTheme Theme
         {
-            ICollection<ResourceDictionary> mergedDictionaries = Current.Resources.MergedDictionaries;
-            if (mergedDictionaries != null)
+            get 
             {
-                mergedDictionaries.Clear();
-
-                switch (theme)
-                {
-                    case AppTheme.Dark:
-                        mergedDictionaries.Add(new DarkTheme());
-                        break;
-                    case AppTheme.Light:
-                    default: // this covers the 0 enum value AppTheme.Unspecified
-                        mergedDictionaries.Add(new LightTheme());
-                        break;
-                }
+                return (AppTheme)Preferences.Get("Theme", defaultValue: (int)AppInfo.RequestedTheme);
             }
-            Preferences.Set("Theme", (int)theme);
+
+            set
+            {
+                ICollection<ResourceDictionary> mergedDictionaries = Current.Resources.MergedDictionaries;
+                if (mergedDictionaries != null)
+                {
+                    mergedDictionaries.Clear();
+
+                    switch (value)
+                    {
+                        case AppTheme.Dark:
+                            mergedDictionaries.Add(new DarkTheme());
+                            break;
+                        case AppTheme.Light:
+                        default: // this covers the 0 enum value AppTheme.Unspecified
+                            mergedDictionaries.Add(new LightTheme());
+                            break;
+                    }
+                }
+                Preferences.Set("Theme", (int)value);
+            }
         }
 
-        public static AppTheme GetTheme()
+        public static SortingMode SortingMode
         {
-            return (AppTheme)Preferences.Get("Theme", defaultValue: (int)AppInfo.RequestedTheme);
-        }
+            get
+            {
+                return (SortingMode)Preferences.Get("SortingMode", defaultValue: 0);
+            }
 
-        public static SortingMode GetSortingMode()
-        {
-            return (SortingMode)Preferences.Get("SortingMode", defaultValue: 0);
-        }
-
-        public static void SetSortingMode(SortingMode sortingMode)
-        {
-            Preferences.Set("SortingMode", (int)sortingMode);
+            set
+            {
+                Preferences.Set("SortingMode", (int)value);
+            }
         }
 
         private CSS GetNonUserStyleSheet(int id)
@@ -142,19 +148,22 @@ namespace Notes
             return DefaultStyleSheets.Where(i => i.ID == id).FirstOrDefault();
         }
 
-        public static int GetStyleSheetID()
+        public static int StyleSheetID
         {
-            return Preferences.Get("StyleSheet", defaultValue: DefaultStyleSheetID);
-        }
+            get
+            {
+                return Preferences.Get("StyleSheet", defaultValue: DefaultStyleSheetID);
+            }
 
-        public static void SetStyleSheetID(int id)
-        {
-            Preferences.Set("StyleSheet", id);
+            set
+            {
+                Preferences.Set("StyleSheet", value);
+            }
         }
 
         public async Task<CSS> GetStyleSheetAsync()
         {
-            int sheetID = GetStyleSheetID();
+            int sheetID = StyleSheetID;
             CSS sheet;
 
             if (sheetID > 0) // is user defined

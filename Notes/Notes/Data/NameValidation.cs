@@ -15,10 +15,13 @@ namespace Notes.Data
     class NameValidation
     {
         /// <summary>
-        /// Get a valid name from the user for the Note. Return is the Option, Cancel or OK, and if OK, the string the user desires.
+        /// Get a valid name from the user for the Note. Return is a tuple of the Option selected, Cancel or OK, and the string the user desires.
         /// </summary>
-        /// <param name="folderID"></param>
-        /// <returns>(bool ok_clicked, string result)</returns>
+        /// <param name="page">Current Page for the dialog to be raised over</param>
+        /// <param name="folderID">ID of folder</param>
+        /// <param name="title">Title of dialog</param>
+        /// <param name="initialValue">Initial text in dialog entry when first raised</param>
+        /// <returns>(Option option_clicked, string result)</returns>
         public static async Task<(Option, string)> GetUniqueNoteName(Page page, int folderID, string title, string initialValue = "")
         {
             string result = await page.DisplayPromptAsync(title, "Input name for note", initialValue: initialValue);
@@ -57,6 +60,14 @@ namespace Notes.Data
             return (Option.OK, result);
         }
 
+        /// <summary>
+        /// Get a valid name from the user for the Folder. Return is the Option, Cancel or OK, and if OK, the string the user desires.
+        /// </summary>
+        /// <param name="page">Current Page for the dialog to be raised over</param>
+        /// <param name="parentID">ID of parent folder</param>
+        /// <param name="title">Title of dialog</param>
+        /// <param name="initialValue">Initial text in dialog entry when first raised</param>
+        /// <returns>(Option option_clicked, string result)</returns>
         public static async Task<(Option, string)> GetUniqueFolderName(Page page, int parentID, string title, string initialValue = "")
         {
             string result = await page.DisplayPromptAsync(title, "Input name for folder", initialValue: initialValue);
@@ -94,6 +105,11 @@ namespace Notes.Data
             return (Option.OK, result);
         }
 
+        /// <summary>
+        /// Gives that doesn't contain any forbidden characters.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>false if the name contains forbidden characters.</returns>
         public static bool IsNameValid(string name)
         {
             return !(name.Contains(":") || name.Contains("{") || name.Contains("}") || name.Contains("/"));

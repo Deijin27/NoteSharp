@@ -22,7 +22,7 @@ namespace Notes.Pages
         {
             var contentItem = (FolderContentItem)item;
 
-            SortingMode sortingMode = App.GetSortingMode();
+            SortingMode sortingMode = App.SortingMode;
 
             if (contentItem.Identifier == "Folder")
             {
@@ -176,7 +176,7 @@ namespace Notes.Pages
                         sortingMode = SortingMode.Name;
                         break;
                 }
-                App.SetSortingMode(sortingMode);
+                App.SortingMode = sortingMode;
                 await UpdateListView();
             }
         }

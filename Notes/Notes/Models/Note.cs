@@ -15,5 +15,15 @@ namespace Notes.Models
         public DateTime DateModified { get; set; }
         //public DateTime DateAccessed { get; set; }
 
+        public DateTime DateCreatedLocal
+        {
+            get { return DateCreated.ToLocalTime(); }
+        }
+
+        public DateTime DateModifiedLocal
+        {
+            get { return DateModified.ToLocalTime(); }
+        }
+
     }
 }
