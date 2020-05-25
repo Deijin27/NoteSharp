@@ -23,18 +23,19 @@ namespace Notes.Data
         {
             string result = await page.DisplayPromptAsync(title, "Input name for note", initialValue: initialValue);
 
+            if (result == null)
+                return (Option.Cancel, null);
+
             bool valid;
             while (!(valid = IsNameValid(result)) || await App.Database.DoesNoteNameExistAsync(result, folderID))
             {
-                if (result == null)
-                    return (Option.Cancel, null);
 
                 if (!valid)
                 {
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that is not entirely whitespace and does not contain any of the characters /:{}",
+                        "Invalid name, please input a name that does not contain any of the characters /:{}",
                         initialValue: result
                     );
                 }
@@ -49,6 +50,9 @@ namespace Notes.Data
                     );
                 }
 
+                if (result == null)
+                    return (Option.Cancel, null);
+
             }
             return (Option.OK, result);
         }
@@ -57,18 +61,18 @@ namespace Notes.Data
         {
             string result = await page.DisplayPromptAsync(title, "Input name for folder", initialValue: initialValue);
 
+            if (result == null)
+                return (Option.Cancel, null);
+
             bool valid;
             while (!(valid = IsNameValid(result)) || await App.Database.DoesFolderNameExistAsync(result, parentID))
             {
-                if (result == null)
-                    return (Option.Cancel, null);
-
                 if (!valid)
                 {
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that is not entirely whitespace and does not contain any of the characters /:{}",
+                        "Invalid name, please input a name that does not contain any of the characters /:{}",
                         initialValue: result
                     );
                 }
@@ -83,13 +87,16 @@ namespace Notes.Data
                     );
                 }
 
+                if (result == null)
+                    return (Option.Cancel, null);
+
             }
             return (Option.OK, result);
         }
 
         public static bool IsNameValid(string name)
         {
-            return !(string.IsNullOrWhiteSpace(name) || name.Contains(":") || name.Contains("{") || name.Contains("}") || name.Contains("/"));
+            return !(name.Contains(":") || name.Contains("{") || name.Contains("}") || name.Contains("/"));
         }
     }
 }
