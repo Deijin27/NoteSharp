@@ -10,6 +10,7 @@
         <Thickness x:Key="PageMargin" Left="15" Top="15" Right="15" Bottom="15" />
 
         <!-- Implicit styles -->
+        
         <Style TargetType="{x:Type NavigationPage}">
             <Setter Property="BarBackgroundColor" Value="{DynamicResource NavigationBarColor}" />
             <Setter Property="BarTextColor" Value="{DynamicResource NavigationBarTextColor}" />
@@ -60,6 +61,8 @@
         <x:String x:Key="IconGlyph_SquareRight">&#xf309;</x:String>
         <x:String x:Key="IconGlyph_Edit">&#xf158;</x:String>
         <x:String x:Key="IconGlyph_Delete">&#xf154;</x:String>
+        <x:String x:Key="IconGlyph_LongArrowUp">&#xf303;</x:String>
+        <x:String x:Key="IconGlyph_Close">&#xf136;</x:String>
         
         <!-- FontImageSources-->
         <FontImageSource x:Key="FontImageSource_FilePlus"  
@@ -80,6 +83,21 @@
         <FontImageSource x:Key="FontImageSource_Delete"  
                          FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
                          Glyph="{StaticResource IconGlyph_Delete}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_LongArrowUp"  
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_LongArrowUp}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Close"  
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Close}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Folder"  
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Folder}"
                          Size="24"
                          Color="{DynamicResource ToolbarIconColor}"/>
 

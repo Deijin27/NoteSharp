@@ -33,6 +33,9 @@
     <Compile Update="Pages\HtmlPreviewPage.xaml.cs">
       <DependentUpon>HtmlPreviewPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\NotesMovePage.xaml.cs">
+      <DependentUpon>NotesMovePage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\StyleSheetEntryPage.xaml.cs">
       <DependentUpon>StyleSheetEntryPage.xaml</DependentUpon>
     </Compile>

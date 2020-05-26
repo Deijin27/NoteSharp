@@ -93,6 +93,13 @@ namespace Notes.Data
             return query.ToListAsync();
         }
 
+        public Task<Folder> GetFolderAsync(int id)
+        {
+            return _database.Table<Folder>()
+                            .Where(i => i.ID == id)
+                            .FirstOrDefaultAsync();
+        }
+
         public Task<Note> GetNoteAsync(int id)
         {
             return _database.Table<Note>()

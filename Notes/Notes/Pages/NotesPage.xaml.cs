@@ -6,6 +6,8 @@ using Xamarin.Forms;
 using Notes.Models;
 using System.Threading.Tasks;
 using Notes.Data;
+using Xamarin.Essentials;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Notes.Pages
 {
@@ -54,7 +56,7 @@ namespace Notes.Pages
     }
     public partial class NotesPage : ContentPage
     {
-        public int FolderID;
+        public int FolderID = 0;
 
         public NotesPage()
         {
@@ -199,7 +201,11 @@ namespace Notes.Pages
 
         private async void MoveFolder_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("MoveFolder_Clicked", "The other one", "OK");
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Folder folder = folderContentItem.ContentFolder;
+
+            await Navigation.PushAsync(new NotesMovePage(folder) { Title = this.Title });
         }
 
         private async void DeleteFolder_Clicked(object sender, EventArgs e)
@@ -234,7 +240,11 @@ namespace Notes.Pages
 
         private async void MoveNote_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("MoveNote_Clicked", "The other one", "OK");
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Note note = folderContentItem.ContentNote;
+
+            await Navigation.PushAsync(new NotesMovePage(note) { CurrentFolderName = this.Title });
         }
 
         private async void DeleteNote_Clicked(object sender, EventArgs e)

@@ -22,9 +22,9 @@ namespace Notes.Data
         /// <param name="title">Title of dialog</param>
         /// <param name="initialValue">Initial text in dialog entry when first raised</param>
         /// <returns>(Option option_clicked, string result)</returns>
-        public static async Task<(Option, string)> GetUniqueNoteName(Page page, int folderID, string title, string initialValue = "")
+        public static async Task<(Option, string)> GetUniqueNoteName(Page page, int folderID, string title, string message = "Input name for note", string initialValue = "")
         {
-            string result = await page.DisplayPromptAsync(title, "Input name for note", initialValue: initialValue);
+            string result = await page.DisplayPromptAsync(title, message, initialValue: initialValue);
 
             if (result == null)
                 return (Option.Cancel, null);
@@ -68,9 +68,9 @@ namespace Notes.Data
         /// <param name="title">Title of dialog</param>
         /// <param name="initialValue">Initial text in dialog entry when first raised</param>
         /// <returns>(Option option_clicked, string result)</returns>
-        public static async Task<(Option, string)> GetUniqueFolderName(Page page, int parentID, string title, string initialValue = "")
+        public static async Task<(Option, string)> GetUniqueFolderName(Page page, int parentID, string title, string message = "Input name for folder", string initialValue = "")
         {
-            string result = await page.DisplayPromptAsync(title, "Input name for folder", initialValue: initialValue);
+            string result = await page.DisplayPromptAsync(title, message, initialValue: initialValue);
 
             if (result == null)
                 return (Option.Cancel, null);
