@@ -262,7 +262,8 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Navigate Up" Order="Primary" Clicked="ToParentFolder_Clicked" 
                      IconImageSource="{StaticResource FontImageSource_LongArrowUp}"/>
-        <ToolbarItem Text="Select" Order="Primary" Clicked="SelectCurrentFolder_Clicked"/>
+        <ToolbarItem Text="Select" Order="Primary" Clicked="SelectCurrentFolder_Clicked"
+                     IconImageSource="{StaticResource FontImageSource_Check}"/>
         <ToolbarItem Text="Add Folder" Clicked="OnFolderAddedClicked" Order="Primary"
                      IconImageSource="{StaticResource FontImageSource_Folder}"/>
         <ToolbarItem Text="Cancel" Order="Primary" Clicked="Cancel_Clicked" 
