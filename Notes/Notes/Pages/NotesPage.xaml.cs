@@ -205,7 +205,7 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Folder folder = folderContentItem.ContentFolder;
 
-            await Navigation.PushAsync(new NotesMovePage(folder) { Title = this.Title });
+            await Navigation.PushModalAsync(new NavigationPage(new NotesMovePage(folder) { CurrentFolderName = this.Title }));
         }
 
         private async void DeleteFolder_Clicked(object sender, EventArgs e)
@@ -244,7 +244,7 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Note note = folderContentItem.ContentNote;
 
-            await Navigation.PushAsync(new NotesMovePage(note) { CurrentFolderName = this.Title });
+            await Navigation.PushModalAsync(new NavigationPage(new NotesMovePage(note) { CurrentFolderName = this.Title }));
         }
 
         private async void DeleteNote_Clicked(object sender, EventArgs e)

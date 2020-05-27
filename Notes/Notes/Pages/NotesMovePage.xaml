@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Notes.Pages"
              x:Class="Notes.Pages.NotesMovePage"
-             BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}">
+             BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}"
+             NavigationPage.HasBackButton="False">
 
     <ContentPage.Resources>
 
@@ -259,14 +260,13 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-
-        <ToolbarItem Text="Add Folder" Clicked="OnFolderAddedClicked" Order="Primary"
-                     IconImageSource="{StaticResource FontImageSource_Folder}"/>
         <ToolbarItem Text="Navigate Up" Order="Primary" Clicked="ToParentFolder_Clicked" 
                      IconImageSource="{StaticResource FontImageSource_LongArrowUp}"/>
         <ToolbarItem Text="Select" Order="Primary" Clicked="SelectCurrentFolder_Clicked"/>
-        <!--<ToolbarItem Text="Cancel" Order="Primary" Clicked="Cancel_Clicked" 
-                     IconImageSource="{StaticResource FontImageSource_Close}"/>-->
+        <ToolbarItem Text="Add Folder" Clicked="OnFolderAddedClicked" Order="Primary"
+                     IconImageSource="{StaticResource FontImageSource_Folder}"/>
+        <ToolbarItem Text="Cancel" Order="Primary" Clicked="Cancel_Clicked" 
+                     IconImageSource="{StaticResource FontImageSource_Close}"/>
         <!--<ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />-->
     </ContentPage.ToolbarItems>
     
