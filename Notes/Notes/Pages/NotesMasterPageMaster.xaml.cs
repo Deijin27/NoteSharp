@@ -23,17 +23,9 @@ namespace Notes.Pages
             List<ListViewMenuItem> menuItems = new List<ListViewMenuItem>();
             menuItems.Add(new ListViewMenuItem() { Icon = "\uf1c6", Text = "Settings", TargetType = typeof(SettingsPage)});
             menuItems.Add(new ListViewMenuItem() { Icon = "\uf350", Text = "Style Sheets", TargetType = typeof(StyleSheetsPage)});
+            menuItems.Add(new ListViewMenuItem() { Icon = "\uf227", Text = "Quick Access", TargetType = typeof(NotesPage)});
 
             menu.ItemsSource = menuItems;
         }
-
-        //async void OnOpenTemplatesFolderClicked(object sender, EventArgs e)
-        //{
-        //    await Navigation.PushAsync(new NotesPage
-        //    {
-        //        FolderID = 0,
-        //        Title = "Templates"
-        //    });
-        //}
     }
 }

@@ -22,18 +22,18 @@ namespace Notes.Data
         /// <param name="title">Title of dialog</param>
         /// <param name="initialValue">Initial text in dialog entry when first raised</param>
         /// <returns>(Option option_clicked, string result)</returns>
-        public static async Task<(Option, string)> GetUniqueNoteName(Page page, int folderID, string title, string message = "Input name for note", string initialValue = "")
+        public static async Task<(Option, string)> GetUniqueNoteName(Page page, int folderID, string title, bool isQuickAccess = false, string message = "Input name for note", string initialValue = "")
         {
             string result = await page.DisplayPromptAsync(title, message, initialValue: initialValue);
 
             if (result == null)
                 return (Option.Cancel, null);
 
-            bool valid;
-            while (!(valid = IsNameValid(result)) || await App.Database.DoesNoteNameExistAsync(result, folderID))
+            bool invalid = true;
+            while (invalid)
             {
 
-                if (!valid)
+                if (invalid = !IsNameValid(result))
                 {
                     result = await page.DisplayPromptAsync
                     (
@@ -43,7 +43,17 @@ namespace Notes.Data
                     );
                 }
 
-                else
+                else if (isQuickAccess && (invalid = await App.Database.DoesQuickAccessNoteNameExistAsync(result)))
+                {
+                    result = await page.DisplayPromptAsync
+                    (
+                        title,
+                        "A note of that name already exists in Quick Access; please input a different name",
+                        initialValue: result
+                    );
+                }
+
+                else if (invalid = await App.Database.DoesNoteNameExistAsync(result, folderID))
                 {
                     result = await page.DisplayPromptAsync
                     (
@@ -68,17 +78,17 @@ namespace Notes.Data
         /// <param name="title">Title of dialog</param>
         /// <param name="initialValue">Initial text in dialog entry when first raised</param>
         /// <returns>(Option option_clicked, string result)</returns>
-        public static async Task<(Option, string)> GetUniqueFolderName(Page page, int parentID, string title, string message = "Input name for folder", string initialValue = "")
+        public static async Task<(Option, string)> GetUniqueFolderName(Page page, int parentID, string title, bool isQuickAccess = false, string message = "Input name for folder", string initialValue = "")
         {
             string result = await page.DisplayPromptAsync(title, message, initialValue: initialValue);
 
             if (result == null)
                 return (Option.Cancel, null);
 
-            bool valid;
-            while (!(valid = IsNameValid(result)) || await App.Database.DoesFolderNameExistAsync(result, parentID))
+            bool invalid = true;
+            while (invalid)
             {
-                if (!valid)
+                if (invalid = !IsNameValid(result))
                 {
                     result = await page.DisplayPromptAsync
                     (
@@ -88,7 +98,17 @@ namespace Notes.Data
                     );
                 }
 
-                else
+                else if (isQuickAccess && (invalid = await App.Database.DoesQuickAccessFolderNameExistAsync(result)))
+                {
+                    result = await page.DisplayPromptAsync
+                    (
+                        title,
+                        "A folder of that name already exists in Quick Access; please input a different name",
+                        initialValue: result
+                    );
+                }
+
+                else if (invalid = await App.Database.DoesFolderNameExistAsync(result, parentID))
                 {
                     result = await page.DisplayPromptAsync
                     (

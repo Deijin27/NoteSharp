@@ -9,9 +9,11 @@ using System.Collections;
 using SQLitePCL;
 using System.Runtime.InteropServices.ComTypes;
 using Xamarin.Forms;
+using System.Runtime.CompilerServices;
 
 namespace Notes.Data
 {
+
     public class NoteDatabase
     {
         readonly SQLiteAsyncConnection _database;
@@ -24,11 +26,8 @@ namespace Notes.Data
             _database.CreateTableAsync<CSS>().Wait();
         }
 
-        public Task<List<Note>> GetNotesAsync(int folderID)
+        public static AsyncTableQuery<Note> SortNotes(AsyncTableQuery<Note> query)
         {
-            var query = _database.Table<Note>()
-                                 .Where(i => i.FolderID == folderID);
-
             SortingMode sortingMode = App.SortingMode;
 
             switch (sortingMode)
@@ -46,6 +45,48 @@ namespace Notes.Data
                     query = query.OrderBy(i => i.Name);
                     break;
             }
+            return query;
+        }
+
+        public static AsyncTableQuery<Folder> SortFolders(AsyncTableQuery<Folder> query)
+        {
+            SortingMode sortingMode = App.SortingMode;
+
+            switch (sortingMode)
+            {
+                case SortingMode.Name:
+                    query = query.OrderBy(i => i.Name);
+                    break;
+                case SortingMode.DateCreated:
+                    query = query.OrderByDescending(i => i.DateCreated);
+                    break;
+                case SortingMode.DateModified:
+                    query = query.OrderByDescending(i => i.DateModified);
+                    break;
+                default:
+                    query = query.OrderBy(i => i.Name);
+                    break;
+            }
+            return query;
+        }
+
+        public Task<List<Note>> GetNotesAsync(int folderID)
+        {
+            var query = _database.Table<Note>()
+                                 .Where(i => i.FolderID == folderID);
+
+            query = SortNotes(query);
+
+            return query.ToListAsync();
+
+        }
+
+        public Task<List<Note>> GetQuickAccessNotesAsync()
+        {
+            var query = _database.Table<Note>()
+                                 .Where(i => i.IsQuickAccess == true);
+
+            query = SortNotes(query);
 
             return query.ToListAsync();
 
@@ -72,23 +113,17 @@ namespace Notes.Data
             var query = _database.Table<Folder>()
                             .Where(i => i.ParentID == folderID);
 
-            SortingMode sortingMode = App.SortingMode;
+            query = SortFolders(query);
 
-            switch (sortingMode)
-            {
-                case SortingMode.Name:
-                    query = query.OrderBy(i => i.Name);
-                    break;
-                case SortingMode.DateCreated:
-                    query = query.OrderByDescending(i => i.DateCreated);
-                    break;
-                case SortingMode.DateModified:
-                    query = query.OrderByDescending(i => i.DateModified);
-                    break;
-                default:
-                    query = query.OrderBy(i => i.Name);
-                    break;
-            }
+            return query.ToListAsync();
+        }
+
+        public Task<List<Folder>> GetQuickAccessFoldersAsync()
+        {
+            var query = _database.Table<Folder>()
+                            .Where(i => i.IsQuickAccess == true);
+
+            query = SortFolders(query);
 
             return query.ToListAsync();
         }
@@ -122,6 +157,22 @@ namespace Notes.Data
                                        .Where(i => i.ParentID == parentID && i.Name == name)
                                        .CountAsync();
 
+            return count > 0;
+        }
+
+        public async Task<bool> DoesQuickAccessFolderNameExistAsync(string name)
+        {
+            int count = await _database.Table<Folder>()
+                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
+                                       .CountAsync();
+            return count > 0;
+        }
+
+        public async Task<bool> DoesQuickAccessNoteNameExistAsync(string name)
+        {
+            int count = await _database.Table<Note>()
+                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
+                                       .CountAsync();
             return count > 0;
         }
 

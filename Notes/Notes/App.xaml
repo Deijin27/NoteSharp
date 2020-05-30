@@ -64,6 +64,8 @@
         <x:String x:Key="IconGlyph_LongArrowUp">&#xf303;</x:String>
         <x:String x:Key="IconGlyph_Close">&#xf136;</x:String>
         <x:String x:Key="IconGlyph_Check">&#xf26b;</x:String>
+        <x:String x:Key="IconGlyph_Star">&#xf27d;</x:String>
+        <x:String x:Key="IconGlyph_FolderStar">&#xf227;</x:String>
         
         <!-- FontImageSources-->
         <FontImageSource x:Key="FontImageSource_FilePlus"  
@@ -104,6 +106,11 @@
         <FontImageSource x:Key="FontImageSource_Check"  
                          FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
                          Glyph="{StaticResource IconGlyph_Check}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Star"  
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Star}"
                          Size="24"
                          Color="{DynamicResource ToolbarIconColor}"/>
 

@@ -57,6 +57,7 @@ namespace Notes.Pages
     public partial class NotesPage : ContentPage
     {
         public int FolderID = 0;
+        public bool IsQuickAccessPage = false;
 
         public NotesPage()
         {
@@ -71,8 +72,19 @@ namespace Notes.Pages
 
         public async Task UpdateListView()
         {
-            var folderItems = await App.Database.GetFoldersAsync(FolderID);
-            var fileItems = await App.Database.GetNotesAsync(FolderID);
+            List<Folder> folderItems;
+            List<Note> fileItems;
+
+            if (IsQuickAccessPage)
+            {
+                folderItems = await App.Database.GetQuickAccessFoldersAsync();
+                fileItems = await App.Database.GetQuickAccessNotesAsync();
+            }
+            else
+            { 
+                folderItems = await App.Database.GetFoldersAsync(FolderID);
+                fileItems = await App.Database.GetNotesAsync(FolderID);
+            }
 
             var listViewItems = new List<FolderContentItem>();
 
@@ -189,7 +201,9 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Folder folder = folderContentItem.ContentFolder;
 
-            (Option option, string result) = await NameValidation.GetUniqueFolderName(this, folder.ParentID, "Rename Folder", initialValue: folder.Name);
+            (Option option, string result) = await NameValidation.GetUniqueFolderName(this, folder.ParentID, "Rename Folder", 
+                isQuickAccess: folder.IsQuickAccess,
+                initialValue: folder.Name);
             if (option == Option.OK)
             {
                 folder.Name = result;
@@ -228,7 +242,9 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Note note = folderContentItem.ContentNote;
 
-            (Option option, string result) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Rename Note", initialValue: note.Name);
+            (Option option, string result) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Rename Note", 
+                isQuickAccess: note.IsQuickAccess,
+                initialValue: note.Name);
             if (option == Option.OK)
             {
                 note.Name = result;
@@ -258,6 +274,98 @@ namespace Notes.Pages
             {
                 await App.Database.DeleteNoteAsync(note);
                 await UpdateListView();
+            }
+        }
+
+        private async void ToggleNoteQuickAccess_Clicked(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Note note = folderContentItem.ContentNote;
+
+            if (!note.IsQuickAccess)
+            {
+                bool answer = await DisplayAlert("Quick Access", "Add note to quick access?", "Yes", "Cancel");
+
+                if (answer)
+                {
+                    if (await App.Database.DoesQuickAccessNoteNameExistAsync(note.Name))
+                    {
+                        (Option option, string newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Folder Name Conflict",
+                            isQuickAccess: true,
+                            message: "A folder of the same name already exists in the QuickAccess, please input a different name");
+                        if (option == Option.OK)
+                        {
+                            note.Name = newName;
+                            note.IsQuickAccess = true;
+                            await App.Database.SaveNoteAsync(note);
+                            await UpdateListView();
+                        }
+                    }
+                    else
+                    {
+                        note.IsQuickAccess = true;
+                        await App.Database.SaveNoteAsync(note);
+                        await UpdateListView();
+                    }
+                }
+            }
+            else
+            {
+                bool answer = await DisplayAlert("Quick Access", "Remove note from quick access?", "Yes", "Cancel");
+
+                if (answer)
+                {
+                    note.IsQuickAccess = false;
+                    await App.Database.SaveNoteAsync(note);
+                    await UpdateListView();
+                }
+            }
+        }
+
+        private async void ToggleFolderQuickAccess_Clicked(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Folder folder = folderContentItem.ContentFolder;
+
+            if (!folder.IsQuickAccess)
+            {
+                bool answer = await DisplayAlert("Quick Access", "Add folder to quick access?", "Yes", "Cancel");
+
+                if (answer)
+                {
+                    if (await App.Database.DoesQuickAccessFolderNameExistAsync(folder.Name))
+                    {
+                        (Option option, string newName) = await NameValidation.GetUniqueFolderName(this, folder.ParentID, "Folder Name Conflict",
+                            isQuickAccess: true,
+                            message: "A folder of the same name already exists in the QuickAccess, please input a different name");
+                        if (option == Option.OK)
+                        {
+                            folder.Name = newName;
+                            folder.IsQuickAccess = true;
+                            await App.Database.SaveFolderAsync(folder);
+                            await UpdateListView();
+                        }
+                    }
+                    else
+                    {
+                        folder.IsQuickAccess = true;
+                        await App.Database.SaveFolderAsync(folder);
+                        await UpdateListView();
+                    }
+                }
+            }
+            else
+            {
+                bool answer = await DisplayAlert("Quick Access", "Remove folder from quick access?", "Yes", "Cancel");
+
+                if (answer)
+                {
+                    folder.IsQuickAccess = false;
+                    await App.Database.SaveFolderAsync(folder);
+                    await UpdateListView();
+                }
             }
         }
     }

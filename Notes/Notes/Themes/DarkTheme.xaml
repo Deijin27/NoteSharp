@@ -16,5 +16,6 @@
     <Color x:Key="SliderMinTrackColor">#FFFFFF</Color>
     <Color x:Key="SliderMaxTrackColor">#FFFFFF</Color>
     <Color x:Key="SliderThumbColor">#FFFFFF</Color>
+    <Color x:Key="QuickAccessMarkerColor">#e3d5af</Color>
 
 </ResourceDictionary>

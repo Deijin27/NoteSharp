@@ -22,6 +22,10 @@
                                   CommandParameter="{Binding .}"
                                   Text="Move"
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Clicked="ToggleFolderQuickAccess_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Toggle Quick Access"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
                                   Text="Delete" IsDestructive="True"
@@ -34,7 +38,8 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0"
@@ -52,6 +57,14 @@
                                VerticalOptions="Center"
                                MaxLines="1"
                                Margin="10, 0, 0, 0"/>
+                        <Label Grid.Column="2"
+                               Text="{StaticResource IconGlyph_Star}"
+                               FontSize="12"
+                               TextColor="{DynamicResource QuickAccessMarkerColor}"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               IsVisible="{Binding ContentFolder.IsQuickAccess}"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"/>
                     </Grid>
                 </ViewCell>
             </DataTemplate>
@@ -66,6 +79,10 @@
                                   CommandParameter="{Binding .}"
                                   Text="Move" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Clicked="ToggleFolderQuickAccess_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Toggle Quick Access"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
                                   Text="Delete" IsDestructive="True"
@@ -79,7 +96,8 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0"
@@ -102,11 +120,21 @@
                                Margin="10, 0, 0, 0"/>
                         <Label Grid.Column="1"
                                Grid.Row="1"
+                               Grid.ColumnSpan="2"
                                Text="{Binding ContentFolder.DateCreatedLocal, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
                                TextColor="{DynamicResource SecondaryContentTextColor}"
                                FontSize="Micro"
                                VerticalOptions="End"
                                Margin="10, 0, 0, 0"/>
+                        <Label Grid.Column="2"
+                               Grid.Row="0"
+                               Text="{StaticResource IconGlyph_Star}"
+                               FontSize="12"
+                               TextColor="{DynamicResource QuickAccessMarkerColor}"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               IsVisible="{Binding ContentFolder.IsQuickAccess}"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"/>
 
                     </Grid>
                 </ViewCell>
@@ -122,6 +150,10 @@
                                   CommandParameter="{Binding .}"
                                   Text="Move" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Clicked="ToggleFolderQuickAccess_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Toggle Quick Access"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
                                   Text="Delete" IsDestructive="True"
@@ -135,7 +167,8 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0"
@@ -162,7 +195,17 @@
                                TextColor="{DynamicResource SecondaryContentTextColor}"
                                FontSize="Micro"
                                VerticalOptions="End"
+                               Grid.ColumnSpan="2"
                                Margin="10, 0, 0, 0"/>
+                        <Label Grid.Column="2"
+                               Grid.Row="0"
+                               Text="{StaticResource IconGlyph_Star}"
+                               FontSize="12"
+                               TextColor="{DynamicResource QuickAccessMarkerColor}"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               IsVisible="{Binding ContentFolder.IsQuickAccess}"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"/>
 
                     </Grid>
                 </ViewCell>
@@ -178,6 +221,10 @@
                                   CommandParameter="{Binding .}"
                                   Text="Move" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Clicked="ToggleNoteQuickAccess_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Toggle Quick Access"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
                                   Text="Delete" IsDestructive="True"
@@ -191,7 +238,8 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Column="0"
@@ -209,6 +257,14 @@
                                VerticalOptions="Center"
                                MaxLines="1"
                                Margin="10, 0, 0, 0"/>
+                        <Label Grid.Column="2"
+                               Text="{StaticResource IconGlyph_Star}"
+                               FontSize="12"
+                               TextColor="{DynamicResource QuickAccessMarkerColor}"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               IsVisible="{Binding ContentNote.IsQuickAccess}"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"/>
 
                     </Grid>
                 </ViewCell>
@@ -224,6 +280,10 @@
                                   CommandParameter="{Binding .}"
                                   Text="Move" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Clicked="ToggleNoteQuickAccess_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Toggle Quick Access"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
                                   Text="Delete" IsDestructive="True"
@@ -237,6 +297,7 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
@@ -252,6 +313,7 @@
                         </Label>
                         <Label Grid.Column="1"
                                Grid.Row="0"
+                               Grid.ColumnSpan="2"
                                Text="{Binding ContentNote.Name}" 
                                TextColor="{DynamicResource PrimaryContentTextColor}"
                                FontSize="Small"
@@ -265,6 +327,15 @@
                                FontSize="Micro"
                                VerticalOptions="End"
                                Margin="10, 0, 0, 0"/>
+                        <Label Grid.Column="2"
+                               Grid.Row="0"
+                               Text="{StaticResource IconGlyph_Star}"
+                               FontSize="12"
+                               TextColor="{DynamicResource QuickAccessMarkerColor}"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               IsVisible="{Binding ContentNote.IsQuickAccess}"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"/>
 
                     </Grid>
                 </ViewCell>
@@ -280,6 +351,10 @@
                                   CommandParameter="{Binding .}"
                                   Text="Move" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Clicked="ToggleNoteQuickAccess_Clicked"
+                                  CommandParameter="{Binding .}"
+                                  Text="Toggle Quick Access"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
                                   Text="Delete" IsDestructive="True"
@@ -293,6 +368,7 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
@@ -317,11 +393,21 @@
                                Margin="10, 0, 0, 0"/>
                         <Label Grid.Column="1"
                                Grid.Row="1"
+                               Grid.ColumnSpan="2"
                                Text="{Binding ContentNote.DateModifiedLocal, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
                                TextColor="{DynamicResource SecondaryContentTextColor}"
                                FontSize="Micro"
                                VerticalOptions="End"
                                Margin="10, 0, 0, 0"/>
+                        <Label Grid.Column="2"
+                               Grid.Row="0"
+                               Text="{StaticResource IconGlyph_Star}"
+                               FontSize="12"
+                               TextColor="{DynamicResource QuickAccessMarkerColor}"
+                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                               IsVisible="{Binding ContentNote.IsQuickAccess}"
+                               VerticalTextAlignment="Center"
+                               HorizontalTextAlignment="Start"/>
 
                     </Grid>
                 </ViewCell>

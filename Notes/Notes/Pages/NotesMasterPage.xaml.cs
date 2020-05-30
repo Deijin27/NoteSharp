@@ -33,7 +33,14 @@ namespace Notes.Pages
             var item = e.SelectedItem as ListViewMenuItem;
             if (item != null)
             {
-                await mainNavigation.PushAsync((ContentPage)Activator.CreateInstance(item.TargetType));
+                if (item.TargetType == typeof(NotesPage))
+                {
+                    await mainNavigation.PushAsync(new NotesPage() { Title = "Quick Access", IsQuickAccessPage = true });
+                }
+                else
+                { 
+                    await mainNavigation.PushAsync((ContentPage)Activator.CreateInstance(item.TargetType));
+                }
                 masterPage.menu.SelectedItem = null;
                 IsPresented = false;
             }

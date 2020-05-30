@@ -167,8 +167,22 @@ namespace Notes.Pages
                 bool exists = await App.Database.DoesFolderNameExistAsync(FolderToMove.Name, FolderID);
                 if (exists)
                 {
-                    (Option option, string newName) = await NameValidation.GetUniqueFolderName(this, FolderID, "Folder Name Conflict", 
-                        "A folder of the same name already exists in the destination, please input a different name");
+                    (Option option, string newName) = await NameValidation.GetUniqueFolderName(this, FolderID, "Folder Name Conflict",
+                        message: "A folder of the same name already exists in the destination, please input a different name");
+                    if (option == Option.OK)
+                    {
+                        FolderToMove.ParentID = FolderID;
+                        FolderToMove.DateModified = DateTime.UtcNow;
+                        FolderToMove.Name = newName;
+                        await App.Database.SaveFolderAsync(FolderToMove);
+                        await Navigation.PopModalAsync();
+                    }
+                }
+                else if (FolderToMove.IsQuickAccess && (await App.Database.DoesQuickAccessFolderNameExistAsync(FolderToMove.Name)))
+                {
+                    (Option option, string newName) = await NameValidation.GetUniqueFolderName(this, FolderID, "Folder Name Conflict",
+                        isQuickAccess: true,
+                        message: "A folder of the same name already exists in the QuickAccess, please input a different name");
                     if (option == Option.OK)
                     {
                         FolderToMove.ParentID = FolderID;
@@ -192,7 +206,7 @@ namespace Notes.Pages
                 if (exists)
                 {
                     (Option option, string newName) = await NameValidation.GetUniqueNoteName(this, FolderID, "Note Name Conflict",
-                        "A note of the same name already exists in the destination, please input a different name");
+                        message: "A note of the same name already exists in the destination, please input a different name");
                     if (option == Option.OK)
                     {
                         NoteToMove.FolderID = FolderID;
@@ -202,7 +216,20 @@ namespace Notes.Pages
                         await Navigation.PopModalAsync();
                     }
                 }
-
+                else if (NoteToMove.IsQuickAccess && (await App.Database.DoesQuickAccessNoteNameExistAsync(NoteToMove.Name)))
+                {
+                    (Option option, string newName) = await NameValidation.GetUniqueNoteName(this, FolderID, "Note Name Conflict",
+                        isQuickAccess: true,
+                        message: "A note of the same name already exists in the QuickAccess, please input a different name");
+                    if (option == Option.OK)
+                    {
+                        NoteToMove.FolderID = FolderID;
+                        NoteToMove.DateModified = DateTime.UtcNow;
+                        NoteToMove.Name = newName;
+                        await App.Database.SaveNoteAsync(NoteToMove);
+                        await Navigation.PopModalAsync();
+                    }
+                }
                 else
                 {
                     NoteToMove.FolderID = FolderID;
