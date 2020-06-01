@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Notes.Pages"
+             xmlns:views="clr-namespace:Notes.Views;assembly=Notes"
              x:Class="Notes.Pages.NotesMovePage"
              BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}"
              NavigationPage.HasBackButton="False">
@@ -11,240 +12,44 @@
         <ResourceDictionary>
             <DataTemplate x:Key="folderTemplate_NameOnly">
                 <ViewCell>
-                    <Grid Margin="10,10,10,10">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="0"
-                               Text="{StaticResource IconGlyph_Folder}"
-                               FontSize="24"
-                               TextColor="{DynamicResource FolderListIconColor}"
-                               HorizontalOptions="Center"
-                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                               VerticalOptions="Center"/>
-                        <Label Grid.Column="1"
-                               Text="{Binding ContentFolder.Name}" 
-                               TextColor="{DynamicResource PrimaryContentTextColor}"
-                               FontSize="Small"
-                               VerticalOptions="Center"
-                               MaxLines="1"
-                               Margin="10, 0, 0, 0"/>
-                    </Grid>
+                    <ViewCell.View>
+                        <views:ListViewItem_FolderNameOnly/>
+                    </ViewCell.View>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="folderTemplate_NameDateCreated">
                 <ViewCell>
-                    <Grid Margin="10,10,10,10">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="0"
-                               Grid.Row="0"
-                               Grid.RowSpan="2"
-                               Text="{StaticResource IconGlyph_Folder}"
-                               FontSize="24"
-                               TextColor="{DynamicResource FolderListIconColor}"
-                               HorizontalOptions="Center"
-                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                               VerticalOptions="Center">
-                        </Label>
-                        <Label Grid.Column="1"
-                               Grid.Row="0"
-                               Text="{Binding ContentFolder.Name}" 
-                               TextColor="{DynamicResource PrimaryContentTextColor}"
-                               FontSize="Small"
-                               VerticalOptions="Center"
-                               MaxLines="1"
-                               Margin="10, 0, 0, 0"/>
-                        <Label Grid.Column="1"
-                               Grid.Row="1"
-                               Text="{Binding ContentFolder.DateCreatedLocal, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
-                               TextColor="{DynamicResource SecondaryContentTextColor}"
-                               FontSize="Micro"
-                               VerticalOptions="End"
-                               Margin="10, 0, 0, 0"/>
-
-                    </Grid>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameDateCreated/>
+                    </ViewCell.View>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="folderTemplate_NameDateModified">
                 <ViewCell>
-                    <Grid Margin="10,10,10,10">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="0"
-                               Grid.Row="0"
-                               Grid.RowSpan="2"
-                               Text="{StaticResource IconGlyph_Folder}"
-                               FontSize="24"
-                               TextColor="{DynamicResource FolderListIconColor}"
-                               HorizontalOptions="Center"
-                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                               VerticalOptions="Center">
-                        </Label>
-                        <Label Grid.Column="1"
-                               Grid.Row="0"
-                               Text="{Binding ContentFolder.Name}" 
-                               TextColor="{DynamicResource PrimaryContentTextColor}"
-                               FontSize="Small"
-                               VerticalOptions="Center"
-                               MaxLines="1"
-                               Margin="10, 0, 0, 0"/>
-                        <Label Grid.Column="1"
-                               Grid.Row="1"
-                               Text="{Binding ContentFolder.DateModifiedLocal, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
-                               TextColor="{DynamicResource SecondaryContentTextColor}"
-                               FontSize="Micro"
-                               VerticalOptions="End"
-                               Margin="10, 0, 0, 0"/>
-
-                    </Grid>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameDateModified/>
+                    </ViewCell.View>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="fileTemplate_NameOnly">
                 <ViewCell IsEnabled="False">
-                    <Grid Margin="10,10,10,10">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <!--<RowDefinition Height="*" />-->
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="0"
-                               Text="{StaticResource IconGlyph_File}"
-                               FontSize="24"
-                               TextColor="{DynamicResource FileListIconColor}"
-                               HorizontalOptions="Center"
-                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                               VerticalOptions="Center"
-                               Opacity="0.5">
-                        </Label>
-                        <Label Grid.Column="1"
-                               Text="{Binding ContentNote.Name}" 
-                               TextColor="{DynamicResource PrimaryContentTextColor}"
-                               Opacity="0.5"
-                               FontSize="Small"
-                               VerticalOptions="Center"
-                               MaxLines="1"
-                               Margin="10, 0, 0, 0"/>
-
-                    </Grid>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameOnly Opacity="0.5"/>
+                    </ViewCell.View>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="fileTemplate_NameDateCreated">
                 <ViewCell IsEnabled="False">
-                    <Grid Margin="10,10,10,10">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="0"
-                               Grid.Row="0"
-                               Grid.RowSpan="2"
-                               Text="{StaticResource IconGlyph_File}"
-                               FontSize="24"
-                               TextColor="{DynamicResource FileListIconColor}"
-                               Opacity="0.5"
-                               HorizontalOptions="Center"
-                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                               VerticalOptions="Center">
-                        </Label>
-                        <Label Grid.Column="1"
-                               Grid.Row="0"
-                               Text="{Binding ContentNote.Name}" 
-                               TextColor="{DynamicResource PrimaryContentTextColor}"
-                               Opacity="0.5"
-                               FontSize="Small"
-                               VerticalOptions="Center"
-                               MaxLines="1"
-                               Margin="10, 0, 0, 0"/>
-                        <Label Grid.Column="1"
-                               Grid.Row="1"
-                               Text="{Binding ContentNote.DateCreatedLocal, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
-                               TextColor="{DynamicResource SecondaryContentTextColor}"
-                               Opacity="0.5"
-                               FontSize="Micro"
-                               VerticalOptions="End"
-                               Margin="10, 0, 0, 0"/>
-
-                    </Grid>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameDateCreated Opacity="0.5"/>
+                    </ViewCell.View>
                 </ViewCell>
             </DataTemplate>
             <DataTemplate x:Key="fileTemplate_NameDateModified">
                 <ViewCell IsEnabled="False">
-                    <Grid Margin="10,10,10,10">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="24" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="0"
-                               Grid.Row="0"
-                               Grid.RowSpan="2"
-                               Text="{StaticResource IconGlyph_File}"
-                               FontSize="24"
-                               TextColor="{DynamicResource FileListIconColor}"
-                               Opacity="0.5"
-                               HorizontalOptions="Center"
-                               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                               VerticalOptions="Center"
-                               >
-                        </Label>
-                        <Label Grid.Column="1"
-                               Grid.Row="0"
-                               Text="{Binding ContentNote.Name}" 
-                               TextColor="{DynamicResource PrimaryContentTextColor}"
-                               Opacity="0.5"
-                               FontSize="Small"
-                               VerticalOptions="Center"
-                               MaxLines="1"
-                               Margin="10, 0, 0, 0"/>
-                        <Label Grid.Column="1"
-                               Grid.Row="1"
-                               Text="{Binding ContentNote.DateModifiedLocal, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
-                               TextColor="{DynamicResource SecondaryContentTextColor}"
-                               Opacity="0.5"
-                               FontSize="Micro"
-                               VerticalOptions="End"
-                               Margin="10, 0, 0, 0"/>
-
-                    </Grid>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameDateModified Opacity="0.5"/>
+                    </ViewCell.View>
                 </ViewCell>
             </DataTemplate>
             <local:FolderContentDataTemplateSelector x:Key="folderContentDataTemplateSelector"
