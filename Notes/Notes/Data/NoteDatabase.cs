@@ -24,9 +24,32 @@ namespace Notes.Data
             _database.CreateTableAsync<Note>().Wait();
             _database.CreateTableAsync<Folder>().Wait();
             _database.CreateTableAsync<CSS>().Wait();
+            _database.CreateTableAsync<Dataset>().Wait();
         }
 
         public static AsyncTableQuery<Note> SortNotes(AsyncTableQuery<Note> query)
+        {
+            SortingMode sortingMode = App.SortingMode;
+
+            switch (sortingMode)
+            {
+                case SortingMode.Name:
+                    query = query.OrderBy(i => i.Name);
+                    break;
+                case SortingMode.DateCreated:
+                    query = query.OrderByDescending(i => i.DateCreated);
+                    break;
+                case SortingMode.DateModified:
+                    query = query.OrderByDescending(i => i.DateModified);
+                    break;
+                default:
+                    query = query.OrderBy(i => i.Name);
+                    break;
+            }
+            return query;
+        }
+
+        public static AsyncTableQuery<Dataset> SortDatasets(AsyncTableQuery<Dataset> query)
         {
             SortingMode sortingMode = App.SortingMode;
 
@@ -81,6 +104,16 @@ namespace Notes.Data
 
         }
 
+        public Task<List<Dataset>> GetDatasetsAsync(int folderID)
+        {
+            var query = _database.Table<Dataset>()
+                                 .Where(i => i.FolderID == folderID);
+
+            query = SortDatasets(query);
+
+            return query.ToListAsync();
+        }
+
         public Task<List<Note>> GetQuickAccessNotesAsync()
         {
             var query = _database.Table<Note>()
@@ -90,6 +123,16 @@ namespace Notes.Data
 
             return query.ToListAsync();
 
+        }
+
+        public Task<List<Dataset>> GetQuickAccessDatasetsAsync()
+        {
+            var query = _database.Table<Dataset>()
+                                 .Where(i => i.IsQuickAccess == true);
+
+            query = SortDatasets(query);
+
+            return query.ToListAsync();
         }
 
         public async Task<bool> DoesCSSNameExist(string name)
@@ -151,6 +194,15 @@ namespace Notes.Data
             return count > 0;
         }
 
+        public async Task<bool> DoesDatasetNameExistAsync(string name, int folderID)
+        {
+            int count = await _database.Table<Dataset>()
+                                       .Where(i => i.FolderID == folderID && i.Name == name)
+                                       .CountAsync();
+
+            return count > 0;
+        }
+
         public async Task<bool> DoesFolderNameExistAsync(string name, int parentID)
         {
             int count = await _database.Table<Folder>()
@@ -176,6 +228,14 @@ namespace Notes.Data
             return count > 0;
         }
 
+        public async Task<bool> DoesQuickAccessDatasetNameExistAsync(string name)
+        {
+            int count = await _database.Table<Dataset>()
+                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
+                                       .CountAsync();
+            return count > 0;
+        }
+
         public Task<CSS> GetSheetAsync(int id)
         {
             return _database.Table<CSS>()
@@ -192,6 +252,18 @@ namespace Notes.Data
             else
             {
                 return _database.InsertAsync(note);
+            }
+        }
+
+        public Task<int> SaveDatasetAsync(Dataset dataset)
+        {
+            if (dataset.ID != 0)
+            {
+                return _database.UpdateAsync(dataset);
+            }
+            else
+            {
+                return _database.InsertAsync(dataset);
             }
         }
 
@@ -229,6 +301,11 @@ namespace Notes.Data
             return _database.DeleteAsync(note);
         }
 
+        public Task<int> DeleteDatasetAsync(Dataset dataset)
+        {
+            return _database.DeleteAsync(dataset);
+        }
+
         public async Task<int> DeleteFolderAndAllContentsAsync(Folder folder)
         {
             List<Folder> query = await _database.Table<Folder>().Where(i => i.ParentID == folder.ID).ToListAsync();
@@ -239,7 +316,7 @@ namespace Notes.Data
             }
 
             await _database.Table<Note>().Where(i => i.FolderID == folder.ID).DeleteAsync();
-
+            await _database.Table<Dataset>().Where(i => i.FolderID == folder.ID).DeleteAsync();
             await _database.DeleteAsync(folder);
 
             return default;

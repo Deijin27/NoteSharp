@@ -9,39 +9,24 @@
              x:Class="Notes.Pages.SettingsPage"
              Title="Settings">
     <ContentPage.Content>
-        <Grid Margin="10,10,10,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            <!--<Picker Title="Select Theme"
-                    SelectedIndexChanged="OnPickerSelectionChanged"
-                    TextColor="{DynamicResource PrimaryContentTextColor}">
-                <Picker.Items>
-                    <x:String>Light</x:String>
-                    <x:String>Dark</x:String>
-                </Picker.Items>
-            </Picker>-->
-
-            <!--<local:EnumPicker ios:Picker.UpdateMode="WhenFinished"
-                              EnumType="{x:Type local:Theme}"
-                              Title="Select Theme"
-                              SelectedIndexChanged="OnPickerSelectionChanged"
-                              TextColor="{DynamicResource PrimaryContentTextColor}"
-                              />-->
-            <Label Text="Dark Theme" 
-                   TextColor="{DynamicResource PrimaryContentTextColor}" 
-                   Grid.Row="0" Grid.Column="0" 
-                   VerticalTextAlignment="Center"
-                   FontSize="Small"/>
-            <Switch x:Name="ThemeSwitch" Toggled="ThemeSwitch_Toggled" 
-                    Grid.Row="0" Grid.Column="1" VerticalOptions="Center"/>
-
-        </Grid>
+        <TableView Intent="Settings" Margin="10">
+            <TableSection>
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Dark Theme" 
+                               Grid.Column="0" 
+                               VerticalTextAlignment="Center" 
+                               TextColor="{DynamicResource PrimaryContentTextColor}"/>
+                        <Switch x:Name="ThemeSwitch" 
+                                Grid.Column="1"
+                                Toggled="ThemeSwitch_Toggled"/>
+                    </Grid>
+                </ViewCell>
+            </TableSection>
+        </TableView>
     </ContentPage.Content>
 </ContentPage>

@@ -17,50 +17,8 @@ namespace Notes.Pages
 
         public NoteEntryPage()
         {
-            Console.WriteLine("DEBUG: NoteEntryPage constructor called."); // DEBUG
             InitializeComponent();
         }
-
-        /*        async void OnSaveButtonClicked(object sender, EventArgs e)
-        {
-            Note note = (Note)BindingContext;
-            note.FolderID = FolderID;
-
-            if (NewNote)
-            {
-                string result = await DisplayPromptAsync("Name", "Input name for file");
-
-                if (!string.IsNullOrWhiteSpace(result))
-                {
-                    while (await App.Database.DoesNoteNameExistAsync(result, note.FolderID))
-                    {
-                        result = await DisplayPromptAsync
-                        (
-                            "Name",
-                            "A file of that name already exists in the current folder; please input a different name",
-                            initialValue: result
-                        );
-
-                        if (string.IsNullOrWhiteSpace(result)) break;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(result))
-                    {
-                        note.Name = result;
-                        note.DateModified = DateTime.UtcNow;
-                        note.DateCreated = note.DateModified;
-                        await App.Database.SaveNoteAsync(note);
-                        await Navigation.PopAsync();
-                    }
-                }
-            }
-            else
-            {
-                note.DateModified = DateTime.UtcNow;
-                await App.Database.SaveNoteAsync(note);
-                await Navigation.PopAsync();
-            }
-        }*/
 
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {

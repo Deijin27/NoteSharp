@@ -66,6 +66,7 @@
         <x:String x:Key="IconGlyph_Check">&#xf26b;</x:String>
         <x:String x:Key="IconGlyph_Star">&#xf27d;</x:String>
         <x:String x:Key="IconGlyph_FolderStar">&#xf227;</x:String>
+        <x:String x:Key="IconGlyph_Javascript">&#xf352;</x:String>
         
         <!-- FontImageSources-->
         <FontImageSource x:Key="FontImageSource_FilePlus"  
@@ -111,6 +112,16 @@
         <FontImageSource x:Key="FontImageSource_Star"  
                          FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
                          Glyph="{StaticResource IconGlyph_Star}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Floppy" 
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Floppy}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Eye"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Eye}"
                          Size="24"
                          Color="{DynamicResource ToolbarIconColor}"/>
 

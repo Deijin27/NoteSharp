@@ -21,22 +21,8 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save" Clicked="OnSaveButtonClicked" Order="Primary">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                                 Glyph="{StaticResource IconGlyph_Floppy}"
-                                 Size="24"
-                                 Color="{DynamicResource ToolbarIconColor}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-        <ToolbarItem Text="MarkdownView" Clicked="MarkdownView_Clicked" Order="Primary">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                                 Glyph="{StaticResource IconGlyph_Eye}"
-                                 Size="24"
-                                 Color="{DynamicResource ToolbarIconColor}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
+        <ToolbarItem Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
+        <ToolbarItem Text="MarkdownView" Clicked="MarkdownView_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
         <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
         <ToolbarItem Text="Html Preview" Clicked="HtmlPreview_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>

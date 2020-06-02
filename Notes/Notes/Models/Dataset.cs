@@ -1,9 +1,11 @@
-﻿using System;
-using SQLite;
+﻿using SQLite;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Notes.Models
 {
-    public class Note
+    public class Dataset
     {
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }
@@ -13,7 +15,6 @@ namespace Notes.Models
         public bool IsQuickAccess { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateModified { get; set; }
-        //public DateTime DateAccessed { get; set; }
 
         public DateTime DateCreatedLocal
         {

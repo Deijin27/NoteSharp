@@ -38,7 +38,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters /:{}",
+                        "Invalid name, please input a name that does not contain any of the characters /:{};#*",
                         initialValue: result
                     );
                 }
@@ -58,7 +58,55 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "A file of that name already exists in the current folder; please input a different name",
+                        "A note of that name already exists in the current folder; please input a different name",
+                        initialValue: result
+                    );
+                }
+
+                if (result == null)
+                    return (Option.Cancel, null);
+
+            }
+            return (Option.OK, result);
+        }
+
+        public static async Task<(Option, string)> GetUniqueDatasetName(Page page, int folderID, string title, bool isQuickAccess = false, string message = "Input name for dataset", string initialValue = "")
+        {
+            string result = await page.DisplayPromptAsync(title, message, initialValue: initialValue);
+
+            if (result == null)
+                return (Option.Cancel, null);
+
+            bool invalid = true;
+            while (invalid)
+            {
+
+                if (invalid = !IsNameValid(result))
+                {
+                    result = await page.DisplayPromptAsync
+                    (
+                        title,
+                        "Invalid name, please input a name that does not contain any of the characters /:{};#*",
+                        initialValue: result
+                    );
+                }
+
+                else if (isQuickAccess && (invalid = await App.Database.DoesQuickAccessDatasetNameExistAsync(result)))
+                {
+                    result = await page.DisplayPromptAsync
+                    (
+                        title,
+                        "A dataset of that name already exists in Quick Access; please input a different name",
+                        initialValue: result
+                    );
+                }
+
+                else if (invalid = await App.Database.DoesDatasetNameExistAsync(result, folderID))
+                {
+                    result = await page.DisplayPromptAsync
+                    (
+                        title,
+                        "A dataset of that name already exists in the current folder; please input a different name",
                         initialValue: result
                     );
                 }
@@ -93,7 +141,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters /:{}",
+                        "Invalid name, please input a name that does not contain any of the characters /:{};#*",
                         initialValue: result
                     );
                 }
@@ -132,7 +180,10 @@ namespace Notes.Data
         /// <returns>false if the name contains forbidden characters.</returns>
         public static bool IsNameValid(string name)
         {
-            return !(name.Contains(":") || name.Contains("{") || name.Contains("}") || name.Contains("/"));
+            return !(name.Contains(":") || name.Contains("{") || name.Contains("}") ||
+                     name.Contains("/") || name.Contains(";") || name.Contains("#") ||
+                     name.Contains("*")
+                     );
         }
     }
 }
