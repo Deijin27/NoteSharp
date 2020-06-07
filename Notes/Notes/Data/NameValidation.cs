@@ -29,6 +29,8 @@ namespace Notes.Data
             if (result == null)
                 return (Option.Cancel, null);
 
+            result = result.Trim();
+
             bool invalid = true;
             while (invalid)
             {
@@ -66,6 +68,8 @@ namespace Notes.Data
                 if (result == null)
                     return (Option.Cancel, null);
 
+                result = result.Trim();
+
             }
             return (Option.OK, result);
         }
@@ -76,6 +80,8 @@ namespace Notes.Data
 
             if (result == null)
                 return (Option.Cancel, null);
+
+            result = result.Trim();
 
             bool invalid = true;
             while (invalid)
@@ -114,6 +120,7 @@ namespace Notes.Data
                 if (result == null)
                     return (Option.Cancel, null);
 
+                result = result.Trim();
             }
             return (Option.OK, result);
         }
@@ -132,6 +139,8 @@ namespace Notes.Data
 
             if (result == null)
                 return (Option.Cancel, null);
+
+            result = result.Trim();
 
             bool invalid = true;
             while (invalid)
@@ -169,6 +178,7 @@ namespace Notes.Data
                 if (result == null)
                     return (Option.Cancel, null);
 
+                result = result.Trim();
             }
             return (Option.OK, result);
         }
@@ -182,7 +192,7 @@ namespace Notes.Data
         {
             return !(name.Contains(":") || name.Contains("{") || name.Contains("}") ||
                      name.Contains("/") || name.Contains(";") || name.Contains("#") ||
-                     name.Contains("*")
+                     name.Contains("*") || name.Contains("=") || name == "T"
                      );
         }
     }

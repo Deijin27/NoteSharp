@@ -8,42 +8,58 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Essentials;
+using Notes.Data;
 
 namespace Notes.Pages
 {
     public partial class MarkdownViewPage : ContentPage
     {
-
-
         string MarkdownText;
+        string HtmlText;
 
-        public MarkdownViewPage(string markdownText, bool DisableCssSelector = false)
+        public MarkdownViewPage(string markdownText, int folderID, bool DisableCssSelector = false)
         {
-            Console.WriteLine("DEBUG: MarkdownViewPage constructor called."); // DEBUG
             InitializeComponent();
             if (DisableCssSelector)
             {
                 ToolbarItems.Remove(SelectCSS);
             }
             MarkdownText = markdownText;
-            UpdateWebView();
-            
+            Console.WriteLine("DEBUG: Initialise Html Started");
+            InitialiseHtml(folderID);
+            Console.WriteLine("DEBUG: Initialise Html Finished");
+            Console.WriteLine("DEBUG: Update Web View Started");
+            Console.WriteLine("DEBUG: Update Web View Finished");
+
+        }
+
+        async void InitialiseHtml(int folderID)
+        {
+            (string markdownFinal, ErrorEncountered errorEncountered) = await App.Database.InterpolateAndInputTemplatesAsync(MarkdownText, this, folderID);
+
+            Console.WriteLine($"DEBUG: Interpolate crap finished, markdownfinal = [{markdownFinal}]");
+
+            if (errorEncountered == ErrorEncountered.True)
+            {
+                Console.WriteLine("DEBUG: Error Encountered in InitialiseHtml");
+                await Navigation.PopAsync();
+            }
+            else 
+            {
+                Console.WriteLine("DEBUG: Error NOT Encountered in InitialiseHtml");
+                MarkdownPipeline pipeline = new MarkdownPipelineBuilder()
+                                            .UseAdvancedExtensions()
+                                            .Build();
+                HtmlText = Markdown.ToHtml(markdownFinal, pipeline);
+                Console.WriteLine($"DEBUG: HtmlText set to [{HtmlText}]");
+
+                UpdateWebView();
+            }
         }
 
         async void UpdateWebView()
         {
-
-            MarkdownPipeline pipeline = new MarkdownPipelineBuilder()
-                                            .UseAdvancedExtensions()
-                                            .Build();
-
-            string html = Markdown.ToHtml(MarkdownText, pipeline);
-
-            //string css = @"h1 {
-            //                   color: lightcoral;
-            //                   font-weight: bold;
-            //                   font-size: xx-large;
-            //               }";
+            string html = HtmlText;
 
             string css = (await ((App)App.Current).GetStyleSheetAsync()).Text;
 

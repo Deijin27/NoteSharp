@@ -78,7 +78,7 @@ namespace Notes.Pages
         {
             var note = (Note)BindingContext;
             string markdownText = note.Text;
-            await Navigation.PushAsync(new MarkdownViewPage(markdownText));
+            await Navigation.PushAsync(new MarkdownViewPage(markdownText, FolderID));
         }
     }
 }
