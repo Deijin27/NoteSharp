@@ -13,6 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Net;
 using Notes.Pages;
+using System.Dynamic;
 
 namespace Notes.Data
 {
@@ -35,6 +36,7 @@ namespace Notes.Data
             _database.CreateTableAsync<Dataset>().Wait();
         }
 
+        #region Sorting Methods
         public static AsyncTableQuery<Note> SortNotes(AsyncTableQuery<Note> query)
         {
             SortingMode sortingMode = App.SortingMode;
@@ -101,6 +103,10 @@ namespace Notes.Data
             return query;
         }
 
+        #endregion
+
+        #region Get All Objects of Type
+
         public Task<List<Note>> GetNotesAsync(int folderID)
         {
             var query = _database.Table<Note>()
@@ -121,6 +127,20 @@ namespace Notes.Data
 
             return query.ToListAsync();
         }
+
+        public Task<List<Folder>> GetFoldersAsync(int folderID)
+        {
+            var query = _database.Table<Folder>()
+                            .Where(i => i.ParentID == folderID);
+
+            query = SortFolders(query);
+
+            return query.ToListAsync();
+        }
+
+        #endregion
+
+        #region Get All Quick Access Objects of Type
 
         public Task<List<Note>> GetQuickAccessNotesAsync()
         {
@@ -143,32 +163,6 @@ namespace Notes.Data
             return query.ToListAsync();
         }
 
-        public async Task<bool> DoesCSSNameExist(string name)
-        {
-            int count = await _database.Table<CSS>()
-                                 .Where(i => i.Name == name)
-                                 .CountAsync();
-
-            return count > 0;
-        }
-
-        public Task<List<CSS>> GetSheetsAsync()
-        {
-            return _database.Table<CSS>()
-                            .OrderBy(i => i.Name)
-                            .ToListAsync();
-        }
-
-        public Task<List<Folder>> GetFoldersAsync(int folderID)
-        {
-            var query = _database.Table<Folder>()
-                            .Where(i => i.ParentID == folderID);
-
-            query = SortFolders(query);
-
-            return query.ToListAsync();
-        }
-
         public Task<List<Folder>> GetQuickAccessFoldersAsync()
         {
             var query = _database.Table<Folder>()
@@ -178,6 +172,10 @@ namespace Notes.Data
 
             return query.ToListAsync();
         }
+
+        #endregion
+
+        #region Get Single Object By ID
 
         public Task<Folder> GetFolderAsync(int id)
         {
@@ -193,63 +191,59 @@ namespace Notes.Data
                             .FirstOrDefaultAsync();
         }
 
-        public async Task<bool> DoesNoteNameExistAsync(string name, int folderID)
+        #endregion
+
+        #region Get Single Object By Name and Folder ID
+
+        public Task<Note> GetNoteByNameAsync(int folderID, string name)
         {
-            int count = await _database.Table<Note>()
-                                       .Where(i => i.FolderID == folderID && i.Name == name)
-                                       .CountAsync();
-
-            return count > 0;
-        }
-
-        public async Task<bool> DoesDatasetNameExistAsync(string name, int folderID)
-        {
-            int count = await _database.Table<Dataset>()
-                                       .Where(i => i.FolderID == folderID && i.Name == name)
-                                       .CountAsync();
-
-            return count > 0;
-        }
-
-        public async Task<bool> DoesFolderNameExistAsync(string name, int parentID)
-        {
-            int count = await _database.Table<Folder>()
-                                       .Where(i => i.ParentID == parentID && i.Name == name)
-                                       .CountAsync();
-
-            return count > 0;
-        }
-
-        public async Task<bool> DoesQuickAccessFolderNameExistAsync(string name)
-        {
-            int count = await _database.Table<Folder>()
-                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
-                                       .CountAsync();
-            return count > 0;
-        }
-
-        public async Task<bool> DoesQuickAccessNoteNameExistAsync(string name)
-        {
-            int count = await _database.Table<Note>()
-                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
-                                       .CountAsync();
-            return count > 0;
-        }
-
-        public async Task<bool> DoesQuickAccessDatasetNameExistAsync(string name)
-        {
-            int count = await _database.Table<Dataset>()
-                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
-                                       .CountAsync();
-            return count > 0;
-        }
-
-        public Task<CSS> GetSheetAsync(int id)
-        {
-            return _database.Table<CSS>()
-                            .Where(i => i.ID == id)
+            return _database.Table<Note>()
+                            .Where(i => i.FolderID == folderID && i.Name == name)
                             .FirstOrDefaultAsync();
         }
+
+        public Task<Dataset> GetDatasetByNameAsync(int folderID, string name)
+        {
+            return _database.Table<Dataset>()
+                            .Where(i => i.FolderID == folderID && i.Name == name)
+                            .FirstOrDefaultAsync();
+        }
+
+        public Task<Folder> GetFolderByNameAsync(int parentID, string name)
+        {
+            return _database.Table<Folder>()
+                            .Where(i => i.ParentID == parentID && i.Name == name)
+                            .FirstOrDefaultAsync();
+        }
+
+        #endregion
+
+        #region Get Single Quick Access Object By Name
+
+        public Task<Note> GetQuickAccessNoteByNameAsync(string name)
+        {
+            return _database.Table<Note>()
+                            .Where(i => i.IsQuickAccess == true && i.Name == name)
+                            .FirstOrDefaultAsync();
+        }
+
+        public Task<Dataset> GetQuickAccessDatasetByNameAsync(string name)
+        {
+            return _database.Table<Dataset>()
+                            .Where(i => i.IsQuickAccess == true && i.Name == name)
+                            .FirstOrDefaultAsync();
+        }
+
+        public Task<Folder> GetQuickAccessFolderByNameAsync(string name)
+        {
+            return _database.Table<Folder>()
+                            .Where(i => i.IsQuickAccess == true && i.Name == name)
+                            .FirstOrDefaultAsync();
+        }
+
+        #endregion
+
+        #region Save Object
 
         public Task<int> SaveNoteAsync(Note note)
         {
@@ -287,6 +281,106 @@ namespace Notes.Data
             }
         }
 
+        #endregion
+
+        #region Delete Object
+
+        public Task<int> DeleteNoteAsync(Note note)
+        {
+            return _database.DeleteAsync(note);
+        }
+
+        public Task<int> DeleteDatasetAsync(Dataset dataset)
+        {
+            return _database.DeleteAsync(dataset);
+        }
+
+        #endregion
+
+        #region Check Name Exists of Type in Folder
+
+        public async Task<bool> DoesNoteNameExistAsync(string name, int folderID)
+        {
+            int count = await _database.Table<Note>()
+                                       .Where(i => i.FolderID == folderID && i.Name == name)
+                                       .CountAsync();
+
+            return count > 0;
+        }
+
+        public async Task<bool> DoesDatasetNameExistAsync(string name, int folderID)
+        {
+            int count = await _database.Table<Dataset>()
+                                       .Where(i => i.FolderID == folderID && i.Name == name)
+                                       .CountAsync();
+
+            return count > 0;
+        }
+
+        public async Task<bool> DoesFolderNameExistAsync(string name, int parentID)
+        {
+            int count = await _database.Table<Folder>()
+                                       .Where(i => i.ParentID == parentID && i.Name == name)
+                                       .CountAsync();
+
+            return count > 0;
+        }
+
+        #endregion
+
+        #region Check Name Exists of Type in Quick Access
+
+        public async Task<bool> DoesQuickAccessFolderNameExistAsync(string name)
+        {
+            int count = await _database.Table<Folder>()
+                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
+                                       .CountAsync();
+            return count > 0;
+        }
+
+        public async Task<bool> DoesQuickAccessNoteNameExistAsync(string name)
+        {
+            int count = await _database.Table<Note>()
+                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
+                                       .CountAsync();
+            return count > 0;
+        }
+
+        public async Task<bool> DoesQuickAccessDatasetNameExistAsync(string name)
+        {
+            int count = await _database.Table<Dataset>()
+                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
+                                       .CountAsync();
+            return count > 0;
+        }
+
+        #endregion
+
+        #region Style Sheet Methods
+
+        public Task<List<CSS>> GetSheetsAsync()
+        {
+            return _database.Table<CSS>()
+                            .OrderBy(i => i.Name)
+                            .ToListAsync();
+        }
+
+        public async Task<bool> DoesCSSNameExist(string name)
+        {
+            int count = await _database.Table<CSS>()
+                                 .Where(i => i.Name == name)
+                                 .CountAsync();
+
+            return count > 0;
+        }
+
+        public Task<CSS> GetSheetAsync(int id)
+        {
+            return _database.Table<CSS>()
+                            .Where(i => i.ID == id)
+                            .FirstOrDefaultAsync();
+        }
+
         public Task<int> SaveSheetAsync(CSS sheet)
         {
             if (sheet.ID != 0)
@@ -304,15 +398,8 @@ namespace Notes.Data
             return _database.DeleteAsync(sheet);
         }
 
-        public Task<int> DeleteNoteAsync(Note note)
-        {
-            return _database.DeleteAsync(note);
-        }
+        #endregion
 
-        public Task<int> DeleteDatasetAsync(Dataset dataset)
-        {
-            return _database.DeleteAsync(dataset);
-        }
 
         public async Task<int> DeleteFolderAndAllContentsAsync(Folder folder)
         {
@@ -335,387 +422,266 @@ namespace Notes.Data
             return _database.InsertAsync(folder);
         }
 
-        public Task<Note> GetNoteByNameAsync(int folderID, string name)
-        {
-            return _database.Table<Note>()
-                            .Where(i => i.FolderID == folderID && i.Name == name)
-                            .FirstOrDefaultAsync();
-        }
-
-        public Task<Note> GetQuickAccessNoteByNameAsync(string name)
-        {
-            return _database.Table<Note>()
-                            .Where(i => i.IsQuickAccess == true && i.Name == name)
-                            .FirstOrDefaultAsync();
-        }
-
-        public Task<Dataset> GetDatasetByNameAsync(int folderID, string name)
-        {
-            return _database.Table<Dataset>()
-                            .Where(i => i.FolderID == folderID && i.Name == name)
-                            .FirstOrDefaultAsync();
-        }
-
-        public Task<Dataset> GetQuickAccessDatasetByNameAsync(string name)
-        {
-            return _database.Table<Dataset>()
-                            .Where(i => i.IsQuickAccess == true && i.Name == name)
-                            .FirstOrDefaultAsync();
-        }
-
-        public Task<Folder> GetFolderByNameAsync(int parentID, string name)
-        {
-            return _database.Table<Folder>()
-                            .Where(i => i.ParentID == parentID && i.Name == name)
-                            .FirstOrDefaultAsync();
-        }
-
-        public Task<Folder> GetQuickAccessFolderByNameAsync(string name)
-        {
-            return _database.Table<Folder>()
-                            .Where(i => i.IsQuickAccess == true && i.Name == name)
-                            .FirstOrDefaultAsync();
-        }
+        #region Template Stuff
 
         public Task<(string, ErrorEncountered)> InterpolateAndInputTemplatesAsync(string text, Page currentPage, int folderID)
         {
             // first interpolate anything in this string, inputting the default values specified
-            Console.WriteLine("DEBUG: Initial InterpolateValues started");
             text = InterpolateValues(text, new List<Dictionary<string, string>>());
-            Console.WriteLine("DEBUG: Intitial InterpolateValues finished");
             // then input all templates
-            Console.WriteLine("DEBUG: Main InputTemplates started");
-            return InputTemplates(text, currentPage, folderID);
+            return InputTemplates(text, currentPage, folderID, folderID);
         }
 
-        private async Task<(string, ErrorEncountered)> GetTemplate(string path, Page currentPage, int folderID)
+        private async Task<(Folder, ErrorEncountered)> FollowFolderPath(Folder currentFolder, IEnumerable<string> folderNameSequence, Page currentPage)
         {
-            Note templateFile;
-            string noteName;
-            string[] pathSplit = path.Split('/');
-
-            if (pathSplit.Length == 1) // is just a note
+            foreach (string folderName in folderNameSequence)
             {
-                noteName = pathSplit[0];
-
-                switch (noteName[0])
+                
+                if (folderName[0] == '*') // look for in quick access
                 {
-                    case '*':  // must be quick access
-                        {
-                            noteName = noteName.Skip(1).ToString();
-                            templateFile = await GetQuickAccessNoteByNameAsync(noteName);
-                            if (templateFile == null)
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Quick Access Note {{{noteName}}} not found.", "OK");
-                                return (null, ErrorEncountered.True);
-                            }
-                            break;
-                        }
-                    case '/': // must be in root folder
-                        {
-                            templateFile = await GetNoteByNameAsync(0, noteName);
-                            if (templateFile == null)
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Note {{{noteName}}} not found in root folder.", "OK");
-                                return (null, ErrorEncountered.True);
-                            }
-                            break;
-                        }
-                    default: // must be relative path
-                        {
-                            templateFile = await GetNoteByNameAsync(folderID, noteName);
-                            if (templateFile == null)
-                            {
-                                Folder folder = await GetFolderAsync(folderID);
-                                await currentPage.DisplayAlert("Template Error", $"Note {{{noteName}}} not found in folder {{{folder.Name}}}.", "OK");
-                                return (null, ErrorEncountered.True);
-                            }
-                            break;
-                        }
-                }
-            }
-            else
-            {
-                var folderNames = pathSplit.Take(pathSplit.Length - 1).Skip(1);
-                noteName = pathSplit.Last();
-                string firstFolderName = pathSplit.First();
+                    currentFolder = await GetQuickAccessFolderByNameAsync(folderName.Remove(0, 1));
 
-                Folder currentFolder;
-                Folder newFolder;
-                switch (firstFolderName[0])
-                {
-                    case '*': // the first folder must be quick access
-                        {
-                            firstFolderName = firstFolderName.Skip(1).ToString();
-                            currentFolder = await GetQuickAccessFolderByNameAsync(firstFolderName);
-                            if (currentFolder == null)
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Quick Access Folder {{{firstFolderName}}} not found.", "OK");
-                                return (null, ErrorEncountered.True);
-                            }
-                            break;
-                        }
-                    case '/': // root folder
-                        {
-                            currentFolder = new Folder() { ID = 0 };
-                            break;
-                        }
-                    default: // relative path
-                        {
-                            if (folderID == 0) // current folder is root folder
-                            {
-                                currentFolder = new Folder() { ID = 0 };
-                            }
-                            else // current folder is not root folder, i.e. it exists in the database
-                            {
-                                currentFolder = await GetFolderAsync(folderID);
-                            }
-                            break;
-                        }
-                }
-
-                foreach (string folderName in folderNames)
-                {
-                    if (folderName == "..") // go up one level from current folder
+                    if (currentFolder == null)
                     {
-                        if (currentFolder.ID == 0) // current folder is root folder
-                        {
-                            await currentPage.DisplayAlert("Template Error", "Root folder does not have a parent folder.", "OK");
-                            return (null, ErrorEncountered.True);
-                        }
-                        // current folder is not root folder
-                        if (currentFolder.ParentID == 0) // parent folder is root folder
-                        {
-                            newFolder = new Folder() { ID = 0 };
-                        }
-                        else // parent folder is not root folder, i.e. it exists in database
-                        {
-                            newFolder = await GetFolderAsync(currentFolder.ParentID);
-                        }
+                        await currentPage.DisplayAlert("Template Error", $"Quick Access Folder \"{currentFolder.Name}\" not found.", "OK");
+                        return (null, ErrorEncountered.True);
                     }
-                    else // is a sub folder of current folder
+                }
+                else if (folderName == "..") // step up a folder
+                {
+                    if (currentFolder.ID == 0) // current folder is root folder
                     {
-                        newFolder = await GetFolderByNameAsync(currentFolder.ID, folderName);
-
-                        if (newFolder == null)
-                        {
-                            if (currentFolder.ID == 0)
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Folder {{{folderName}}} not found in root folder", "OK");
-                            }
-                            else
-                            { 
-                                await currentPage.DisplayAlert("Template Error", $"Folder {{{folderName}}} not found in {{{currentFolder.Name}}}", "OK");
-                            }
-                            return (null, ErrorEncountered.True);
-                        }
+                        await currentPage.DisplayAlert("Template Error", "Root folder does not have a parent folder.", "OK");
+                        return (null, ErrorEncountered.True);
                     }
+                    // current folder is not root folder
+                    if (currentFolder.ParentID == 0) // parent folder is root folder
+                    {
+                        currentFolder = new Folder() { ID = 0 };
+                    }
+                    else // parent folder is not root folder, i.e. it exists in database
+                    {
+                        currentFolder = await GetFolderAsync(currentFolder.ParentID);
+                    }
+                }
+                else if (folderName == ".") // stay same folder
+                {
+                    // do nothing
+                }
+                else // look for folder in current folder
+                {
+                    Folder newFolder = await GetFolderByNameAsync(currentFolder.ID, folderName);
+
+                    if (newFolder == null)
+                    {
+                        await currentPage.DisplayAlert("Template Error", $"Folder \"{folderName}\" not found in folder \"{currentFolder.Name}\"", "OK");
+                        return (null, ErrorEncountered.True);
+                    }
+
                     currentFolder = newFolder;
                 }
+            }
+            return (currentFolder, ErrorEncountered.False);
+        }
 
-                templateFile = await GetNoteByNameAsync(currentFolder.ID, noteName);
-                if (templateFile == null)
+        private async Task<(Note, ErrorEncountered)> GetNoteByPath(string path, Page currentPage, int folderID, int mainFolderID)
+        {
+            #region Identical to GetDatasetByPath
+
+            switch (path[0])
+            {
+                case '/': // start in root folder
+                    {
+                        folderID = 0;
+                        path = path.Remove(0, 1);
+                        break;
+                    }
+                case '~': // relative path, but relative to the folder of the file you press the preview button in
+                    {
+                        folderID = mainFolderID;
+                        path = path.Remove(0, 1);
+                        break;
+                    }
+            }
+
+            string[] pathSplit = path.Split('/');
+
+            Folder startFolder;
+            if (folderID == 0) 
+                startFolder = new Folder() { ID = 0 };
+            else 
+                startFolder = await GetFolderAsync(folderID);
+
+            IEnumerable<string> folderNameSequence = pathSplit.Take(pathSplit.Length - 1);
+
+            Folder endFolder;
+            
+            ErrorEncountered errorEncountered;
+            (endFolder, errorEncountered) = await FollowFolderPath(startFolder, folderNameSequence, currentPage);
+            if (errorEncountered == ErrorEncountered.True)
+                return (null, errorEncountered);
+            
+            #endregion
+
+            string noteName = pathSplit.Last();
+
+            Note noteFile;
+
+            if (noteName[0] == '*')
+            {
+                noteName = noteName.Remove(0, 1);
+                noteFile = await GetQuickAccessNoteByNameAsync(noteName);
+
+                if (noteFile == null)
                 {
-                    await currentPage.DisplayAlert("Template Error", $"Note {{{noteName}}} not found in {{{currentFolder.Name}}}.", "OK");
+                    await currentPage.DisplayAlert("Template Error", $"Quick Access Note \"{noteName}\" not found", "OK");
                     return (null, ErrorEncountered.True);
                 }
             }
-            Console.WriteLine($"DEBUG: Get Template {templateFile.Name} Completed");
-            return (templateFile.Text, ErrorEncountered.False);
-        }
+            else 
+            { 
+                noteFile = await GetNoteByNameAsync(endFolder.ID, noteName);
 
-        private async Task<(Dictionary<string, string>, ErrorEncountered)> GetDataset(string path, Page currentPage, int folderID)
-        {
-            Dataset datasetFile;
-            string datasetName;
-            string[] pathSplit = path.Split('/');
-
-            if (pathSplit.Length == 1) // is just a note
-            {
-                datasetName = pathSplit[0];
-
-                switch (datasetName[0])
+                if (noteFile == null)
                 {
-                    case '*':  // must be quick access
-                        {
-                            datasetName = datasetName.Skip(1).ToString();
-                            datasetFile = await GetQuickAccessDatasetByNameAsync(datasetName);
-                            if (datasetFile == null)
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Quick Access Dataset {{{datasetName}}} not found.", "OK");
-                                return (null, ErrorEncountered.True);
-                            }
-                            break;
-                        }
-                    case '/': // must be in root folder
-                        {
-                            datasetFile = await GetDatasetByNameAsync(0, datasetName);
-                            if (datasetFile == null)
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Dataset {{{datasetName}}} not found in root folder.", "OK");
-                                return (null, ErrorEncountered.True);
-                            }
-                            break;
-                        }
-                    default: // must be relative path
-                        {
-                            datasetFile = await GetDatasetByNameAsync(folderID, datasetName);
-                            if (datasetFile == null)
-                            {
-                                Folder folder = await GetFolderAsync(folderID);
-                                await currentPage.DisplayAlert("Template Error", $"Dataset {{{datasetName}}} not found in folder {{{folder.Name}}}.", "OK");
-                                return (null, ErrorEncountered.True);
-                            }
-                            break;
-                        }
+                    await currentPage.DisplayAlert("Template Error", $"Note \"{noteName}\" not found in folder \"{endFolder.Name}\"", "OK");
+                    return (null, ErrorEncountered.True);
                 }
             }
-            else
+
+            return (noteFile, ErrorEncountered.False);
+        }
+
+        private async Task<(Dataset, ErrorEncountered)> GetDatasetByPath(string path, Page currentPage, int folderID, int mainFolderID)
+        {
+            #region Identical to GetNoteByPath
+
+            switch (path[0])
             {
-                var folderNames = pathSplit.Take(pathSplit.Length - 1).Skip(1);
-                datasetName = pathSplit.Last();
-                string firstFolderName = pathSplit.First();
-
-                Folder currentFolder;
-                Folder newFolder;
-                switch (firstFolderName[0])
-                {
-                    case '*': // the first folder must be quick access
-                        {
-                            firstFolderName = firstFolderName.Skip(1).ToString();
-                            currentFolder = await GetQuickAccessFolderByNameAsync(firstFolderName);
-                            if (currentFolder == null)
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Quick Access Folder {{{firstFolderName}}} not found.", "OK");
-                                return (null, ErrorEncountered.True);
-                            }
-                            break;
-                        }
-                    case '/': // root folder
-                        {
-                            currentFolder = new Folder() { ID = 0 };
-                            break;
-                        }
-                    default: // relative path
-                        {
-                            if (folderID == 0) // current folder is root folder
-                            {
-                                currentFolder = new Folder() { ID = 0 };
-                            }
-                            else // current folder is not root folder, i.e. it exists in the database
-                            {
-                                currentFolder = await GetFolderAsync(folderID);
-                            }
-                            break;
-                        }
-                }
-
-                foreach (string folderName in folderNames)
-                {
-                    if (folderName == "..") // go up one level from current folder
+                case '/': // start in root folder
                     {
-                        if (currentFolder.ID == 0) // current folder is root folder
-                        {
-                            await currentPage.DisplayAlert("Template Error", "Root folder does not have a parent folder.", "OK");
-                            return (null, ErrorEncountered.True);
-                        }
-                        // current folder is not root folder
-                        if (currentFolder.ParentID == 0) // parent folder is root folder
-                        {
-                            newFolder = new Folder() { ID = 0 };
-                        }
-                        else // parent folder is not root folder, i.e. it exists in database
-                        {
-                            newFolder = await GetFolderAsync(currentFolder.ParentID);
-                        }
+                        folderID = 0;
+                        path = path.Remove(0, 1);
+                        break;
                     }
-                    else // is a sub folder of current folder
+                case '~': // relative path, but relative to the folder of the file you press the preview button in
                     {
-                        newFolder = await GetFolderByNameAsync(currentFolder.ID, folderName);
-
-                        if (newFolder == null)
-                        {
-                            if (currentFolder.ID == 0)
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Folder {{{folderName}}} not found in root folder", "OK");
-                            }
-                            else
-                            {
-                                await currentPage.DisplayAlert("Template Error", $"Folder {{{folderName}}} not found in {{{currentFolder.Name}}}", "OK");
-                            }
-                            return (null, ErrorEncountered.True);
-                        }
+                        folderID = mainFolderID;
+                        path = path.Remove(0, 1);
+                        break;
                     }
-                    currentFolder = newFolder;
-                }
+            }
 
-                datasetFile = await GetDatasetByNameAsync(currentFolder.ID, datasetName);
+            string[] pathSplit = path.Split('/');
+
+            Folder startFolder;
+            if (folderID == 0)
+                startFolder = new Folder() { ID = 0 };
+            else
+                startFolder = await GetFolderAsync(folderID);
+
+            IEnumerable<string> folderNameSequence = pathSplit.Take(pathSplit.Length - 1);
+
+            Folder endFolder;
+
+            ErrorEncountered errorEncountered;
+            (endFolder, errorEncountered) = await FollowFolderPath(startFolder, folderNameSequence, currentPage);
+            if (errorEncountered == ErrorEncountered.True)
+                return (null, errorEncountered);
+
+            #endregion
+
+            string datasetName = pathSplit.Last();
+
+            Dataset datasetFile;
+
+            if (datasetName[0] == '*')
+            {
+                datasetName = datasetName.Remove(0, 1);
+                datasetFile = await GetQuickAccessDatasetByNameAsync(datasetName);
+
                 if (datasetFile == null)
                 {
-                    await currentPage.DisplayAlert("Template Error", $"Dataset {{{datasetName}}} not found in {{{currentFolder.Name}}}.", "OK");
+                    await currentPage.DisplayAlert("Template Error", $"Quick Access Dataset \"{datasetName}\" not found", "OK");
+                    return (null, ErrorEncountered.True);
+                }
+            }
+            else
+            {
+                datasetFile = await GetDatasetByNameAsync(endFolder.ID, datasetName);
+
+                if (datasetFile == null)
+                {
+                    await currentPage.DisplayAlert("Template Error", $"Dataset \"{datasetName}\" not found in folder \"{endFolder.Name}\"", "OK");
                     return (null, ErrorEncountered.True);
                 }
             }
 
-            Console.WriteLine($"DEBUG: DatasetFile {datasetFile.Name} found, Loading file...");
-            return (LoadDatasetString(datasetFile.Text), ErrorEncountered.False);
+            return (datasetFile, ErrorEncountered.False);
         }
 
         private Dictionary<string, string> LoadDatasetString(string datasetString)
         {
-            Regex datasetRegex = new Regex(@"(}>)?(?<key>[^{}:]*?):\s*<{(?<value>.*?)}>");
+            Regex datasetRegex = new Regex(@"(?<!\\)<dv\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*dv\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
 
             var dataset = new Dictionary<string, string>();
 
             foreach (Match match in datasetRegex.Matches(datasetString))
             {
-                dataset.Add(match.Groups["key"].ToString().Trim(), match.Groups["value"].ToString());
+                string value = match.Groups["value"].Value;
+
+                dataset.Add(match.Groups["key"].Value.Trim(), value);
             }
 
-            Console.WriteLine("DEBUG: Dataset loaded");
             return dataset;
         }
 
-        private async Task<(string, ErrorEncountered)> InputTemplates(string text, Page currentPage, int folderID)
-        {
-            Regex templateRegex = new Regex(@"(?<!\\){\s*?T\s*?:(?<path>[^:{}]*?)(:(?<datasets>[^:{}]*?))?(?<!\\)}");
+        private async Task<(string, ErrorEncountered)> InputTemplates(string text, Page currentPage, int folderID, int mainFolderID)
+        { 
+
+            Regex tRegex = new Regex(@"(?<!\\)<ti\s+""(?<path>[^>]*?)""\s*(?<datasets>[^>]*?)?/>");
+
+            Regex dRegex = new Regex(@"\s*""(?<dataset>.*?)""\s*");
 
             string template;
-            Dictionary<string, string> dataset;
-            ErrorEncountered errorEncountered;
             string path;
+            ErrorEncountered errorEncountered;
+            Dataset datasetFile;
+            Note noteFile;
             List<Dictionary<string, string>> datasets;
 
-            foreach (Match match in templateRegex.Matches(text))
+            foreach (Match match in tRegex.Matches(text))
             {
-                Console.WriteLine("DEBUG: A match has been started...");
-                path = match.Groups["path"].ToString().Trim();
-                string[] datasetPaths = match.Groups["datasets"].ToString().Trim().Split(';');
+                path = match.Groups["path"].Value;
 
-                (template, errorEncountered) = await GetTemplate(path, currentPage, folderID);
+                var datasetPaths = new List<string>();
+
+                foreach (Match dmatch in dRegex.Matches(match.Groups["datasets"].Value))
+                {
+                    datasetPaths.Add(dmatch.Groups["dataset"].Value);
+                }
+
+                (noteFile, errorEncountered) = await GetNoteByPath(path, currentPage, folderID, mainFolderID);
                 if (errorEncountered == ErrorEncountered.True) 
                     return (null, ErrorEncountered.True);
-
-                Console.WriteLine($"DEBUG: After GetTemplate, the template appears to be [{template}]");
+                template = noteFile.Text;
 
                 datasets = new List<Dictionary<string, string>>();
                 foreach (string datasetPath in datasetPaths)
                 {
-                    (dataset, errorEncountered) = await GetDataset(datasetPath, currentPage, folderID);
+                    (datasetFile, errorEncountered) = await GetDatasetByPath(datasetPath, currentPage, folderID, mainFolderID);
                     if (errorEncountered == ErrorEncountered.True)
                         return (null, ErrorEncountered.True);
-                    datasets.Add(dataset);
+                    datasets.Add(LoadDatasetString(datasetFile.Text));
                 }
 
                 template = InterpolateValues(template, datasets);
-                Console.WriteLine($"DEBUG: Another InterpolateValues has been done, template is now [{template}]");
 
-                (template, errorEncountered) = await InputTemplates(template, currentPage, folderID);
+                (template, errorEncountered) = await InputTemplates(template, currentPage, noteFile.FolderID, mainFolderID);
                 if (errorEncountered == ErrorEncountered.True)
                     return (null, ErrorEncountered.True);
 
                 text = text.Replace(match.Value, template);
-                Console.WriteLine($"DEBUG: That match [{match.Value}] has been replaced by [{template}]");
             }
 
             return (text, ErrorEncountered.False);
@@ -723,34 +689,28 @@ namespace Notes.Data
 
         private static string InterpolateValues(string template, List<Dictionary<string, string>> datasets)
         {
-            Regex interpolationRegex = new Regex(@"(?<!\\){(?!#)(?<key>[^:={}]*?)(=(?<default>[^:{}]*?))?(?<!\\)}");
+            Regex interpolationRegex = new Regex(@"(?<!\\)<di\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*di\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
 
             foreach (Match match in interpolationRegex.Matches(template))
             {
                 string replacement = "";
 
                 bool keyFound = false;
+                string key = match.Groups["key"].Value;
                 // take the value from the first dataset with a match
                 foreach (var dataset in datasets)
                 {
-                    try
+                    if (dataset.ContainsKey(key))
                     {
-                        replacement = dataset[match.Groups["key"].ToString().Trim()];
+                        replacement = dataset[key];
                         keyFound = true;
                         break;
                     }
-                    catch (KeyNotFoundException) { }
                 }
 
                 if (!keyFound)
                 {
-                    replacement = match.Groups["default"].ToString();
-
-                    //string trimmed = replacement.Trim();
-                    //if (trimmed[0] == '{' && trimmed[trimmed.Length - 1] == '}')
-                    //{
-                    //    replacement = trimmed.Skip(1).Take(trimmed.Length - 2).ToString();
-                    //}
+                    replacement = match.Groups["value"].Value;
                 }
 
                 template = template.Replace(match.Value, replacement);
@@ -758,5 +718,7 @@ namespace Notes.Data
 
             return template;
         }
+
+        #endregion
     }
 }

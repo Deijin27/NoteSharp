@@ -40,7 +40,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters /:{};#*",
+                        "Invalid name, please input a name that does not contain any of the characters \"/* and is not just two full stops (..)",
                         initialValue: result
                     );
                 }
@@ -92,7 +92,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters /:{};#*",
+                        "Invalid name, please input a name that does not contain any of the characters \"/* and is not just two full stops (..)",
                         initialValue: result
                     );
                 }
@@ -150,7 +150,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters /:{};#*",
+                        "Invalid name, please input a name that does not contain any of the characters \"/* and is not just two full stops (..)",
                         initialValue: result
                     );
                 }
@@ -190,10 +190,7 @@ namespace Notes.Data
         /// <returns>false if the name contains forbidden characters.</returns>
         public static bool IsNameValid(string name)
         {
-            return !(name.Contains(":") || name.Contains("{") || name.Contains("}") ||
-                     name.Contains("/") || name.Contains(";") || name.Contains("#") ||
-                     name.Contains("*") || name.Contains("=") || name == "T"
-                     );
+            return !(name.Contains("/") || name.Contains("\"") || name.Contains("*") || name == "..");
         }
     }
 }
