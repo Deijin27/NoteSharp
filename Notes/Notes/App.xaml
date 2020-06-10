@@ -66,8 +66,7 @@
         <x:String x:Key="IconGlyph_Check">&#xf26b;</x:String>
         <x:String x:Key="IconGlyph_Star">&#xf27d;</x:String>
         <x:String x:Key="IconGlyph_FolderStar">&#xf227;</x:String>
-        <x:String x:Key="IconGlyph_Javascript">&#xf352;</x:String>
-        
+
         <!-- FontImageSources-->
         <FontImageSource x:Key="FontImageSource_FilePlus"  
                          FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"

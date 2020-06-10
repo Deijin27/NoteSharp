@@ -7,8 +7,7 @@ namespace Notes.Models
     public enum FolderContentItemIdentifier
     {
         Folder,
-        File,
-        Dataset
+        File
     }
 
     class FolderContentItem
@@ -16,7 +15,6 @@ namespace Notes.Models
         public FolderContentItemIdentifier Identifier { get; set; }
         public Folder ContentFolder { get; set; }
         public Note ContentNote { get; set; }
-        public Dataset ContentDataset { get; set; }
         public string Icon { get; set; }
 
         public FolderContentItem(Folder folder)
@@ -29,12 +27,6 @@ namespace Notes.Models
         {
             ContentNote = note;
             Identifier = FolderContentItemIdentifier.File;
-        }
-
-        public FolderContentItem(Dataset dataset)
-        {
-            ContentDataset = dataset;
-            Identifier = FolderContentItemIdentifier.Dataset;
         }
     }
 }

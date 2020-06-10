@@ -52,27 +52,7 @@
                     </ViewCell.View>
                 </ViewCell>
             </DataTemplate>
-            <DataTemplate x:Key="datasetTemplate_NameOnly">
-                <ViewCell IsEnabled="False">
-                    <ViewCell.View>
-                        <views:ListViewItem_DatasetNameOnly Opacity="0.5"/>
-                    </ViewCell.View>
-                </ViewCell>
-            </DataTemplate>
-            <DataTemplate x:Key="datasetTemplate_NameDateCreated">
-                <ViewCell IsEnabled="False">
-                    <ViewCell.View>
-                        <views:ListViewItem_DatasetNameDateCreated Opacity="0.5"/>
-                    </ViewCell.View>
-                </ViewCell>
-            </DataTemplate>
-            <DataTemplate x:Key="datasetTemplate_NameDateModified">
-                <ViewCell IsEnabled="False">
-                    <ViewCell.View>
-                        <views:ListViewItem_DatasetNameDateModified Opacity="0.5"/>
-                    </ViewCell.View>
-                </ViewCell>
-            </DataTemplate>
+            
             <local:FolderContentDataTemplateSelector x:Key="folderContentDataTemplateSelector"
                                                      FolderTemplate_NameOnly="{StaticResource folderTemplate_NameOnly}"
                                                      FolderTemplate_NameDateCreated="{StaticResource folderTemplate_NameDateCreated}"
@@ -80,9 +60,6 @@
                                                      FileTemplate_NameOnly="{StaticResource fileTemplate_NameOnly}" 
                                                      FileTemplate_NameDateModified="{StaticResource fileTemplate_NameDateModified}"
                                                      FileTemplate_NameDateCreated="{StaticResource fileTemplate_NameDateCreated}"
-                                                     DatasetTemplate_NameOnly="{StaticResource datasetTemplate_NameOnly}"
-                                                     DatasetTemplate_NameDateCreated="{StaticResource datasetTemplate_NameDateCreated}"
-                                                     DatasetTemplate_NameDateModified="{StaticResource datasetTemplate_NameDateModified}"
                                                      />
         </ResourceDictionary>
         

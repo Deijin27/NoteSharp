@@ -13,8 +13,7 @@ namespace Notes.Pages
     public enum MoveMode
     {
         Note,
-        Folder,
-        Dataset
+        Folder
     }
 
     public partial class NotesMovePage : ContentPage
@@ -22,7 +21,6 @@ namespace Notes.Pages
         public int FolderID;
         public Folder FolderToMove;
         public Note NoteToMove;
-        public Dataset DatasetToMove;
         public MoveMode MoveMode;
 
         public string CurrentFolderName { set { Title = "Move To: " + value; } }
@@ -42,14 +40,6 @@ namespace Notes.Pages
             MoveMode = MoveMode.Note;
         }
 
-        public NotesMovePage(Dataset datasetToMove)
-        {
-            InitializeComponent();
-            FolderID = datasetToMove.FolderID;
-            DatasetToMove = datasetToMove;
-            MoveMode = MoveMode.Dataset;
-        }
-
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -60,17 +50,12 @@ namespace Notes.Pages
         {
             var folderItems = await App.Database.GetFoldersAsync(FolderID);
             var fileItems = await App.Database.GetNotesAsync(FolderID);
-            var datasetItems = await App.Database.GetDatasetsAsync(FolderID);
 
             var listViewItems = new List<FolderContentItem>();
 
             foreach (Folder folder in folderItems)
             {
                 listViewItems.Add(new FolderContentItem(folder));
-            }
-            foreach (Dataset dataset in datasetItems)
-            {
-                listViewItems.Add(new FolderContentItem(dataset));
             }
             foreach (Note file in fileItems)
             {
@@ -212,44 +197,6 @@ namespace Notes.Pages
                     FolderToMove.ParentID = FolderID;
                     FolderToMove.DateModified = DateTime.UtcNow;
                     await App.Database.SaveFolderAsync(FolderToMove);
-                    await Navigation.PopModalAsync();
-                }
-            }
-            else if (MoveMode == MoveMode.Dataset) // i.e. MoveMode == MoveMode.Note
-            {
-                bool exists = await App.Database.DoesDatasetNameExistAsync(DatasetToMove.Name, FolderID);
-                if (exists)
-                {
-                    (Option option, string newName) = await NameValidation.GetUniqueDatasetName(this, FolderID, "Dataset Name Conflict",
-                        message: "A dataset of the same name already exists in the destination, please input a different name");
-                    if (option == Option.OK)
-                    {
-                        DatasetToMove.FolderID = FolderID;
-                        DatasetToMove.DateModified = DateTime.UtcNow;
-                        DatasetToMove.Name = newName;
-                        await App.Database.SaveDatasetAsync(DatasetToMove);
-                        await Navigation.PopModalAsync();
-                    }
-                }
-                else if (DatasetToMove.IsQuickAccess && (await App.Database.DoesQuickAccessDatasetNameExistAsync(DatasetToMove.Name)))
-                {
-                    (Option option, string newName) = await NameValidation.GetUniqueDatasetName(this, FolderID, "Dataset Name Conflict",
-                        isQuickAccess: true,
-                        message: "A dataset of the same name already exists in the QuickAccess, please input a different name");
-                    if (option == Option.OK)
-                    {
-                        DatasetToMove.FolderID = FolderID;
-                        DatasetToMove.DateModified = DateTime.UtcNow;
-                        DatasetToMove.Name = newName;
-                        await App.Database.SaveDatasetAsync(DatasetToMove);
-                        await Navigation.PopModalAsync();
-                    }
-                }
-                else
-                {
-                    DatasetToMove.FolderID = FolderID;
-                    DatasetToMove.DateModified = DateTime.UtcNow;
-                    await App.Database.SaveDatasetAsync(DatasetToMove);
                     await Navigation.PopModalAsync();
                 }
             }

@@ -33,33 +33,10 @@ namespace Notes.Data
             _database.CreateTableAsync<Note>().Wait();
             _database.CreateTableAsync<Folder>().Wait();
             _database.CreateTableAsync<CSS>().Wait();
-            _database.CreateTableAsync<Dataset>().Wait();
         }
 
         #region Sorting Methods
         public static AsyncTableQuery<Note> SortNotes(AsyncTableQuery<Note> query)
-        {
-            SortingMode sortingMode = App.SortingMode;
-
-            switch (sortingMode)
-            {
-                case SortingMode.Name:
-                    query = query.OrderBy(i => i.Name);
-                    break;
-                case SortingMode.DateCreated:
-                    query = query.OrderByDescending(i => i.DateCreated);
-                    break;
-                case SortingMode.DateModified:
-                    query = query.OrderByDescending(i => i.DateModified);
-                    break;
-                default:
-                    query = query.OrderBy(i => i.Name);
-                    break;
-            }
-            return query;
-        }
-
-        public static AsyncTableQuery<Dataset> SortDatasets(AsyncTableQuery<Dataset> query)
         {
             SortingMode sortingMode = App.SortingMode;
 
@@ -118,16 +95,6 @@ namespace Notes.Data
 
         }
 
-        public Task<List<Dataset>> GetDatasetsAsync(int folderID)
-        {
-            var query = _database.Table<Dataset>()
-                                 .Where(i => i.FolderID == folderID);
-
-            query = SortDatasets(query);
-
-            return query.ToListAsync();
-        }
-
         public Task<List<Folder>> GetFoldersAsync(int folderID)
         {
             var query = _database.Table<Folder>()
@@ -151,16 +118,6 @@ namespace Notes.Data
 
             return query.ToListAsync();
 
-        }
-
-        public Task<List<Dataset>> GetQuickAccessDatasetsAsync()
-        {
-            var query = _database.Table<Dataset>()
-                                 .Where(i => i.IsQuickAccess == true);
-
-            query = SortDatasets(query);
-
-            return query.ToListAsync();
         }
 
         public Task<List<Folder>> GetQuickAccessFoldersAsync()
@@ -202,13 +159,6 @@ namespace Notes.Data
                             .FirstOrDefaultAsync();
         }
 
-        public Task<Dataset> GetDatasetByNameAsync(int folderID, string name)
-        {
-            return _database.Table<Dataset>()
-                            .Where(i => i.FolderID == folderID && i.Name == name)
-                            .FirstOrDefaultAsync();
-        }
-
         public Task<Folder> GetFolderByNameAsync(int parentID, string name)
         {
             return _database.Table<Folder>()
@@ -223,13 +173,6 @@ namespace Notes.Data
         public Task<Note> GetQuickAccessNoteByNameAsync(string name)
         {
             return _database.Table<Note>()
-                            .Where(i => i.IsQuickAccess == true && i.Name == name)
-                            .FirstOrDefaultAsync();
-        }
-
-        public Task<Dataset> GetQuickAccessDatasetByNameAsync(string name)
-        {
-            return _database.Table<Dataset>()
                             .Where(i => i.IsQuickAccess == true && i.Name == name)
                             .FirstOrDefaultAsync();
         }
@@ -257,18 +200,6 @@ namespace Notes.Data
             }
         }
 
-        public Task<int> SaveDatasetAsync(Dataset dataset)
-        {
-            if (dataset.ID != 0)
-            {
-                return _database.UpdateAsync(dataset);
-            }
-            else
-            {
-                return _database.InsertAsync(dataset);
-            }
-        }
-
         public Task<int> SaveFolderAsync(Folder folder)
         {
             if (folder.ID != 0)
@@ -290,11 +221,6 @@ namespace Notes.Data
             return _database.DeleteAsync(note);
         }
 
-        public Task<int> DeleteDatasetAsync(Dataset dataset)
-        {
-            return _database.DeleteAsync(dataset);
-        }
-
         #endregion
 
         #region Check Name Exists of Type in Folder
@@ -302,15 +228,6 @@ namespace Notes.Data
         public async Task<bool> DoesNoteNameExistAsync(string name, int folderID)
         {
             int count = await _database.Table<Note>()
-                                       .Where(i => i.FolderID == folderID && i.Name == name)
-                                       .CountAsync();
-
-            return count > 0;
-        }
-
-        public async Task<bool> DoesDatasetNameExistAsync(string name, int folderID)
-        {
-            int count = await _database.Table<Dataset>()
                                        .Where(i => i.FolderID == folderID && i.Name == name)
                                        .CountAsync();
 
@@ -341,14 +258,6 @@ namespace Notes.Data
         public async Task<bool> DoesQuickAccessNoteNameExistAsync(string name)
         {
             int count = await _database.Table<Note>()
-                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
-                                       .CountAsync();
-            return count > 0;
-        }
-
-        public async Task<bool> DoesQuickAccessDatasetNameExistAsync(string name)
-        {
-            int count = await _database.Table<Dataset>()
                                        .Where(i => i.IsQuickAccess == true && i.Name == name)
                                        .CountAsync();
             return count > 0;
@@ -411,7 +320,6 @@ namespace Notes.Data
             }
 
             await _database.Table<Note>().Where(i => i.FolderID == folder.ID).DeleteAsync();
-            await _database.Table<Dataset>().Where(i => i.FolderID == folder.ID).DeleteAsync();
             await _database.DeleteAsync(folder);
 
             return default;
@@ -423,6 +331,10 @@ namespace Notes.Data
         }
 
         #region Template Stuff
+
+        private static Regex DiRegex = new Regex(@"(?<!\\)<di\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*di\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
+        private static Regex TiRegex = new Regex(@"(?<!\\)<ti\s+""(?<path>[^>]*?)""\s*(?<datasets>[^>]*?)?/>");
+        private static Regex DatasetPathRegex = new Regex(@"\s*""(?<dataset>.*?)""\s*");
 
         public Task<(string, ErrorEncountered)> InterpolateAndInputTemplatesAsync(string text, Page currentPage, int folderID)
         {
@@ -552,81 +464,12 @@ namespace Notes.Data
             return (noteFile, ErrorEncountered.False);
         }
 
-        private async Task<(Dataset, ErrorEncountered)> GetDatasetByPath(string path, Page currentPage, int folderID, int mainFolderID)
-        {
-            #region Identical to GetNoteByPath
-
-            switch (path[0])
-            {
-                case '/': // start in root folder
-                    {
-                        folderID = 0;
-                        path = path.Remove(0, 1);
-                        break;
-                    }
-                case '~': // relative path, but relative to the folder of the file you press the preview button in
-                    {
-                        folderID = mainFolderID;
-                        path = path.Remove(0, 1);
-                        break;
-                    }
-            }
-
-            string[] pathSplit = path.Split('/');
-
-            Folder startFolder;
-            if (folderID == 0)
-                startFolder = new Folder() { ID = 0 };
-            else
-                startFolder = await GetFolderAsync(folderID);
-
-            IEnumerable<string> folderNameSequence = pathSplit.Take(pathSplit.Length - 1);
-
-            Folder endFolder;
-
-            ErrorEncountered errorEncountered;
-            (endFolder, errorEncountered) = await FollowFolderPath(startFolder, folderNameSequence, currentPage);
-            if (errorEncountered == ErrorEncountered.True)
-                return (null, errorEncountered);
-
-            #endregion
-
-            string datasetName = pathSplit.Last();
-
-            Dataset datasetFile;
-
-            if (datasetName[0] == '*')
-            {
-                datasetName = datasetName.Remove(0, 1);
-                datasetFile = await GetQuickAccessDatasetByNameAsync(datasetName);
-
-                if (datasetFile == null)
-                {
-                    await currentPage.DisplayAlert("Template Error", $"Quick Access Dataset \"{datasetName}\" not found", "OK");
-                    return (null, ErrorEncountered.True);
-                }
-            }
-            else
-            {
-                datasetFile = await GetDatasetByNameAsync(endFolder.ID, datasetName);
-
-                if (datasetFile == null)
-                {
-                    await currentPage.DisplayAlert("Template Error", $"Dataset \"{datasetName}\" not found in folder \"{endFolder.Name}\"", "OK");
-                    return (null, ErrorEncountered.True);
-                }
-            }
-
-            return (datasetFile, ErrorEncountered.False);
-        }
-
         private Dictionary<string, string> LoadDatasetString(string datasetString)
         {
-            Regex datasetRegex = new Regex(@"(?<!\\)<dv\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*dv\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
 
             var dataset = new Dictionary<string, string>();
 
-            foreach (Match match in datasetRegex.Matches(datasetString))
+            foreach (Match match in DiRegex.Matches(datasetString))
             {
                 string value = match.Groups["value"].Value;
 
@@ -638,38 +481,33 @@ namespace Notes.Data
 
         private async Task<(string, ErrorEncountered)> InputTemplates(string text, Page currentPage, int folderID, int mainFolderID)
         { 
-
-            Regex tRegex = new Regex(@"(?<!\\)<ti\s+""(?<path>[^>]*?)""\s*(?<datasets>[^>]*?)?/>");
-
-            Regex dRegex = new Regex(@"\s*""(?<dataset>.*?)""\s*");
-
             string template;
-            string path;
+            string templatePath;
             ErrorEncountered errorEncountered;
-            Dataset datasetFile;
-            Note noteFile;
+            Note datasetFile;
+            Note templateFile;
             List<Dictionary<string, string>> datasets;
 
-            foreach (Match match in tRegex.Matches(text))
+            foreach (Match match in TiRegex.Matches(text))
             {
-                path = match.Groups["path"].Value;
+                templatePath = match.Groups["path"].Value;
 
                 var datasetPaths = new List<string>();
 
-                foreach (Match dmatch in dRegex.Matches(match.Groups["datasets"].Value))
+                foreach (Match dmatch in DatasetPathRegex.Matches(match.Groups["datasets"].Value))
                 {
                     datasetPaths.Add(dmatch.Groups["dataset"].Value);
                 }
 
-                (noteFile, errorEncountered) = await GetNoteByPath(path, currentPage, folderID, mainFolderID);
+                (templateFile, errorEncountered) = await GetNoteByPath(templatePath, currentPage, folderID, mainFolderID);
                 if (errorEncountered == ErrorEncountered.True) 
                     return (null, ErrorEncountered.True);
-                template = noteFile.Text;
+                template = templateFile.Text;
 
                 datasets = new List<Dictionary<string, string>>();
                 foreach (string datasetPath in datasetPaths)
                 {
-                    (datasetFile, errorEncountered) = await GetDatasetByPath(datasetPath, currentPage, folderID, mainFolderID);
+                    (datasetFile, errorEncountered) = await GetNoteByPath(datasetPath, currentPage, folderID, mainFolderID);
                     if (errorEncountered == ErrorEncountered.True)
                         return (null, ErrorEncountered.True);
                     datasets.Add(LoadDatasetString(datasetFile.Text));
@@ -677,7 +515,7 @@ namespace Notes.Data
 
                 template = InterpolateValues(template, datasets);
 
-                (template, errorEncountered) = await InputTemplates(template, currentPage, noteFile.FolderID, mainFolderID);
+                (template, errorEncountered) = await InputTemplates(template, currentPage, templateFile.FolderID, mainFolderID);
                 if (errorEncountered == ErrorEncountered.True)
                     return (null, ErrorEncountered.True);
 
@@ -689,9 +527,7 @@ namespace Notes.Data
 
         private static string InterpolateValues(string template, List<Dictionary<string, string>> datasets)
         {
-            Regex interpolationRegex = new Regex(@"(?<!\\)<di\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*di\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
-
-            foreach (Match match in interpolationRegex.Matches(template))
+            foreach (Match match in DiRegex.Matches(template))
             {
                 string replacement = "";
 

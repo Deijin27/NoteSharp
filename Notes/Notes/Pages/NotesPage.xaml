@@ -163,82 +163,6 @@
                     </ViewCell.ContextActions>
                 </ViewCell>
             </DataTemplate>
-            <DataTemplate x:Key="datasetTemplate_NameOnly">
-                <ViewCell>
-                    <ViewCell.View>
-                        <views:ListViewItem_DatasetNameOnly/>
-                    </ViewCell.View>
-                    <ViewCell.ContextActions>
-                        <MenuItem Clicked="RenameDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Rename" 
-                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
-                        <MenuItem Clicked="MoveDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Move" 
-                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
-                        <MenuItem Clicked="ToggleDatasetQuickAccess_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
-                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
-                        <MenuItem Clicked="DeleteDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
-                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
-                    </ViewCell.ContextActions>
-
-                </ViewCell>
-            </DataTemplate>
-            <DataTemplate x:Key="datasetTemplate_NameDateCreated">
-                <ViewCell>
-                    <ViewCell.View>
-                        <views:ListViewItem_DatasetNameDateCreated/>
-                    </ViewCell.View>
-                    <ViewCell.ContextActions>
-                        <MenuItem Clicked="RenameDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Rename" 
-                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
-                        <MenuItem Clicked="MoveDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Move" 
-                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
-                        <MenuItem Clicked="ToggleDatasetQuickAccess_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
-                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
-                        <MenuItem Clicked="DeleteDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
-                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
-                    </ViewCell.ContextActions>
-                </ViewCell>
-            </DataTemplate>
-            <DataTemplate x:Key="datasetTemplate_NameDateModified">
-                <ViewCell>
-                    <ViewCell.View>
-                        <views:ListViewItem_DatasetNameDateModified/>
-                    </ViewCell.View>
-                    <ViewCell.ContextActions>
-                        <MenuItem Clicked="RenameDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Rename" 
-                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
-                        <MenuItem Clicked="MoveDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Move" 
-                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
-                        <MenuItem Clicked="ToggleDatasetQuickAccess_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
-                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
-                        <MenuItem Clicked="DeleteDataset_Clicked"
-                                  CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
-                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
-                    </ViewCell.ContextActions>
-                </ViewCell>
-            </DataTemplate>
             <local:FolderContentDataTemplateSelector x:Key="folderContentDataTemplateSelector"
                                                      FolderTemplate_NameOnly="{StaticResource folderTemplate_NameOnly}"
                                                      FolderTemplate_NameDateCreated="{StaticResource folderTemplate_NameDateCreated}"
@@ -246,19 +170,15 @@
                                                      FileTemplate_NameOnly="{StaticResource fileTemplate_NameOnly}" 
                                                      FileTemplate_NameDateModified="{StaticResource fileTemplate_NameDateModified}"
                                                      FileTemplate_NameDateCreated="{StaticResource fileTemplate_NameDateCreated}"
-                                                     DatasetTemplate_NameOnly="{StaticResource datasetTemplate_NameOnly}"
-                                                     DatasetTemplate_NameDateCreated="{StaticResource datasetTemplate_NameDateCreated}"
-                                                     DatasetTemplate_NameDateModified="{StaticResource datasetTemplate_NameDateModified}"
                                                      />
         </ResourceDictionary>
         
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add File" Clicked="OnNoteAddedClicked" Order="Primary" 
+        <ToolbarItem Text="Add Note" Clicked="OnNoteAddedClicked" Order="Primary" 
                      IconImageSource="{StaticResource FontImageSource_FilePlus}"/>
         <ToolbarItem Text="Add Folder" Clicked="OnFolderAddedClicked" Order="Secondary" />
-        <ToolbarItem Text="Add Dataset" Clicked="OnDatasetAddedClicked" Order="Secondary"/>
         <ToolbarItem Text="Order By" Clicked="OrderBy_Clicked" Order="Secondary"/>
         <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
     </ContentPage.ToolbarItems>

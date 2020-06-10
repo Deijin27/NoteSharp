@@ -16,9 +16,6 @@ namespace Notes.Pages
         public DataTemplate FolderTemplate_NameOnly { get; set; }
         public DataTemplate FolderTemplate_NameDateModified { get; set; }
         public DataTemplate FolderTemplate_NameDateCreated { get; set; }
-        public DataTemplate DatasetTemplate_NameOnly { get; set; }
-        public DataTemplate DatasetTemplate_NameDateModified { get; set; }
-        public DataTemplate DatasetTemplate_NameDateCreated { get; set; }
         public DataTemplate FileTemplate_NameOnly { get; set; }
         public DataTemplate FileTemplate_NameDateModified { get; set; }
         public DataTemplate FileTemplate_NameDateCreated { get; set; }
@@ -41,21 +38,6 @@ namespace Notes.Pages
                         return FolderTemplate_NameDateModified;
                     default:
                         return FolderTemplate_NameOnly;
-                }
-            }
-
-            else if (contentItem.Identifier == FolderContentItemIdentifier.Dataset)
-            {
-                switch (sortingMode)
-                {
-                    case SortingMode.Name:
-                        return DatasetTemplate_NameOnly;
-                    case SortingMode.DateCreated:
-                        return DatasetTemplate_NameDateCreated;
-                    case SortingMode.DateModified:
-                        return DatasetTemplate_NameDateModified;
-                    default:
-                        return DatasetTemplate_NameOnly;
                 }
             }
 
@@ -92,19 +74,16 @@ namespace Notes.Pages
         public async Task UpdateListView()
         {
             List<Folder> folderItems;
-            List<Dataset> datasetItems;
             List<Note> fileItems;
 
             if (IsQuickAccessPage)
             {
                 folderItems = await App.Database.GetQuickAccessFoldersAsync();
-                datasetItems = await App.Database.GetQuickAccessDatasetsAsync();
                 fileItems = await App.Database.GetQuickAccessNotesAsync();
             }
             else
             { 
                 folderItems = await App.Database.GetFoldersAsync(FolderID);
-                datasetItems = await App.Database.GetDatasetsAsync(FolderID);
                 fileItems = await App.Database.GetNotesAsync(FolderID);
             }
 
@@ -113,10 +92,6 @@ namespace Notes.Pages
             foreach (Folder folder in folderItems)
             {
                 listViewItems.Add(new FolderContentItem(folder));
-            }
-            foreach (Dataset dataset in datasetItems)
-            {
-                listViewItems.Add(new FolderContentItem(dataset));
             }
             foreach (Note file in fileItems)
             {
@@ -137,16 +112,6 @@ namespace Notes.Pages
             });
         }
 
-        async void OnDatasetAddedClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new DatasetEntryPage
-            {
-                BindingContext = new Dataset(),
-                NewDataset = true,
-                FolderID = FolderID
-            });
-        }
-
         async void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem != null)
@@ -163,15 +128,7 @@ namespace Notes.Pages
                         Title = folder.Name
                     });
                 }
-                else if (folderContentItem.Identifier == FolderContentItemIdentifier.Dataset)
-                {
-                    await Navigation.PushAsync(new DatasetEntryPage
-                    {
-                        BindingContext = folderContentItem.ContentDataset,
-                        FolderID = FolderID
-                    });
-                }
-                else
+                else // Note
                 {
                     await Navigation.PushAsync(new NoteEntryPage
                     {
@@ -319,47 +276,6 @@ namespace Notes.Pages
             }
         }
 
-        private async void RenameDataset_Clicked(object sender, EventArgs e)
-        {
-            var mi = ((MenuItem)sender);
-            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
-            Dataset dataset = folderContentItem.ContentDataset;
-
-            (Option option, string result) = await NameValidation.GetUniqueDatasetName(this, dataset.FolderID, "Rename Dataset",
-                isQuickAccess: dataset.IsQuickAccess,
-                initialValue: dataset.Name);
-            if (option == Option.OK)
-            {
-                dataset.Name = result;
-                dataset.DateModified = DateTime.UtcNow;
-                await App.Database.SaveDatasetAsync(dataset);
-                await UpdateListView();
-            }
-        }
-
-        private async void MoveDataset_Clicked(object sender, EventArgs e)
-        {
-            var mi = ((MenuItem)sender);
-            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
-            Dataset dataset = folderContentItem.ContentDataset;
-
-            await Navigation.PushModalAsync(new NavigationPage(new NotesMovePage(dataset) { CurrentFolderName = this.Title }));
-        }
-
-        private async void DeleteDataset_Clicked(object sender, EventArgs e)
-        {
-            var mi = ((MenuItem)sender);
-            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
-            Dataset dataset = folderContentItem.ContentDataset;
-
-            bool answer = await DisplayAlert("Delete Dataset?", "Are you sure you want to permanently delete this dataset?", "Yes", "No");
-            if (answer)
-            {
-                await App.Database.DeleteDatasetAsync(dataset);
-                await UpdateListView();
-            }
-        }
-
         private async void ToggleNoteQuickAccess_Clicked(object sender, EventArgs e)
         {
             var mi = ((MenuItem)sender);
@@ -406,51 +322,7 @@ namespace Notes.Pages
             }
         }
 
-        private async void ToggleDatasetQuickAccess_Clicked(object sender, EventArgs e)
-        {
-            var mi = ((MenuItem)sender);
-            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
-            Dataset dataset = folderContentItem.ContentDataset;
-
-            if (!dataset.IsQuickAccess)
-            {
-                bool answer = await DisplayAlert("Quick Access", "Add dataset to quick access?", "Yes", "Cancel");
-
-                if (answer)
-                {
-                    if (await App.Database.DoesQuickAccessDatasetNameExistAsync(dataset.Name))
-                    {
-                        (Option option, string newName) = await NameValidation.GetUniqueDatasetName(this, dataset.FolderID, "Dataset Name Conflict",
-                            isQuickAccess: true,
-                            message: "A dataset of the same name already exists in the QuickAccess, please input a different name");
-                        if (option == Option.OK)
-                        {
-                            dataset.Name = newName;
-                            dataset.IsQuickAccess = true;
-                            await App.Database.SaveDatasetAsync(dataset);
-                            await UpdateListView();
-                        }
-                    }
-                    else
-                    {
-                        dataset.IsQuickAccess = true;
-                        await App.Database.SaveDatasetAsync(dataset);
-                        await UpdateListView();
-                    }
-                }
-            }
-            else
-            {
-                bool answer = await DisplayAlert("Quick Access", "Remove dataset from quick access?", "Yes", "Cancel");
-
-                if (answer)
-                {
-                    dataset.IsQuickAccess = false;
-                    await App.Database.SaveDatasetAsync(dataset);
-                    await UpdateListView();
-                }
-            }
-        }
+        
 
         private async void ToggleFolderQuickAccess_Clicked(object sender, EventArgs e)
         {

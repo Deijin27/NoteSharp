@@ -48,24 +48,12 @@
     <Compile Update="Themes\LightTheme.xaml.cs">
       <DependentUpon>LightTheme.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ListViewItem_DatasetNameDateCreated.xaml.cs">
-      <DependentUpon>ListViewItem_DatasetNameDateCreated.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\ListViewItem_DatasetNameDateModified.xaml.cs">
-      <DependentUpon>ListViewItem_DatasetNameDateModified.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\ListViewItem_DatasetNameOnly.xaml.cs">
-      <DependentUpon>ListViewItem_DatasetNameOnly.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\ListViewItem_FolderNameOnly.xaml.cs">
       <DependentUpon>ListViewItem_FolderNameOnly.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Pages\DatasetEntryPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Pages\NoteEntryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

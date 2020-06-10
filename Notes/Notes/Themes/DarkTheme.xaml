@@ -17,6 +17,5 @@
     <Color x:Key="SliderMaxTrackColor">#FFFFFF</Color>
     <Color x:Key="SliderThumbColor">#FFFFFF</Color>
     <Color x:Key="QuickAccessMarkerColor">#e3d5af</Color>
-    <Color x:Key="DatasetListIconColor">#FFCE48</Color>
 
 </ResourceDictionary>

@@ -40,7 +40,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters \"/* and is not just two full stops (..)",
+                        "Invalid name, please input a name that does not contain any of the characters \"/*.~",
                         initialValue: result
                     );
                 }
@@ -74,57 +74,6 @@ namespace Notes.Data
             return (Option.OK, result);
         }
 
-        public static async Task<(Option, string)> GetUniqueDatasetName(Page page, int folderID, string title, bool isQuickAccess = false, string message = "Input name for dataset", string initialValue = "")
-        {
-            string result = await page.DisplayPromptAsync(title, message, initialValue: initialValue);
-
-            if (result == null)
-                return (Option.Cancel, null);
-
-            result = result.Trim();
-
-            bool invalid = true;
-            while (invalid)
-            {
-
-                if (invalid = !IsNameValid(result))
-                {
-                    result = await page.DisplayPromptAsync
-                    (
-                        title,
-                        "Invalid name, please input a name that does not contain any of the characters \"/* and is not just two full stops (..)",
-                        initialValue: result
-                    );
-                }
-
-                else if (isQuickAccess && (invalid = await App.Database.DoesQuickAccessDatasetNameExistAsync(result)))
-                {
-                    result = await page.DisplayPromptAsync
-                    (
-                        title,
-                        "A dataset of that name already exists in Quick Access; please input a different name",
-                        initialValue: result
-                    );
-                }
-
-                else if (invalid = await App.Database.DoesDatasetNameExistAsync(result, folderID))
-                {
-                    result = await page.DisplayPromptAsync
-                    (
-                        title,
-                        "A dataset of that name already exists in the current folder; please input a different name",
-                        initialValue: result
-                    );
-                }
-
-                if (result == null)
-                    return (Option.Cancel, null);
-
-                result = result.Trim();
-            }
-            return (Option.OK, result);
-        }
-
         /// <summary>
         /// Get a valid name from the user for the Folder. Return is the Option, Cancel or OK, and if OK, the string the user desires.
         /// </summary>
@@ -150,7 +99,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters \"/* and is not just two full stops (..)",
+                        "Invalid name, please input a name that does not contain any of the characters \"/*.~",
                         initialValue: result
                     );
                 }
@@ -190,7 +139,7 @@ namespace Notes.Data
         /// <returns>false if the name contains forbidden characters.</returns>
         public static bool IsNameValid(string name)
         {
-            return !(name.Contains("/") || name.Contains("\"") || name.Contains("*") || name == "..");
+            return !(name.Contains("/") || name.Contains("\"") || name.Contains("*") || name.Contains("~") || name.Contains("."));
         }
     }
 }
