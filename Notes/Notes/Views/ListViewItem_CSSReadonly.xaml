@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="Notes.Views.ListViewItem_CSS">
+             x:Class="Notes.Views.ListViewItem_CSSReadonly">
   <ContentView.Content>
         <Grid Margin="10,10,10,10">
 
@@ -13,6 +13,7 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="24" />
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -29,10 +30,15 @@
                                Text="{Binding Name}" 
                                TextColor="{DynamicResource PrimaryContentTextColor}"
                                FontSize="Small"
-                               WidthRequest="24"
                                VerticalOptions="Center"
                                MaxLines="1"
                                Margin="10, 0, 0, 0"/>
+            <Label Grid.Column="2" 
+                   Text="ReadOnly" 
+                   VerticalOptions="Center"
+                   HorizontalOptions="Start"
+                   TextColor="{DynamicResource SecondaryContentTextColor}"
+                   FontSize="Micro"/>
         </Grid>
     </ContentView.Content>
 </ContentView>

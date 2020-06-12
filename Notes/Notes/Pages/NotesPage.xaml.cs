@@ -104,12 +104,7 @@ namespace Notes.Pages
 
         async void OnNoteAddedClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new NoteEntryPage
-            {
-                BindingContext = new Note(),
-                NewNote = true,
-                FolderID = FolderID
-            });
+            await Navigation.PushModalAsync(new NavigationPage(new NoteEntryPage(FolderID)));
         }
 
         async void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -130,11 +125,7 @@ namespace Notes.Pages
                 }
                 else // Note
                 {
-                    await Navigation.PushAsync(new NoteEntryPage
-                    {
-                        BindingContext = folderContentItem.ContentNote,
-                        FolderID = FolderID
-                    });
+                    await Navigation.PushModalAsync(new NavigationPage(new NoteEntryPage(folderContentItem.ContentNote)));
                 }
                 listView.SelectedItem = null;
             }

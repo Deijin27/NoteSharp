@@ -26,6 +26,21 @@
                                 Toggled="ThemeSwitch_Toggled"/>
                     </Grid>
                 </ViewCell>
+                <ViewCell>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Spell Check Enabled" 
+                               Grid.Column="0" 
+                               VerticalTextAlignment="Center" 
+                               TextColor="{DynamicResource PrimaryContentTextColor}"/>
+                        <Switch x:Name="SpellCheckSwitch" 
+                                Grid.Column="1"
+                                Toggled="SpellCheckSwitch_Toggled"/>
+                    </Grid>
+                </ViewCell>
             </TableSection>
         </TableView>
     </ContentPage.Content>

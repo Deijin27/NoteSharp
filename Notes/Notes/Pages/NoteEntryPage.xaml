@@ -2,36 +2,35 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Notes.Pages.NoteEntryPage"
-             Title="Note Entry">
-
-    <ContentPage.Resources>
-        <!-- Implicit styles -->
-        
-        
-        <!--
-        <Style TargetType="Button"
-               ApplyToDerivedTypes="True"
-               CanCascade="True">
-            <Setter Property="FontSize" Value="Medium" />
-            <Setter Property="BackgroundColor" Value="#1976D2" />
-            <Setter Property="TextColor" Value="White" />
-            <Setter Property="CornerRadius" Value="5" />
-        </Style>
-        -->
-    </ContentPage.Resources>
+             NavigationPage.HasBackButton="False">
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />
         <ToolbarItem Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
-        <ToolbarItem Text="MarkdownView" Clicked="MarkdownView_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
+        <ToolbarItem Text="Markdown View" Clicked="MarkdownView_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
         <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
         <ToolbarItem Text="Html Preview" Clicked="HtmlPreview_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 
-    <Editor Placeholder="Enter you   "
-            Text="{Binding Text}"
-            VerticalOptions="FillAndExpand"
-            FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
-            Margin="10, 10, 10, 10">
-    </Editor>
-
+    <NavigationPage.TitleView>
+        <Entry x:Name="NameEntry"
+               Text="{Binding Name}" 
+               Placeholder="Note Name..."
+               TextColor="{DynamicResource NavigationBarTextColor}"
+               PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
+               IsSpellCheckEnabled="False"
+               />
+    </NavigationPage.TitleView>
+    
+    <ScrollView>
+        <StackLayout>
+            <Editor x:Name="MainEditor" 
+                    Placeholder="Enter you   "
+                    Text="{Binding Text}"
+                    AutoSize="TextChanges"
+                    FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
+                    Margin="10, 10, 10, 10"/>
+            <Label HeightRequest="500"/>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

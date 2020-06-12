@@ -14,16 +14,12 @@ namespace Notes.Pages
     {
         public SettingsPage()
         {
-            
             InitializeComponent();
-            if (App.Theme == AppTheme.Dark)
-            {
-                ThemeSwitch.IsToggled = true;
-            }
-            else
-            {
-                ThemeSwitch.IsToggled = false;
-            }
+
+            if (App.Theme == AppTheme.Dark) ThemeSwitch.IsToggled = true;
+            else ThemeSwitch.IsToggled = false;
+
+            SpellCheckSwitch.IsToggled = App.IsSpellCheckEnabled;
         }
 
         private void ThemeSwitch_Toggled(object sender, ToggledEventArgs e)
@@ -36,6 +32,11 @@ namespace Notes.Pages
             {
                 App.Theme = AppTheme.Light;
             }
+        }
+
+        private void SpellCheckSwitch_Toggled(object sender, ToggledEventArgs e)
+        {
+            App.IsSpellCheckEnabled = e.Value;
         }
     }
 }

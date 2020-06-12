@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Notes.Pages.NotesMasterPage"
+             BackgroundColor="{DynamicResource AppBackgroundColor}"
              xmlns:pages="clr-namespace:Notes.Pages">
     <!--<MasterDetailPage.Detail>
     <NavigationPage>

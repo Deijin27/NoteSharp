@@ -55,7 +55,7 @@ namespace Notes
             {
                 ID = -1,
                 IsReadOnly = true,
-                Name = "Default1 - Red (ReadOnly)",
+                Name = "Default1 - Red",
                 Text = "h1 { color: red; }"
             });
 
@@ -63,7 +63,7 @@ namespace Notes
             {
                 ID = -2,
                 IsReadOnly = true,
-                Name = "Default2 - Blue (ReadOnly)",
+                Name = "Default2 - Blue",
                 Text = "h1 { color: blue; }"
             });
 
@@ -71,7 +71,7 @@ namespace Notes
             {
                 ID = -3,
                 IsReadOnly = true,
-                Name = "Default3 - Green (ReadOnly)",
+                Name = "Default3 - Green",
                 Text = "h1 { color: blue; }"
             });
         }
@@ -99,6 +99,18 @@ namespace Notes
             var styleSheets = ((App)App.Current).DefaultStyleSheets;
             styleSheets = styleSheets.Concat(await App.Database.GetSheetsAsync()).ToList();
             return styleSheets;
+        }
+
+        public static bool IsSpellCheckEnabled
+        {
+            get
+            {
+                return Preferences.Get("IsSpellCheckEnabled", defaultValue: true);
+            }
+            set
+            {
+                Preferences.Set("IsSpellCheckEnabled", value);
+            }
         }
 
         public static AppTheme Theme

@@ -109,15 +109,17 @@ namespace Notes.Pages
             var colorDialogSettings = new ColorDialogSettings()
             {
                 OkButtonText = "Copy",
+                EditAlfa = false,
+                DialogAnimation = false
                 // More Settings Can Go Here
             };
 
-            Color color = await ColorPickerDialog.Show(ColorPickerUtils.GetRootParent<Layout<View>>((View)NameEntry), 
+            Color color = await ColorPickerDialog.Show(ColorPickerUtils.GetRootParent<Layout<View>>((View)TextEditor), 
                 "Color Picker", Color.White, colorDialogSettings);
 
-            string colorString = $"rgba({(int)(color.R * 255)}, {(int)(color.G * 255)}, {(int)(color.B * 255)}, {color.A:0.00})";
+            string hexNoAlpha = color.ToHex().Remove(1, 2);
 
-            await Clipboard.SetTextAsync(colorString);
+            await Clipboard.SetTextAsync(hexNoAlpha);
         }
     }
 }

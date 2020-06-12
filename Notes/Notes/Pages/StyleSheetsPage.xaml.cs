@@ -8,6 +8,23 @@ using System.Threading.Tasks;
 
 namespace Notes.Pages
 {
+    public class StyleSheetDataTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate CSSTemplate { get; set; }
+        public DataTemplate CSSTemplate_ReadOnly { get; set; }
+
+        protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
+        {
+            var sheet = (CSS)item;
+
+            if (sheet.IsReadOnly)
+            {
+                return CSSTemplate_ReadOnly;
+            }
+            return CSSTemplate;
+        }
+    }
+
     public partial class StyleSheetsPage : ContentPage
     {
         public int FolderID;
@@ -52,6 +69,24 @@ namespace Notes.Pages
                 });
                 listView.SelectedItem = null;
             }
+        }
+
+        private async void Delete_Clicked(object sender, EventArgs e)
+        {
+            var mi = ((MenuItem)sender);
+            CSS sheet = mi.CommandParameter as CSS;
+
+            bool answer = await DisplayAlert("Delete?", "Permanently delete style sheet?", "Yes", "No");
+            if (answer)
+            {
+                await App.Database.DeleteSheetAsync(sheet);
+                await UpdateListView();
+            }
+        }
+
+        private async void Rename_Clicked(object sender, EventArgs e)
+        {
+            await DisplayAlert("Rename_Clicked", "you did it!", "OK");
         }
 
         async void OnSettingsButtonClicked(object sender, EventArgs e)

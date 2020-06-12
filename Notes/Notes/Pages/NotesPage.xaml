@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Notes.Pages"
              xmlns:views="clr-namespace:Notes.Views;assembly=Notes"
+             BackgroundColor="{DynamicResource AppBackgroundColor}"
              x:Class="Notes.Pages.NotesPage">
 
     <ContentPage.Resources>

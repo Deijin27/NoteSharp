@@ -7,11 +7,12 @@
     <Color x:Key="AppSecondaryBackgroundColor">#121212</Color>
     <Color x:Key="NavigationBarColor">#212121</Color>
     <Color x:Key="NavigationBarTextColor">#E0E0E0</Color>
+    <Color x:Key="NavigationBarPaleTextColor">#A0A0A0</Color>
     <Color x:Key="PrimaryContentTextColor">#E0E0E0</Color>
     <Color x:Key="SecondaryContentTextColor">#A0A0A0</Color>
-    <Color x:Key="MasterDetailIconColor">#007ACC</Color>
-    <Color x:Key="FolderListIconColor">#686868</Color>
-    <Color x:Key="FileListIconColor">#48AEF0</Color>
+    <Color x:Key="MasterDetailIconColor">#6ea3f7</Color>
+    <Color x:Key="FolderListIconColor">#898990</Color>
+    <Color x:Key="FileListIconColor">#6ea3f7</Color>
     <Color x:Key="ToolbarIconColor">#FFFFFF</Color>
     <Color x:Key="SliderMinTrackColor">#FFFFFF</Color>
     <Color x:Key="SliderMaxTrackColor">#FFFFFF</Color>

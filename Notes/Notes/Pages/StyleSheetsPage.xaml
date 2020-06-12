@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:Notes.Views;assembly=Notes"
              x:Class="Notes.Pages.StyleSheetsPage"
+             xmlns:local="clr-namespace:Notes.Pages"
              Title=" Cascading Style Sheets">
 
     <ContentPage.Resources>
@@ -15,8 +16,28 @@
             <DataTemplate x:Key="cssTemplate">
                 <ViewCell>
                     <views:ListViewItem_CSS/>
+                    <ViewCell.ContextActions>
+                        <MenuItem Clicked="Rename_Clicked"
+                                      CommandParameter="{Binding .}"
+                                      Text="Rename"
+                                      IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Clicked="Delete_Clicked"
+                                      CommandParameter="{Binding .}"
+                                      Text="Delete" IsDestructive="True"
+                                      IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                    </ViewCell.ContextActions>
                 </ViewCell>
             </DataTemplate>
+            <DataTemplate x:Key="cssReadonlyTemplate">
+                <ViewCell>
+                    <views:ListViewItem_CSSReadonly/>
+                </ViewCell>
+            </DataTemplate>
+
+            <local:StyleSheetDataTemplateSelector x:Key="styleSheetDataTemplateSelector"
+                                                  CSSTemplate="{StaticResource cssTemplate}"
+                                                  CSSTemplate_ReadOnly="{StaticResource cssReadonlyTemplate}"
+                                                     />
         </ResourceDictionary>
         
     </ContentPage.Resources>
@@ -34,7 +55,7 @@
     </ContentPage.ToolbarItems>
 
     <ListView x:Name="listView" 
-              ItemTemplate="{StaticResource cssTemplate}" 
+              ItemTemplate="{StaticResource styleSheetDataTemplateSelector}" 
               ItemSelected="OnListViewItemSelected"
               HasUnevenRows="True"
               SeparatorVisibility="None"

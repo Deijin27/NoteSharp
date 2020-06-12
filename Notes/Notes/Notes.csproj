@@ -48,6 +48,9 @@
     <Compile Update="Themes\LightTheme.xaml.cs">
       <DependentUpon>LightTheme.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\ListViewItem_CSSReadonly.xaml.cs">
+      <DependentUpon>ListViewItem_CSSReadonly.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ListViewItem_FolderNameOnly.xaml.cs">
       <DependentUpon>ListViewItem_FolderNameOnly.xaml</DependentUpon>
     </Compile>
