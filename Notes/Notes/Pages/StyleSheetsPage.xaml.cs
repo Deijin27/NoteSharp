@@ -40,6 +40,8 @@ namespace Notes.Pages
             await UpdateListView();
         }
 
+        
+
         public async Task UpdateListView()
         {
             List<CSS> listViewItems = await App.GetAllStyleSheetsAsync();
@@ -49,11 +51,7 @@ namespace Notes.Pages
 
         async void OnCSSAddedClicked(object sender, EventArgs e)
         {
-            CSS sheet = new CSS() { IsReadOnly = false };
-            await Navigation.PushAsync(new StyleSheetEntryPage(sheet.IsReadOnly, NewSheet:true)
-            {
-                BindingContext = sheet
-            });
+            await Navigation.PushModalAsync(new NavigationPage(new StyleSheetEntryPage()));
         }
         
         async void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -62,11 +60,7 @@ namespace Notes.Pages
             {
                 var sheet = e.SelectedItem as CSS;
 
-                await Navigation.PushAsync(new StyleSheetEntryPage(sheet.IsReadOnly)
-                {
-                    BindingContext = sheet,
-                    OriginalSheetName = sheet.Name
-                });
+                await Navigation.PushModalAsync(new NavigationPage(new StyleSheetEntryPage(sheet)));
                 listView.SelectedItem = null;
             }
         }
@@ -79,6 +73,10 @@ namespace Notes.Pages
             bool answer = await DisplayAlert("Delete?", "Permanently delete style sheet?", "Yes", "No");
             if (answer)
             {
+                if (sheet.ID == App.StyleSheetID)
+                {
+                    App.StyleSheetID = App.DefaultStyleSheetID;
+                }
                 await App.Database.DeleteSheetAsync(sheet);
                 await UpdateListView();
             }

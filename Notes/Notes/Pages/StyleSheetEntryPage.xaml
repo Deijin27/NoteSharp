@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Notes.Pages.StyleSheetEntryPage">
+             x:Class="Notes.Pages.StyleSheetEntryPage"
+             NavigationPage.HasBackButton="False">
 
     <NavigationPage.TitleView>
         <Entry x:Name="NameEntry"
@@ -14,14 +15,8 @@
     </NavigationPage.TitleView>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="SaveButton" Text="Save" Clicked="OnSaveButtonClicked" Order="Primary">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                                 Glyph="{StaticResource IconGlyph_Floppy}"
-                                 Size="24"
-                                 Color="{DynamicResource ToolbarIconColor}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
+        <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />
+        <ToolbarItem x:Name="SaveButton" Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
         <ToolbarItem x:Name="CopyButton" Text="Copy" Clicked="CopyButton_Clicked" Order="Primary">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
@@ -38,15 +33,7 @@
                                  Color="{DynamicResource ToolbarIconColor}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        <ToolbarItem Text="Quick Test" Clicked="QuickTest_Clicked" Order="Primary">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                                 Glyph="{StaticResource IconGlyph_Eye}"
-                                 Size="24"
-                                 Color="{DynamicResource ToolbarIconColor}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-        <ToolbarItem x:Name="DeleteButton" Text="Delete" Clicked="OnDeleteButtonClicked" Order="Secondary"/>
+        <ToolbarItem Text="Quick Test" Clicked="QuickTest_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
         <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary"/>
     </ContentPage.ToolbarItems>
 
@@ -59,6 +46,8 @@
                         Text="{Binding Text}"
                         AutoSize="TextChanges"
                         FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False"
                         Margin="10, 0, 10, 10"
                         />
                 <Label HeightRequest="500"/>

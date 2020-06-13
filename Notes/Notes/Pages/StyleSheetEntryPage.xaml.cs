@@ -9,76 +9,83 @@ namespace Notes.Pages
 {
     public partial class StyleSheetEntryPage : ContentPage
     {
+        string InitialName;
+        string InitialText;
 
-        public StyleSheetEntryPage(bool isReadOnly=false, bool NewSheet = false)
+        public StyleSheetEntryPage(CSS sheet)
         {
             InitializeComponent();
 
-            if (isReadOnly)
+            if (sheet.IsReadOnly)
             {
                 // technically, if I disable the save button theres no need to make them readonly. 
                 // But I'll leave it like this for now.
                 TextEditor.IsReadOnly = true;
                 NameEntry.IsReadOnly = true;
                 ToolbarItems.Remove(SaveButton);
-                ToolbarItems.Remove(DeleteButton);
                 ToolbarItems.Remove(ColorPickerButton);
                 Title = "Built In CSS";
             }
             else
             {
                 ToolbarItems.Remove(CopyButton);
+                InitialText = string.Copy(sheet.Text);
+                InitialName = string.Copy(sheet.Name);
             }
 
-            if (NewSheet)
-            {
-                ToolbarItems.Remove(DeleteButton);
-            }
-            
+            BindingContext = sheet;
         }
 
-        public string OriginalSheetName = null;
+        public StyleSheetEntryPage()
+        {
+            InitializeComponent();
+
+            ToolbarItems.Remove(CopyButton);
+
+            CSS sheet = new CSS() { IsReadOnly = false };
+
+            InitialText = string.Copy(sheet.Text);
+            InitialName = string.Copy(sheet.Name);
+
+            BindingContext = sheet;
+        }
+
+        void UnfocusAll()
+        {
+            TextEditor.Unfocus();
+            NameEntry.Unfocus();
+        }
 
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             var sheet = (CSS)BindingContext;
 
-
-            // ! There is no reason to force unique names of style sheets
-
-            //if (sheet.Name == null) // null is the value when the text input is empty
-            //{
-            //    sheet.Name = "Untitled Sheet";
-            //}
-            //// The sheet name is always changed from being equal to the default OriginalSheetName
-            //// So that if it's a new sheet, the name checks always occurr.
-            //if (sheet.Name != OriginalSheetName)
-            //{
-            //    // Make sure no duplicate names
-            //    string newName = sheet.Name;
-            //    int count = 1;
-            //    while ((await ((App)App.Current).DoesSheetNameExist(newName)))
-            //    {
-            //        newName = $"{sheet.Name}[{count}]";
-            //        count++;
-            //    }
-            //    sheet.Name = newName;
-            //}
-
             await App.Database.SaveSheetAsync(sheet);
-            await Navigation.PopAsync();
+            UnfocusAll();
+            await Navigation.PopModalAsync();
         }
 
-        async void OnDeleteButtonClicked(object sender, EventArgs e)
+        async void Cancel_Clicked(object sender, EventArgs e)
         {
-            var sheet = (CSS)BindingContext;
-            await App.Database.DeleteSheetAsync(sheet);
-            await Navigation.PopAsync();
+            CSS sheet = (CSS)BindingContext;
 
-            // If this sheet is set as the current sheet, then reset that to default.
-            if (sheet.ID == App.StyleSheetID)
+            if (sheet.IsReadOnly)
             {
-                App.StyleSheetID = App.DefaultStyleSheetID;
+                await Navigation.PopModalAsync();
+            }
+            else if (sheet.Name != InitialName || sheet.Text != InitialText)
+            {
+                bool answer = await DisplayAlert("Exit?", "Exit without saving changes?", "Yes", "No");
+                if (answer)
+                {
+                    UnfocusAll();
+                    await Navigation.PopModalAsync();
+                }
+            }
+            else
+            {
+                UnfocusAll();
+                await Navigation.PopModalAsync();
             }
         }
 
