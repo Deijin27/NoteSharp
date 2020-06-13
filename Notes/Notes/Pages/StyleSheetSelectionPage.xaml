@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Notes.Views;assembly=Notes"
+             x:Class="Notes.Pages.StyleSheetSelectionPage"
+             xmlns:local="clr-namespace:Notes.Pages"
+             Title="Choose CSS">
+
+    <ContentPage.Resources>
+        <!-- Implicit Styles -->
+        <!--<Style TargetType="{x:Type ListView}">
+            <Setter Property="BackgroundColor" Value="{DynamicResource AppSecondaryBackgroundColor}" />
+        </Style>-->
+
+        <ResourceDictionary>
+            <DataTemplate x:Key="cssTemplate">
+                <ViewCell>
+                    <views:ListViewItem_CSS/>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="cssReadonlyTemplate">
+                <ViewCell>
+                    <views:ListViewItem_CSSReadonly/>
+                </ViewCell>
+            </DataTemplate>
+
+            <local:StyleSheetDataTemplateSelector x:Key="styleSheetSelectionDataTemplateSelector"
+                                                  CSSTemplate="{StaticResource cssTemplate}"
+                                                  CSSTemplate_ReadOnly="{StaticResource cssReadonlyTemplate}"
+                                                     />
+        </ResourceDictionary>
+
+    </ContentPage.Resources>
+
+    <ListView x:Name="listView" 
+              ItemTemplate="{StaticResource styleSheetSelectionDataTemplateSelector}" 
+              ItemSelected="OnListViewItemSelected"
+              SeparatorVisibility="None"
+              BackgroundColor="{DynamicResource AppBackgroundColor}"
+              Margin="0,0,0,0">
+        <ListView.Header>
+            <Label HeightRequest="250" BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}"/>
+        </ListView.Header>
+    </ListView>
+
+
+</ContentPage>

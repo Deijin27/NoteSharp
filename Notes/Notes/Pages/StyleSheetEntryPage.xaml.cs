@@ -42,28 +42,29 @@ namespace Notes.Pages
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             var sheet = (CSS)BindingContext;
-            if (sheet.Name == null) // null is the value when the text input is empty
-            {
-                sheet.Name = "Untitled Sheet";
-            }
-            // The sheet name is always changed from being equal to the default OriginalSheetName
-            // So that if it's a new sheet, the name checks always occurr.
-            if (sheet.Name != OriginalSheetName)
-            {
-                if (sheet.Name == "Cancel") // Ensure no interference with Cancel button of the dodgy picker dialog.
-                {
-                    sheet.Name = "Cancel_";
-                }
-                // Make sure no duplicate names because it would break MarkDownViewPage selector.
-                string newName = sheet.Name;
-                int count = 1;
-                while ((await ((App)App.Current).DoesSheetNameExist(newName)))
-                {
-                    newName = $"{sheet.Name}[{count}]";
-                    count++;
-                }
-                sheet.Name = newName;
-            }
+
+
+            // ! There is no reason to force unique names of style sheets
+
+            //if (sheet.Name == null) // null is the value when the text input is empty
+            //{
+            //    sheet.Name = "Untitled Sheet";
+            //}
+            //// The sheet name is always changed from being equal to the default OriginalSheetName
+            //// So that if it's a new sheet, the name checks always occurr.
+            //if (sheet.Name != OriginalSheetName)
+            //{
+            //    // Make sure no duplicate names
+            //    string newName = sheet.Name;
+            //    int count = 1;
+            //    while ((await ((App)App.Current).DoesSheetNameExist(newName)))
+            //    {
+            //        newName = $"{sheet.Name}[{count}]";
+            //        count++;
+            //    }
+            //    sheet.Name = newName;
+            //}
+
             await App.Database.SaveSheetAsync(sheet);
             await Navigation.PopAsync();
         }

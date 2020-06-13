@@ -274,14 +274,14 @@ namespace Notes.Data
                             .ToListAsync();
         }
 
-        public async Task<bool> DoesCSSNameExist(string name)
-        {
-            int count = await _database.Table<CSS>()
-                                 .Where(i => i.Name == name)
-                                 .CountAsync();
+        //public async Task<bool> DoesCSSNameExist(string name)
+        //{
+        //    int count = await _database.Table<CSS>()
+        //                         .Where(i => i.Name == name)
+        //                         .CountAsync();
 
-            return count > 0;
-        }
+        //    return count > 0;
+        //}
 
         public Task<CSS> GetSheetAsync(int id)
         {

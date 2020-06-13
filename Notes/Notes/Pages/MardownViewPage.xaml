@@ -17,7 +17,6 @@
                                  Color="{DynamicResource ToolbarIconColor}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 
     <WebView x:Name="MarkdownWebView"/>

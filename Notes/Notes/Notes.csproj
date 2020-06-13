@@ -39,6 +39,9 @@
     <Compile Update="Pages\StyleSheetEntryPage.xaml.cs">
       <DependentUpon>StyleSheetEntryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\StyleSheetSelectionPage.xaml.cs">
+      <DependentUpon>StyleSheetSelectionPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\StyleSheetsPage.xaml.cs">
       <DependentUpon>StyleSheetsPage.xaml</DependentUpon>
     </Compile>

@@ -86,7 +86,17 @@ namespace Notes.Pages
 
         private async void Rename_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Rename_Clicked", "you did it!", "OK");
+            var mi = ((MenuItem)sender);
+            CSS sheet = mi.CommandParameter as CSS;
+
+            string newName = await DisplayPromptAsync("Rename Sheet", "Input new name for sheet", initialValue:sheet.Name);
+
+            if (newName != null)
+            {
+                sheet.Name = newName;
+                await App.Database.SaveSheetAsync(sheet);
+                await UpdateListView();
+            }
         }
 
         async void OnSettingsButtonClicked(object sender, EventArgs e)

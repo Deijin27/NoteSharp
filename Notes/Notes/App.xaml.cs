@@ -190,10 +190,10 @@ namespace Notes
             return sheet;
         }
 
-        public async Task<bool> DoesSheetNameExist(string name)
-        {
-            int defaultCount = DefaultStyleSheets.Where(i => i.Name == name).Count();
-            return (defaultCount > 0) || (await Database.DoesCSSNameExist(name));
-        }
+        //public async Task<bool> DoesSheetNameExist(string name)
+        //{
+        //    int defaultCount = DefaultStyleSheets.Where(i => i.Name == name).Count();
+        //    return (defaultCount > 0) || (await Database.DoesCSSNameExist(name));
+        //}
     }
 }
