@@ -7,6 +7,8 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Notes.Themes;
 using Xamarin.Essentials;
+using System.IO;
+using Notes.Models;
 
 namespace Notes.Pages
 {
@@ -37,6 +39,31 @@ namespace Notes.Pages
         private void SpellCheckSwitch_Toggled(object sender, ToggledEventArgs e)
         {
             App.IsSpellCheckEnabled = e.Value;
+        }
+
+        private async void CreateBackup()
+        {
+            string externalStoragePath = DependencyService.Get<IFileSystem>().GetExternalStoragePath();
+
+            await DisplayAlert("External Storage Found", externalStoragePath, "OK");
+            //string older = "NoteSharp";
+            //string backupsFolder = "Backups";
+
+            //string fileName = DateTime.UtcNow.ToString();
+
+
+
+            //string folder = Path.Combine(externalStoragePath,)
+
+            //string file = Path.Combine(externalStoragePath, "video.mp4");
+
+            //while (!Directory.Exists())
+
+        }
+
+        private void CreateBackupButton_Clicked(object sender, EventArgs e)
+        {
+            CreateBackup();
         }
     }
 }

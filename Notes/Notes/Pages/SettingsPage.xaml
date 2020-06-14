@@ -41,6 +41,9 @@
                                 Toggled="SpellCheckSwitch_Toggled"/>
                     </Grid>
                 </ViewCell>
+                <ViewCell>
+                    <Button x:Name="CreateBackupButton" Text="Create Backup" Clicked="CreateBackupButton_Clicked"/>
+                </ViewCell>
             </TableSection>
         </TableView>
     </ContentPage.Content>

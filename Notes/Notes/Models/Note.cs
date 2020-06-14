@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using SQLite;
 
 namespace Notes.Models
@@ -15,11 +16,13 @@ namespace Notes.Models
         public DateTime DateModified { get; set; }
         //public DateTime DateAccessed { get; set; }
 
+        [JsonIgnore]
         public DateTime DateCreatedLocal
         {
             get { return DateCreated.ToLocalTime(); }
         }
 
+        [JsonIgnore]
         public DateTime DateModifiedLocal
         {
             get { return DateModified.ToLocalTime(); }

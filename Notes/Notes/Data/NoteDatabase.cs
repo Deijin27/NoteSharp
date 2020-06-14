@@ -82,7 +82,7 @@ namespace Notes.Data
 
         #endregion
 
-        #region Get All Objects of Type
+        #region Get All Objects of Type In Folder
 
         public Task<List<Note>> GetNotesAsync(int folderID)
         {
@@ -309,6 +309,20 @@ namespace Notes.Data
 
         #endregion
 
+        #region Get All Object of Type
+
+        public Task<List<Note>> GetAllNotesAsync()
+        {
+            return _database.Table<Note>().ToListAsync();
+
+        }
+
+        public Task<List<Folder>> GetAllFoldersAsync()
+        {
+            return _database.Table<Folder>().ToListAsync();
+        }
+
+        #endregion
 
         public async Task<int> DeleteFolderAndAllContentsAsync(Folder folder)
         {
