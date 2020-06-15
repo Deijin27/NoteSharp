@@ -196,5 +196,16 @@
         </ListView.Header>
     </ListView>
 
+    <!--<CollectionView x:Name="listView"
+                    ItemTemplate="{StaticResource folderContentDataTemplateSelector}"
+                    SelectionMode="Single"
+                    SelectedItem="OnListViewItemSelected"
+                    BackgroundColor="{DynamicResource AppBackgroundColor}"
+                    Margin="0"
+                    >
+        <CollectionView.Header>
+            <Label HeightRequest="250" BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}"/>
+        </CollectionView.Header>
+    </CollectionView>-->
 
 </ContentPage>

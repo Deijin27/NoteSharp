@@ -19,6 +19,14 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
 
-    <WebView x:Name="MarkdownWebView"/>
+    <ContentPage.Content>
+        <Grid>
+            <WebView x:Name="MarkdownWebView"
+                     Navigating="MarkdownWebView_Navigating"
+                     />
+            <ActivityIndicator x:Name="activityIndicator" IsRunning="True"
+                               HorizontalOptions="Center" VerticalOptions="Center" /> <!-- Color=""  -->
+        </Grid>
+    </ContentPage.Content>
 
 </ContentPage>

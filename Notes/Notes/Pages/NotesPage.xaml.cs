@@ -63,11 +63,17 @@ namespace Notes.Pages
         public NotesPage()
         {
             InitializeComponent();
+            //InitializeListView();
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await UpdateListView();
+        }
+
+        public async void InitializeListView()
+        {
             await UpdateListView();
         }
 
@@ -104,7 +110,7 @@ namespace Notes.Pages
 
         async void OnNoteAddedClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new NoteEntryPage(FolderID)));
+            await Navigation.PushModalAsync(new NavigationPage(new NoteEntryPage(FolderID, this)));
         }
 
         async void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -125,7 +131,7 @@ namespace Notes.Pages
                 }
                 else // Note
                 {
-                    await Navigation.PushModalAsync(new NavigationPage(new NoteEntryPage(folderContentItem.ContentNote)));
+                    await Navigation.PushModalAsync(new NavigationPage(new NoteEntryPage(folderContentItem.ContentNote, this)));
                 }
                 listView.SelectedItem = null;
             }

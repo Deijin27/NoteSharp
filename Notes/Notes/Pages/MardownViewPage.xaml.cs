@@ -24,9 +24,9 @@ namespace Notes.Pages
             {
                 ToolbarItems.Remove(SelectCSS);
             }
+
             MarkdownText = markdownText;
             InitialiseHtml(folderID);
-
         }
 
         protected override void OnAppearing()
@@ -54,10 +54,13 @@ namespace Notes.Pages
 
                 //UpdateWebView();
             }
+
+            //activityIndicator.IsRunning = false;
         }
 
         async void UpdateWebView()
         {
+            activityIndicator.IsRunning = true;
             string html = HtmlText;
 
             CSS sheet = await ((App)App.Current).GetStyleSheetAsync();
@@ -70,11 +73,33 @@ namespace Notes.Pages
                 Html = html
             };
             MarkdownWebView.Source = htmlSource;
+            activityIndicator.IsRunning = false;
         }
 
         async void SelectCSS_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new StyleSheetSelectionPage());
+        }
+
+        private async void MarkdownWebView_Navigating(object sender, WebNavigatingEventArgs e)
+        {
+            //// args.url will have new page url  
+            //if (args.Url == "https://google.com")
+            //{
+            //    args.Cancel = true;
+            //    await DisplayAlert("Info", "This link was restricted to open in this app.", "Ok");
+            //}
+
+
+
+            string url = e.Url;
+            e.Cancel = true;
+            try
+            {
+                await Browser.OpenAsync(url, BrowserLaunchMode.External);
+            }
+            catch (Exception) { }
+            
         }
     }
 }

@@ -16,17 +16,29 @@ namespace Notes.Pages
         public bool NewNote = false;
         private string InitialText;
         private string InitialName;
+        NotesPage PreviousPage;
+        //Note NoteStorage;
 
-        public NoteEntryPage(Note note)
+        public NoteEntryPage(Note note, NotesPage previousPage)
         {
+            PreviousPage = previousPage;
             InitialText = string.Copy(note.Text);
             InitialName = string.Copy(note.Name);
 
             InitializeComponent();
             ApplySettings();
 
+            //NoteStorage = note;
+
             BindingContext = note;
         }
+
+        //protected override void OnAppearing()
+        //{
+        //    base.OnAppearing();
+
+        //    BindingContext = NoteStorage;
+        //}
 
         public void UnfocusAll() 
         {
@@ -37,8 +49,10 @@ namespace Notes.Pages
             NameEntry.Unfocus();
         }
 
-        public NoteEntryPage(int folderID)
+        public NoteEntryPage(int folderID, NotesPage previousPage)
         {
+            PreviousPage = previousPage;
+
             Note note = new Note() { FolderID = folderID };
 
             InitialText = string.Copy(note.Text);
@@ -66,13 +80,13 @@ namespace Notes.Pages
                 bool answer = await DisplayAlert("Exit?", "Exit without saving changes?", "Yes", "No");
                 if (answer)
                 {
-                    await Navigation.PopModalAsync();
+                    await NavigateBack();
                 }
             }
             else
             {
                 UnfocusAll();
-                await Navigation.PopModalAsync();
+                await NavigateBack();
             }
         }
 
@@ -85,6 +99,8 @@ namespace Notes.Pages
             {
                 if (note.Name != InitialName)
                 {
+                    Console.WriteLine("-+-+-+-+---++- DEBUG 1 -+-+-+--+-++--++-");
+
                     if (await App.Database.DoesNoteNameExistAsync(note.Name, note.FolderID))
                     { 
                         (option, newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Note Name Conflict",
@@ -94,7 +110,7 @@ namespace Notes.Pages
                             note.Name = newName;
                             note.DateModified = DateTime.UtcNow;
                             await App.Database.SaveNoteAsync(note);
-                            await Navigation.PopModalAsync();
+                            await NavigateBack();
                         }
                     }
                     else
@@ -102,26 +118,27 @@ namespace Notes.Pages
                         note.DateModified = DateTime.UtcNow;
                         await App.Database.SaveNoteAsync(note);
                         UnfocusAll();
-                        await Navigation.PopModalAsync();
+                        await NavigateBack();
                     }
                 }
                 else
                 { 
                     (option, newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Name Note");
-                    
+                    Console.WriteLine("-+-+-+-+---++- DEBUG 2 -+-+-+--+-++--++-");
                     if (option == Option.OK)
                     {
                         note.Name = newName;
                         note.DateModified = DateTime.UtcNow;
                         note.DateCreated = note.DateModified;
                         await App.Database.SaveNoteAsync(note);
-                        await Navigation.PopModalAsync();
+                        await NavigateBack();
                     }
                 }
 
             }
             else
             {
+                Console.WriteLine("-+-+-+-+---++- DEBUG 3 -+-+-+--+-++--++-");
                 if (note.Name != InitialName && (await App.Database.DoesNoteNameExistAsync(note.Name, note.FolderID)))
                 {
                     (option, newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Note Name Conflict",
@@ -131,17 +148,33 @@ namespace Notes.Pages
                         note.Name = newName;
                         note.DateModified = DateTime.UtcNow;
                         await App.Database.SaveNoteAsync(note);
-                        await Navigation.PopModalAsync();
+                        await NavigateBack();
                     }
                 }
                 else
-                { 
+                {
+                    Console.WriteLine("-+-+-+-+---++- DEBUG 4 -+-+-+--+-++--++-");
                     note.DateModified = DateTime.UtcNow;
                     await App.Database.SaveNoteAsync(note);
                     UnfocusAll();
-                    await Navigation.PopModalAsync();
+                    await NavigateBack();
                 }
             }
+        }
+
+        private async Task NavigateBack()
+        {
+            // thiss is weird but necessary, the reason weridly specific
+            // When you close the app (by that I just mean press the home button or something)
+            // then open it again, then click save, you are pushed to the NotesPage
+            // but for some reason the notes page doesn't update
+            // this means the note changes are saved, but if you click on 
+            // the same note before doing something to force an update
+            // it will have the old content when you look at it.
+            // plus it will of course be listed as the wrong name
+            // if you changed the name
+            await PreviousPage.UpdateListView();
+            await Navigation.PopModalAsync();
         }
 
         async void OnSettingsButtonClicked(object sender, EventArgs e)
@@ -172,6 +205,9 @@ namespace Notes.Pages
         async void MarkdownView_Clicked(object sender, EventArgs e)
         {
             var note = (Note)BindingContext;
+
+            //NoteStorage = note;
+
             string markdownText = note.Text;
             await Navigation.PushAsync(new MarkdownViewPage(markdownText, note.FolderID));
         }
