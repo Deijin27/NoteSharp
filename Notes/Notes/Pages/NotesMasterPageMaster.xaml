@@ -22,7 +22,7 @@
                          Margin="0,0,0,0"
                          Spacing="0">
                 <Label HeightRequest="100"/>
-                <Label Text="Notes App"
+                <Label Text="NoteSharp"
                        TextColor="{DynamicResource NavigationBarTextColor}"
                        FontSize="Title"
                        FontAttributes="Bold"

@@ -8,4 +8,12 @@ namespace Notes
     {
         string GetExternalStoragePath();
     }
+
+    public interface IExternalStoragePermission
+    {
+        bool IsPermissionGranted();
+
+
+        bool RequestPermission();
+    }
 }

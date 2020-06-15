@@ -322,6 +322,11 @@ namespace Notes.Data
             return _database.Table<Folder>().ToListAsync();
         }
 
+        public Task<List<CSS>> GetAllSheetsAsync()
+        {
+            return _database.Table<CSS>().ToListAsync();
+        }
+
         #endregion
 
         public async Task<int> DeleteFolderAndAllContentsAsync(Folder folder)

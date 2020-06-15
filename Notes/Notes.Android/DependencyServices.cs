@@ -1,4 +1,5 @@
 ﻿using Android.Content;
+using Android.Content.PM;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(Notes.Droid.FileSystemImplementation))]
