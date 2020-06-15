@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Net;
 using Notes.Pages;
 using System.Dynamic;
+using System.ComponentModel.Design;
 
 namespace Notes.Data
 {
@@ -27,12 +28,67 @@ namespace Notes.Data
     {
         readonly SQLiteAsyncConnection _database;
 
+        public static bool IsValid(string path)
+        {
+            try
+            {
+                SQLiteConnection testFile = new SQLiteConnection(path);
+                Note test = testFile.Table<Note>().FirstOrDefault();
+                Folder test2 = testFile.Table<Folder>().FirstOrDefault();
+                CSS test3 = testFile.Table<CSS>().FirstOrDefault();
+                testFile.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"-++-+-+--+-++--++-+- ERROR: [{e.Message}] -+-+-+--++--++-+-+-+-+-+-+-+-");
+                return false;
+            }
+            Console.WriteLine($"-++-+-+--+-++--++-+- it is valid according to my calculations -+-+-+--++--++-+-+-+-+-+-+-+-");
+            return true;
+        }
+
+        public Task BackupAsync(string path)
+        {
+            return _database.BackupAsync(path);
+        }
+
         public NoteDatabase(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);
             _database.CreateTableAsync<Note>().Wait();
             _database.CreateTableAsync<Folder>().Wait();
             _database.CreateTableAsync<CSS>().Wait();
+        }
+
+        /// <summary>
+        /// Closes any pooled connections used by the database.
+        /// </summary>
+        /// <returns></returns>
+        public Task CloseAsync()
+        {
+            return _database.CloseAsync();
+        }
+
+        /// <summary>
+        /// WARNING, really does delete everything permanently.
+        /// </summary>
+        public async Task DeleteAllAsync()
+        {
+            await _database.DeleteAllAsync<Note>();
+            await _database.DeleteAllAsync<Folder>();
+            await _database.DeleteAllAsync<CSS>();
+        }
+
+        /// <summary>
+        /// Only use on an empty database
+        /// </summary>
+        /// <param name="notes"></param>
+        public async Task PopulateEmpty(IEnumerable<Note> notes, IEnumerable<Folder> folders, IEnumerable<CSS> styleSheets)
+        {
+            await _database.InsertAllAsync(notes);
+            await _database.InsertAllAsync(folders);
+            await _database.InsertAllAsync(styleSheets);
+            return;
         }
 
         #region Sorting Methods

@@ -27,11 +27,18 @@ namespace Notes
             {
                 if (database == null)
                 {
-                    database = new NoteDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Notes.db3"));
+                    database = new NoteDatabase(DatabasePath);
                 }
                 return database;
             }
         }
+
+        public static void ResetDatabase()
+        {
+            database = new NoteDatabase(DatabasePath);
+        }
+
+        public static string DatabasePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Notes.db3");
 
         public App()
         {

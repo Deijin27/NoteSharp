@@ -44,6 +44,9 @@
                 <ViewCell>
                     <Button x:Name="CreateBackupButton" Text="Create Backup" Clicked="CreateBackupButton_Clicked"/>
                 </ViewCell>
+                <ViewCell>
+                    <Button x:Name="RestoreBackupButton" Text="Restore Backup" Clicked="RestoreBackupButton_Clicked"/>
+                </ViewCell>
             </TableSection>
         </TableView>
     </ContentPage.Content>
