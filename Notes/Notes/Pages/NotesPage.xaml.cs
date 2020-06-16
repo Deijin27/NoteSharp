@@ -57,13 +57,21 @@ namespace Notes.Pages
 
     public partial class NotesPage : ContentPage
     {
-        public int FolderID = 0;
+        public Guid FolderID;
         public bool IsQuickAccessPage = false;
 
         public NotesPage()
         {
             InitializeComponent();
             //InitializeListView();
+            FolderID = Guid.Empty;
+        }
+
+        public NotesPage(Folder folder)
+        {
+            InitializeComponent();
+            Title = folder.Name;
+            FolderID = folder.ID;
         }
 
         protected override async void OnAppearing()
@@ -123,11 +131,7 @@ namespace Notes.Pages
                 {
                     Folder folder = folderContentItem.ContentFolder;
 
-                    await Navigation.PushAsync(new NotesPage
-                    {
-                        FolderID = folder.ID,
-                        Title = folder.Name
-                    });
+                    await Navigation.PushAsync(new NotesPage(folder));
                 }
                 else // Note
                 {
@@ -144,7 +148,7 @@ namespace Notes.Pages
             if (option == Option.OK)
             {
                 DateTime dateTime = DateTime.UtcNow;
-                await App.Database.CreateFolderAsync(new Folder 
+                await App.Database.SaveFolderAsync(new Folder 
                 { 
                     Name = result, 
                     ParentID = FolderID, 

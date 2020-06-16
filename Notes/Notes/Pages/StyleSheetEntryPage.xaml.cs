@@ -103,7 +103,7 @@ namespace Notes.Pages
 
             html = "<style>\n" + css + "\n</style>\n" + html;
 
-            await Navigation.PushAsync(new MarkdownViewPage(html, 0, true) { Title = "CSS Test View" });
+            await Navigation.PushAsync(new MarkdownViewPage(html, Guid.Empty, true) { Title = "CSS Test View" });
         }
 
         private async void CopyButton_Clicked(object sender, EventArgs e)

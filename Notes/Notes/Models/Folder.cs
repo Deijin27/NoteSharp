@@ -6,9 +6,9 @@ namespace Notes.Models
 {
     public class Folder
     {
-        [PrimaryKey, AutoIncrement]
-        public int ID { get; set; }
-        public int ParentID { get; set; }
+        [PrimaryKey]
+        public Guid ID { get; set; }
+        public Guid ParentID { get; set; }
         public string Name { get; set; }
         public bool IsQuickAccess { get; set; }
         public DateTime DateCreated { get; set; }

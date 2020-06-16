@@ -19,7 +19,7 @@ namespace Notes.Pages
         public NotesMasterPage()
         {
             InitializeComponent();
-            mainNavigation = new NavigationPage(new NotesPage { Title = "Root", FolderID = 0 });
+            mainNavigation = new NavigationPage(new NotesPage { Title = "Root", FolderID = Guid.Empty });
             Detail = mainNavigation;
 
             masterPage = new NotesMasterPageMaster();

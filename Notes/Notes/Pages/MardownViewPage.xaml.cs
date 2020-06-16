@@ -17,7 +17,7 @@ namespace Notes.Pages
         string MarkdownText;
         string HtmlText;
 
-        public MarkdownViewPage(string markdownText, int folderID, bool DisableCssSelector = false)
+        public MarkdownViewPage(string markdownText, Guid folderID, bool DisableCssSelector = false)
         {
             InitializeComponent();
             if (DisableCssSelector)
@@ -37,7 +37,7 @@ namespace Notes.Pages
             UpdateWebView();
         }
 
-        async void InitialiseHtml(int folderID)
+        async void InitialiseHtml(Guid folderID)
         {
             (string markdownFinal, ErrorEncountered errorEncountered) = await App.Database.InterpolateAndInputTemplatesAsync(MarkdownText, this, folderID);
 

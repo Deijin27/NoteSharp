@@ -53,7 +53,14 @@ namespace Notes
             CreateDefaultStyleSheets();
         }
 
-        public static int DefaultStyleSheetID = -1;
+        public static Guid DefaultStyleSheetID => DefaultStyleSheetGuids[0];
+
+        public static List<Guid> DefaultStyleSheetGuids = new List<Guid>()
+        {
+            Guid.Parse("ac67e818-73bd-4d85-a269-12f78a3f46d7"),
+            Guid.Parse("4ad15e4c-e1db-4ff5-a620-61af06060ff1"),
+            Guid.Parse("7270f57d-dfc5-49f3-b4cf-421d7fb6752c")
+        };
 
         void CreateDefaultStyleSheets()
         {
@@ -61,7 +68,7 @@ namespace Notes
 
             DefaultStyleSheets.Add(new CSS()
             {
-                ID = -1,
+                ID = DefaultStyleSheetGuids[0],
                 IsReadOnly = true,
                 Name = "Default1 - Red",
                 Text = "h1 { color: red; }"
@@ -69,7 +76,7 @@ namespace Notes
 
             DefaultStyleSheets.Add(new CSS()
             {
-                ID = -2,
+                ID = DefaultStyleSheetGuids[1],
                 IsReadOnly = true,
                 Name = "Default2 - Blue",
                 Text = "h1 { color: blue; }"
@@ -77,7 +84,7 @@ namespace Notes
 
             DefaultStyleSheets.Add(new CSS()
             {
-                ID = -3,
+                ID = DefaultStyleSheetGuids[2],
                 IsReadOnly = true,
                 Name = "Default3 - Green",
                 Text = "h1 { color: blue; }"
@@ -204,30 +211,30 @@ namespace Notes
             }
         }
 
-        private CSS GetNonUserStyleSheet(int id)
+        private CSS GetNonUserStyleSheet(Guid id)
         {
             return DefaultStyleSheets.Where(i => i.ID == id).FirstOrDefault();
         }
 
-        public static int StyleSheetID
+        public static Guid StyleSheetID
         {
             get
             {
-                return Preferences.Get("StyleSheet", defaultValue: DefaultStyleSheetID);
+                return Guid.Parse(Preferences.Get("StyleSheet", defaultValue: DefaultStyleSheetID.ToString()));
             }
 
             set
             {
-                Preferences.Set("StyleSheet", value);
+                Preferences.Set("StyleSheet", value.ToString());
             }
         }
 
         public async Task<CSS> GetStyleSheetAsync()
         {
-            int sheetID = StyleSheetID;
+            Guid sheetID = StyleSheetID;
             CSS sheet;
 
-            if (sheetID > 0) // is user defined
+            if (!DefaultStyleSheetGuids.Contains(sheetID)) // is user defined
             {
                 sheet = await Database.GetSheetAsync(sheetID);
             }

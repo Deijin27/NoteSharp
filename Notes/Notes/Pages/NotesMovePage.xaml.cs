@@ -18,7 +18,7 @@ namespace Notes.Pages
 
     public partial class NotesMovePage : ContentPage
     {
-        public int FolderID;
+        public Guid FolderID;
         public Folder FolderToMove;
         public Note NoteToMove;
         public MoveMode MoveMode;
@@ -93,16 +93,15 @@ namespace Notes.Pages
             if (option == Option.OK)
             {
                 DateTime dateTime = DateTime.UtcNow;
-                await App.Database.CreateFolderAsync(new Folder 
-                { 
-                    Name = result, 
-                    ParentID = FolderID, 
+                await App.Database.SaveFolderAsync(new Folder
+                {
+                    Name = result,
+                    ParentID = FolderID,
                     DateCreated = dateTime,
                     DateModified = dateTime
                 });
                 await UpdateListView();
             }
-
         }
 
         async void OnSettingsButtonClicked(object sender, EventArgs e)
@@ -143,13 +142,13 @@ namespace Notes.Pages
         private async void ToParentFolder_Clicked(object sender, EventArgs e)
         {
             
-            if (FolderID != 0)
+            if (FolderID != Guid.Empty)
             {
                 Folder currentFolder = await App.Database.GetFolderAsync(FolderID);
-                int parentID = currentFolder.ParentID;
+                Guid parentID = currentFolder.ParentID;
                 FolderID = parentID;
                 await UpdateListView();
-                if (parentID != 0)
+                if (parentID != Guid.Empty)
                 {
                     CurrentFolderName = (await App.Database.GetFolderAsync(parentID)).Name; 
                 }

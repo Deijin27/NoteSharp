@@ -10,7 +10,6 @@ using System.ComponentModel.Design;
 
 namespace Notes.Pages
 {
-
     public partial class NoteEntryPage : ContentPage
     {
         public bool NewNote = false;
@@ -19,6 +18,11 @@ namespace Notes.Pages
         NotesPage PreviousPage;
         //Note NoteStorage;
 
+        /// <summary>
+        /// Use when loading an existing note
+        /// </summary>
+        /// <param name="note"></param>
+        /// <param name="previousPage"></param>
         public NoteEntryPage(Note note, NotesPage previousPage)
         {
             PreviousPage = previousPage;
@@ -49,11 +53,19 @@ namespace Notes.Pages
             NameEntry.Unfocus();
         }
 
-        public NoteEntryPage(int folderID, NotesPage previousPage)
+        /// <summary>
+        /// Use for creating a new note
+        /// </summary>
+        /// <param name="folderID"></param>
+        /// <param name="previousPage"></param>
+        public NoteEntryPage(Guid folderID, NotesPage previousPage)
         {
             PreviousPage = previousPage;
 
-            Note note = new Note() { FolderID = folderID };
+            Note note = new Note()
+            {
+                FolderID = folderID 
+            };
 
             InitialText = string.Copy(note.Text);
             InitialName = string.Copy(note.Name);
@@ -108,6 +120,7 @@ namespace Notes.Pages
                         {
                             note.Name = newName;
                             note.DateModified = DateTime.UtcNow;
+                            note.DateCreated = note.DateModified;
                             await App.Database.SaveNoteAsync(note);
                             await NavigateBack();
                         }
@@ -115,6 +128,7 @@ namespace Notes.Pages
                     else
                     {
                         note.DateModified = DateTime.UtcNow;
+                        note.DateCreated = note.DateModified;
                         await App.Database.SaveNoteAsync(note);
                         UnfocusAll();
                         await NavigateBack();

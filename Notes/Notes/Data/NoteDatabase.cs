@@ -140,7 +140,7 @@ namespace Notes.Data
 
         #region Get All Objects of Type In Folder
 
-        public Task<List<Note>> GetNotesAsync(int folderID)
+        public Task<List<Note>> GetNotesAsync(Guid folderID)
         {
             var query = _database.Table<Note>()
                                  .Where(i => i.FolderID == folderID);
@@ -148,10 +148,9 @@ namespace Notes.Data
             query = SortNotes(query);
 
             return query.ToListAsync();
-
         }
 
-        public Task<List<Folder>> GetFoldersAsync(int folderID)
+        public Task<List<Folder>> GetFoldersAsync(Guid folderID)
         {
             var query = _database.Table<Folder>()
                             .Where(i => i.ParentID == folderID);
@@ -190,14 +189,14 @@ namespace Notes.Data
 
         #region Get Single Object By ID
 
-        public Task<Folder> GetFolderAsync(int id)
+        public Task<Folder> GetFolderAsync(Guid id)
         {
             return _database.Table<Folder>()
                             .Where(i => i.ID == id)
                             .FirstOrDefaultAsync();
         }
 
-        public Task<Note> GetNoteAsync(int id)
+        public Task<Note> GetNoteAsync(Guid id)
         {
             return _database.Table<Note>()
                             .Where(i => i.ID == id)
@@ -208,14 +207,14 @@ namespace Notes.Data
 
         #region Get Single Object By Name and Folder ID
 
-        public Task<Note> GetNoteByNameAsync(int folderID, string name)
+        public Task<Note> GetNoteByNameAsync(Guid folderID, string name)
         {
             return _database.Table<Note>()
                             .Where(i => i.FolderID == folderID && i.Name == name)
                             .FirstOrDefaultAsync();
         }
 
-        public Task<Folder> GetFolderByNameAsync(int parentID, string name)
+        public Task<Folder> GetFolderByNameAsync(Guid parentID, string name)
         {
             return _database.Table<Folder>()
                             .Where(i => i.ParentID == parentID && i.Name == name)
@@ -246,24 +245,26 @@ namespace Notes.Data
 
         public Task<int> SaveNoteAsync(Note note)
         {
-            if (note.ID != 0)
+            if (note.ID != Guid.Empty)
             {
                 return _database.UpdateAsync(note);
             }
             else
             {
+                note.ID = Guid.NewGuid();
                 return _database.InsertAsync(note);
             }
         }
 
         public Task<int> SaveFolderAsync(Folder folder)
         {
-            if (folder.ID != 0)
+            if (folder.ID != Guid.Empty)
             {
                 return _database.UpdateAsync(folder);
             }
             else
             {
+                folder.ID = Guid.NewGuid();
                 return _database.InsertAsync(folder);
             }
         }
@@ -281,21 +282,19 @@ namespace Notes.Data
 
         #region Check Name Exists of Type in Folder
 
-        public async Task<bool> DoesNoteNameExistAsync(string name, int folderID)
+        public async Task<bool> DoesNoteNameExistAsync(string name, Guid folderID)
         {
             int count = await _database.Table<Note>()
                                        .Where(i => i.FolderID == folderID && i.Name == name)
                                        .CountAsync();
-
             return count > 0;
         }
 
-        public async Task<bool> DoesFolderNameExistAsync(string name, int parentID)
+        public async Task<bool> DoesFolderNameExistAsync(string name, Guid parentID)
         {
             int count = await _database.Table<Folder>()
                                        .Where(i => i.ParentID == parentID && i.Name == name)
                                        .CountAsync();
-
             return count > 0;
         }
 
@@ -339,7 +338,7 @@ namespace Notes.Data
         //    return count > 0;
         //}
 
-        public Task<CSS> GetSheetAsync(int id)
+        public Task<CSS> GetSheetAsync(Guid id)
         {
             return _database.Table<CSS>()
                             .Where(i => i.ID == id)
@@ -348,12 +347,13 @@ namespace Notes.Data
 
         public Task<int> SaveSheetAsync(CSS sheet)
         {
-            if (sheet.ID != 0)
+            if (sheet.ID != Guid.Empty)
             {
                 return _database.UpdateAsync(sheet);
             }
             else
             {
+                sheet.ID = Guid.NewGuid();
                 return _database.InsertAsync(sheet);
             }
         }
@@ -400,10 +400,10 @@ namespace Notes.Data
             return default;
         }
 
-        public Task<int> CreateFolderAsync(Folder folder)
-        {
-            return _database.InsertAsync(folder);
-        }
+        //public Task<int> CreateFolderAsync(Folder folder)
+        //{
+        //    return _database.InsertAsync(folder);
+        //}
 
         #region Template Stuff
 
@@ -411,7 +411,7 @@ namespace Notes.Data
         private static Regex TiRegex = new Regex(@"(?<!\\)<ti\s+""(?<path>[^>]*?)""\s*(?<datasets>[^>]*?)?/>");
         private static Regex DatasetPathRegex = new Regex(@"\s*""(?<dataset>.*?)""\s*");
 
-        public Task<(string, ErrorEncountered)> InterpolateAndInputTemplatesAsync(string text, Page currentPage, int folderID)
+        public Task<(string, ErrorEncountered)> InterpolateAndInputTemplatesAsync(string text, Page currentPage, Guid folderID)
         {
             // first interpolate anything in this string, inputting the default values specified
             text = InterpolateValues(text, new List<Dictionary<string, string>>());
@@ -436,15 +436,15 @@ namespace Notes.Data
                 }
                 else if (folderName == "..") // step up a folder
                 {
-                    if (currentFolder.ID == 0) // current folder is root folder
+                    if (currentFolder.ID == Guid.Empty) // current folder is root folder
                     {
                         await currentPage.DisplayAlert("Template Error", "Root folder does not have a parent folder.", "OK");
                         return (null, ErrorEncountered.True);
                     }
                     // current folder is not root folder
-                    if (currentFolder.ParentID == 0) // parent folder is root folder
+                    if (currentFolder.ParentID == Guid.Empty) // parent folder is root folder
                     {
-                        currentFolder = new Folder() { ID = 0 };
+                        currentFolder = new Folder() { ID = Guid.Empty };
                     }
                     else // parent folder is not root folder, i.e. it exists in database
                     {
@@ -471,15 +471,13 @@ namespace Notes.Data
             return (currentFolder, ErrorEncountered.False);
         }
 
-        private async Task<(Note, ErrorEncountered)> GetNoteByPath(string path, Page currentPage, int folderID, int mainFolderID)
+        private async Task<(Note, ErrorEncountered)> GetNoteByPath(string path, Page currentPage, Guid folderID, Guid mainFolderID)
         {
-            #region Identical to GetDatasetByPath
-
             switch (path[0])
             {
                 case '/': // start in root folder
                     {
-                        folderID = 0;
+                        folderID = Guid.Empty;
                         path = path.Remove(0, 1);
                         break;
                     }
@@ -494,8 +492,8 @@ namespace Notes.Data
             string[] pathSplit = path.Split('/');
 
             Folder startFolder;
-            if (folderID == 0) 
-                startFolder = new Folder() { ID = 0 };
+            if (folderID == Guid.Empty) 
+                startFolder = new Folder() { ID = Guid.Empty };
             else 
                 startFolder = await GetFolderAsync(folderID);
 
@@ -507,8 +505,6 @@ namespace Notes.Data
             (endFolder, errorEncountered) = await FollowFolderPath(startFolder, folderNameSequence, currentPage);
             if (errorEncountered == ErrorEncountered.True)
                 return (null, errorEncountered);
-            
-            #endregion
 
             string noteName = pathSplit.Last();
 
@@ -554,7 +550,7 @@ namespace Notes.Data
             return dataset;
         }
 
-        private async Task<(string, ErrorEncountered)> InputTemplates(string text, Page currentPage, int folderID, int mainFolderID)
+        private async Task<(string, ErrorEncountered)> InputTemplates(string text, Page currentPage, Guid folderID, Guid mainFolderID)
         { 
             string template;
             string templatePath;
