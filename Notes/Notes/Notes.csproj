@@ -28,6 +28,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="AccentColors\BlueAccentLight.xaml.cs">
+      <DependentUpon>BlueAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\BlueAccentDark.xaml.cs">
+      <DependentUpon>BlueAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\RedAccentLight.xaml.cs">
+      <DependentUpon>RedAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\RedAccentDark.xaml.cs">
+      <DependentUpon>RedAccentDark.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\MardownViewPage.xaml.cs">
       <DependentUpon>MardownViewPage.xaml</DependentUpon>
     </Compile>

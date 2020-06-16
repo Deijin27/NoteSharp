@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Notes.AccentColors.BlueAccentLight">
+
+    <Color x:Key="PrimaryAccentColor">#4688F4</Color>
+    <Color x:Key="FileListIconColor">#4688F4</Color>
+    <Color x:Key="MasterDetailIconColor">#4688F4</Color>
+    <Color x:Key="SwitchOnColor">#4688F4</Color>
+</ResourceDictionary>

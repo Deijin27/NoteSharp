@@ -10,13 +10,14 @@
     <Color x:Key="NavigationBarPaleTextColor">#A0A0A0</Color>
     <Color x:Key="PrimaryContentTextColor">#E0E0E0</Color>
     <Color x:Key="SecondaryContentTextColor">#A0A0A0</Color>
-    <Color x:Key="MasterDetailIconColor">#6ea3f7</Color>
     <Color x:Key="FolderListIconColor">#898990</Color>
-    <Color x:Key="FileListIconColor">#6ea3f7</Color>
     <Color x:Key="ToolbarIconColor">#FFFFFF</Color>
     <Color x:Key="SliderMinTrackColor">#FFFFFF</Color>
     <Color x:Key="SliderMaxTrackColor">#FFFFFF</Color>
     <Color x:Key="SliderThumbColor">#FFFFFF</Color>
     <Color x:Key="QuickAccessMarkerColor">#e3d5af</Color>
+
+    <Color x:Key="BlueAccentColor">#6ea3f7</Color>
+    <Color x:Key="RedAccentColor">#f76e6e</Color>
 
 </ResourceDictionary>

@@ -8,12 +8,14 @@ using Xamarin.Essentials;
 using Notes.Data;
 using Notes.Pages;
 using Notes.Themes;
+using Notes.AccentColors;
 using Notes.Models;
 using System.Threading.Tasks;
 using System.Linq;
 
 namespace Notes
 {
+
     public partial class App : Application
     {
 
@@ -46,10 +48,9 @@ namespace Notes
             MainPage = new NotesMasterPage();
 
             // Set theme from stored preferences, default to light if not previously set
-            Theme = Theme;
+            UpdateMergedDictionaries();
 
             CreateDefaultStyleSheets();
-
         }
 
         public static int DefaultStyleSheetID = -1;
@@ -120,6 +121,19 @@ namespace Notes
             }
         }
 
+        public static AppAccentColor AccentColor
+        {
+            get
+            {
+                return (AppAccentColor)Preferences.Get("AccentColor", defaultValue: (int)AppAccentColor.Blue);
+            }
+            set
+            {
+                Preferences.Set("AccentColor", (int)value);
+                UpdateMergedDictionaries();
+            }
+        }
+
         public static AppTheme Theme
         {
             get 
@@ -129,23 +143,51 @@ namespace Notes
 
             set
             {
-                ICollection<ResourceDictionary> mergedDictionaries = Current.Resources.MergedDictionaries;
-                if (mergedDictionaries != null)
-                {
-                    mergedDictionaries.Clear();
-
-                    switch (value)
-                    {
-                        case AppTheme.Dark:
-                            mergedDictionaries.Add(new DarkTheme());
-                            break;
-                        case AppTheme.Light:
-                        default: // this covers the 0 enum value AppTheme.Unspecified
-                            mergedDictionaries.Add(new LightTheme());
-                            break;
-                    }
-                }
                 Preferences.Set("Theme", (int)value);
+                UpdateMergedDictionaries();
+            }
+        }
+
+        private static void UpdateMergedDictionaries()
+        {
+            AppTheme theme = Theme;
+            AppAccentColor accentColor = AccentColor;
+
+            ICollection<ResourceDictionary> mergedDictionaries = Current.Resources.MergedDictionaries;
+            if (mergedDictionaries != null)
+            {
+                mergedDictionaries.Clear();
+
+                switch (theme)
+                {
+                    case AppTheme.Dark:
+                        mergedDictionaries.Add(new DarkTheme());
+
+                        switch (accentColor)
+                        {
+                            case AppAccentColor.Red:
+                                mergedDictionaries.Add(new RedAccentDark());
+                                break;
+                            case AppAccentColor.Blue:
+                                mergedDictionaries.Add(new BlueAccentDark());
+                                break;
+                        }
+                        break;
+
+                    case AppTheme.Light:
+                    default: // this covers the 0 enum value AppTheme.Unspecified
+                        mergedDictionaries.Add(new LightTheme());
+                        switch (accentColor)
+                        {
+                            case AppAccentColor.Red:
+                                mergedDictionaries.Add(new RedAccentLight());
+                                break;
+                            case AppAccentColor.Blue:
+                                mergedDictionaries.Add(new BlueAccentLight());
+                                break;
+                        }
+                        break;
+                }
             }
         }
 

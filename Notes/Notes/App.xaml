@@ -36,6 +36,11 @@
             <Setter Property="TextColor" Value="{DynamicResource PrimaryContentTextColor}"/>
         </Style>
 
+        <Style TargetType="{x:Type Switch}">
+            <Setter Property="OnColor" Value="{DynamicResource SwitchOnColor}" />
+            <Setter Property="ThumbColor" Value="#FFFFFF"/>
+        </Style>
+
         <!-- Font Families -->
             <OnPlatform x:Key="FontFamily_MaterialDesignIconic"  x:TypeArguments="x:String">
             <On Platform="Android" Value="Material-Design-Iconic-Font.ttf#Material-Design-Iconic-Font" />

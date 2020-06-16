@@ -13,6 +13,7 @@ using System.Threading;
 using System.Text.Json;
 using System.Runtime.CompilerServices;
 using Notes.Data;
+using Notes.AccentColors;
 
 namespace Notes.Pages
 {
@@ -24,6 +25,9 @@ namespace Notes.Pages
 
             if (App.Theme == AppTheme.Dark) ThemeSwitch.IsToggled = true;
             else ThemeSwitch.IsToggled = false;
+            ThemeSwitch.Toggled += ThemeSwitch_Toggled; // doing this here might avoid updating theme when i set the thing if that does happen
+
+            SetAccentColorButtonChecked(App.AccentColor);
 
             SpellCheckSwitch.IsToggled = App.IsSpellCheckEnabled;
         }
@@ -414,6 +418,47 @@ namespace Notes.Pages
         private async void RestoreBackupButton_Clicked(object sender, EventArgs e)
         {
             await GetPermissionAndRestoreBackupDatabase();
+        }
+
+        private void AccentColorRadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            RadioButton chosen = sender as RadioButton;
+            
+            switch (chosen.Text)
+            {
+                case "Red":
+                    App.AccentColor = AppAccentColor.Red;
+                    break;
+                case "Blue":
+                default:
+                    App.AccentColor = AppAccentColor.Blue;
+                    break;
+            }
+        }
+
+        private void RedAccentColorButton_Pressed(object sender, EventArgs e) => UpdateAccentColor(AppAccentColor.Red);
+        private void BlueAccentColorButton_Pressed(object sender, EventArgs e) => UpdateAccentColor(AppAccentColor.Blue);
+
+        private void UpdateAccentColor(AppAccentColor accentColor)
+        {
+            App.AccentColor = accentColor;
+            SetAccentColorButtonChecked(accentColor);
+        }
+
+        private void SetAccentColorButtonChecked(AppAccentColor accentColor)
+        {
+
+            switch (accentColor)
+            {
+                case AppAccentColor.Blue:
+                    BlueAccentColorCheck.IsVisible = true;
+                    RedAccentColorCheck.IsVisible = false;
+                    break;
+                case AppAccentColor.Red:
+                    BlueAccentColorCheck.IsVisible = false;
+                    RedAccentColorCheck.IsVisible = true;
+                    break;
+            }
         }
     }
 }

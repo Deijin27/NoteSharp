@@ -9,7 +9,7 @@
              x:Class="Notes.Pages.SettingsPage"
              Title="Settings">
     <ContentPage.Content>
-        <TableView Intent="Settings" Margin="10">
+        <TableView Intent="Settings" Margin="10" HasUnevenRows="True">
             <TableSection>
                 <ViewCell>
                     <Grid>
@@ -17,14 +17,71 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
                         <Label Text="Dark Theme" 
                                Grid.Column="0" 
                                VerticalTextAlignment="Center" 
                                TextColor="{DynamicResource PrimaryContentTextColor}"/>
-                        <Switch x:Name="ThemeSwitch" 
-                                Grid.Column="1"
-                                Toggled="ThemeSwitch_Toggled"/>
+                        <Switch x:Name="ThemeSwitch"
+                                Grid.Column="1"/>
                     </Grid>
+                </ViewCell>
+                <ViewCell>
+                    <StackLayout Orientation="Vertical" Margin="0,10,10,5">
+                        <Label Text="Accent Color" TextColor="{DynamicResource PrimaryContentTextColor}"/>
+                        <StackLayout Orientation="Horizontal" Padding="0,0,0,5">
+                            <Grid>
+                                <Button BackgroundColor="{DynamicResource BlueAccentColor}"
+                                        BorderWidth="0"
+                                        BorderRadius="15"
+                                        HeightRequest="30"
+                                        WidthRequest="30"
+                                        />
+                                <Label x:Name="BlueAccentColorCheck"
+                                       FontSize="Medium"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center"
+                                       FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                                       TextColor="#FFFFFF"
+                                       Text="{StaticResource IconGlyph_Check}"
+                                       />
+                                <Button x:Name="BlueAccentColorButton" 
+                                        Pressed="BlueAccentColorButton_Pressed"
+                                        BackgroundColor="Transparent"
+                                        BorderWidth="0"
+                                        BorderRadius="15"
+                                        HeightRequest="30"
+                                        WidthRequest="30"
+                                        />
+                            </Grid>
+                            <Grid>
+                                <Button BackgroundColor="{DynamicResource RedAccentColor}"
+                                        BorderWidth="0"
+                                        BorderRadius="15"
+                                        HeightRequest="30"
+                                        WidthRequest="30"
+                                        />
+                                <Label x:Name="RedAccentColorCheck"
+                                       FontSize="Medium"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center"
+                                       FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                                       TextColor="#FFFFFF"
+                                       Text="{StaticResource IconGlyph_Check}"
+                                       />
+                                <Button x:Name="RedAccentColorButton" 
+                                        Pressed="RedAccentColorButton_Pressed" 
+                                        BackgroundColor="Transparent"
+                                        BorderWidth="0"
+                                        BorderRadius="15"
+                                        HeightRequest="30"
+                                        WidthRequest="30"
+                                        />
+                            </Grid>
+                        </StackLayout>
+                    </StackLayout>
                 </ViewCell>
                 <ViewCell>
                     <Grid>
@@ -32,6 +89,9 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
                         <Label Text="Spell Check Enabled" 
                                Grid.Column="0" 
                                VerticalTextAlignment="Center" 

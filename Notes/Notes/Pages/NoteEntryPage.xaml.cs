@@ -99,7 +99,6 @@ namespace Notes.Pages
             {
                 if (note.Name != InitialName)
                 {
-                    Console.WriteLine("-+-+-+-+---++- DEBUG 1 -+-+-+--+-++--++-");
 
                     if (await App.Database.DoesNoteNameExistAsync(note.Name, note.FolderID))
                     { 
@@ -124,7 +123,6 @@ namespace Notes.Pages
                 else
                 { 
                     (option, newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Name Note");
-                    Console.WriteLine("-+-+-+-+---++- DEBUG 2 -+-+-+--+-++--++-");
                     if (option == Option.OK)
                     {
                         note.Name = newName;
@@ -138,7 +136,6 @@ namespace Notes.Pages
             }
             else
             {
-                Console.WriteLine("-+-+-+-+---++- DEBUG 3 -+-+-+--+-++--++-");
                 if (note.Name != InitialName && (await App.Database.DoesNoteNameExistAsync(note.Name, note.FolderID)))
                 {
                     (option, newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Note Name Conflict",
@@ -153,7 +150,6 @@ namespace Notes.Pages
                 }
                 else
                 {
-                    Console.WriteLine("-+-+-+-+---++- DEBUG 4 -+-+-+--+-++--++-");
                     note.DateModified = DateTime.UtcNow;
                     await App.Database.SaveNoteAsync(note);
                     UnfocusAll();
