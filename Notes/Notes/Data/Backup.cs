@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Notes.Models;
+using Notes.Constants;
 using System.Text.Json;
 
 namespace Notes.Data
@@ -20,15 +21,6 @@ namespace Notes.Data
         public List<Note> Notes { get; set; }
         public List<Folder> Folders { get; set; }
         public List<CSS> Sheets { get; set; }
-    }
-
-    static class ActionSheetOption
-    {
-        public const string Cancel = "Cancel";
-        public const string DeletePermanently = "Delete Permanently";
-        public const string CreateBackup = "Create Backup";
-        public const string SQLite3 = "SQLite3";
-        public const string JSON = "JSON";
     }
 
     static class Backup
@@ -120,7 +112,7 @@ namespace Notes.Data
             // I should use something other than an action sheet, but this works for now.
             string result = await page.DisplayActionSheet("Choose Backup File", ActionSheetOption.Cancel, null, backupFiles);
 
-            if (result == ActionSheetOption.Cancel) return null;
+            if (string.IsNullOrEmpty(result) || result == ActionSheetOption.Cancel) return null;
 
             return Path.Combine(backupFolderPath, result);
         }
@@ -203,7 +195,7 @@ namespace Notes.Data
                     backupPath = await CreateBackupJson();
                     break;
                 case ActionSheetOption.Cancel:
-                default:
+                default: // this includes the null when user clicks surroundings
                     return false;
             }
             await page.DisplayAlert("Backup Complete", $"It can be found at: {backupPath}", "OK");
@@ -226,7 +218,7 @@ namespace Notes.Data
                     ActionSheetOption.CreateBackup
                 );
 
-                if (option == "Delete Permanently")
+                if (option == ActionSheetOption.DeletePermanently)
                 {
                     certain = await page.DisplayAlert
                     (
@@ -251,14 +243,15 @@ namespace Notes.Data
             string backupExistingOption = await QueryBackupExisting(page);
             switch (backupExistingOption)
             {
-                case ActionSheetOption.Cancel:
-                    return;
                 case ActionSheetOption.DeletePermanently:
                     break;
                 case ActionSheetOption.CreateBackup:
                     bool backupSuccessful = await GetPermissionAndCreateBackup(page);
                     if (!backupSuccessful) return;
                     break;
+                case ActionSheetOption.Cancel:
+                default: // includes null when user clicks surroundings
+                    return;
             }
 
             PermissionStatus status = await CheckAndRequestStorageReadPermission();

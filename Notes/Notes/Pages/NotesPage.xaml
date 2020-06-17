@@ -233,7 +233,6 @@
                      IconImageSource="{StaticResource FontImageSource_FilePlus}"/>
         <ToolbarItem Text="Add Folder" Clicked="OnFolderAddedClicked" Order="Secondary" />
         <ToolbarItem Text="Order By" Clicked="OrderBy_Clicked" Order="Secondary"/>
-        <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 
     <ListView x:Name="listView" 

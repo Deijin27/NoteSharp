@@ -34,7 +34,6 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
         <ToolbarItem Text="Quick Test" Clicked="QuickTest_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
-        <ToolbarItem Text="Settings" Clicked="OnSettingsButtonClicked" Order="Secondary"/>
     </ContentPage.ToolbarItems>
 
     <ScrollView >

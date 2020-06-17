@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using Notes.Models;
 using System.Threading.Tasks;
 using Notes.Data;
+using Notes.Constants;
 
 namespace Notes.Pages
 {
@@ -171,26 +172,33 @@ namespace Notes.Pages
 
         private async void OrderBy_Clicked(object sender, EventArgs e)
         {
-            string[] options =  { "Name", "Date Created", "Date Modified", "Size"};
+            string selected = await DisplayActionSheet
+            (
+                "Order By:",
+                ActionSheetOption.Cancel,
+                null,
+                ActionSheetOption.Name,
+                ActionSheetOption.DateCreated,
+                ActionSheetOption.DateModified,
+                ActionSheetOption.Size
+            );
 
-            string selected = await DisplayActionSheet("Order By:", "Cancel", null, options);
-
-            if (!string.IsNullOrEmpty(selected) && selected != "Cancel")
+            if (!string.IsNullOrEmpty(selected) && selected != ActionSheetOption.Cancel)
             {
                 SortingMode sortingMode;
 
                 switch (selected)
                 {
-                    case "Name":
+                    case ActionSheetOption.Name:
                         sortingMode = SortingMode.Name;
                         break;
-                    case "Date Created":
+                    case ActionSheetOption.DateCreated:
                         sortingMode = SortingMode.DateCreated;
                         break;
-                    case "Date Modified":
+                    case ActionSheetOption.DateModified:
                         sortingMode = SortingMode.DateModified;
                         break;
-                    case "Size":
+                    case ActionSheetOption.Size:
                         sortingMode = SortingMode.Size;
                         break;
                     default:
