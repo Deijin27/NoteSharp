@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Xamarin.Forms;
 using Notes.Models;
 using System.Threading.Tasks;
 using Notes.Data;
-using Xamarin.Essentials;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Notes.Pages
 {
@@ -16,9 +13,11 @@ namespace Notes.Pages
         public DataTemplate FolderTemplate_NameOnly { get; set; }
         public DataTemplate FolderTemplate_NameDateModified { get; set; }
         public DataTemplate FolderTemplate_NameDateCreated { get; set; }
+        public DataTemplate FolderTemplate_NameSize { get; set; }
         public DataTemplate FileTemplate_NameOnly { get; set; }
         public DataTemplate FileTemplate_NameDateModified { get; set; }
         public DataTemplate FileTemplate_NameDateCreated { get; set; }
+        public DataTemplate FileTemplate_NameSize { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
@@ -36,6 +35,8 @@ namespace Notes.Pages
                         return FolderTemplate_NameDateCreated;
                     case SortingMode.DateModified:
                         return FolderTemplate_NameDateModified;
+                    case SortingMode.Size:
+                        return FolderTemplate_NameSize;
                     default:
                         return FolderTemplate_NameOnly;
                 }
@@ -49,6 +50,8 @@ namespace Notes.Pages
                     return FileTemplate_NameDateCreated;
                 case SortingMode.DateModified:
                     return FileTemplate_NameDateModified;
+                case SortingMode.Size:
+                    return FileTemplate_NameSize;
                 default:
                     return FileTemplate_NameOnly;
             }
@@ -89,16 +92,17 @@ namespace Notes.Pages
         {
             List<Folder> folderItems;
             List<Note> fileItems;
+            SortingMode sortingMode = App.SortingMode;
 
             if (IsQuickAccessPage)
             {
-                folderItems = await App.Database.GetQuickAccessFoldersAsync();
-                fileItems = await App.Database.GetQuickAccessNotesAsync();
+                folderItems = (await App.Database.GetQuickAccessFoldersAsync()).OrderBySortingMode(sortingMode).ToList();
+                fileItems = (await App.Database.GetQuickAccessNotesAsync()).OrderBySortingMode(sortingMode).ToList();
             }
             else
             { 
-                folderItems = await App.Database.GetFoldersAsync(FolderID);
-                fileItems = await App.Database.GetNotesAsync(FolderID);
+                folderItems = (await App.Database.GetFoldersAsync(FolderID)).OrderBySortingMode(sortingMode).ToList();
+                fileItems = (await App.Database.GetNotesAsync(FolderID)).OrderBySortingMode(sortingMode).ToList();
             }
 
             var listViewItems = new List<FolderContentItem>();
@@ -148,7 +152,7 @@ namespace Notes.Pages
             if (option == Option.OK)
             {
                 DateTime dateTime = DateTime.UtcNow;
-                await App.Database.SaveFolderAsync(new Folder 
+                await App.Database.SaveAsync(new Folder 
                 { 
                     Name = result, 
                     ParentID = FolderID, 
@@ -167,7 +171,7 @@ namespace Notes.Pages
 
         private async void OrderBy_Clicked(object sender, EventArgs e)
         {
-            string[] options =  { "Name", "Date Created", "Date Modified" };
+            string[] options =  { "Name", "Date Created", "Date Modified", "Size"};
 
             string selected = await DisplayActionSheet("Order By:", "Cancel", null, options);
 
@@ -185,6 +189,9 @@ namespace Notes.Pages
                         break;
                     case "Date Modified":
                         sortingMode = SortingMode.DateModified;
+                        break;
+                    case "Size":
+                        sortingMode = SortingMode.Size;
                         break;
                     default:
                         sortingMode = SortingMode.Name;
@@ -208,7 +215,7 @@ namespace Notes.Pages
             {
                 folder.Name = result;
                 folder.DateModified = DateTime.UtcNow;
-                await App.Database.SaveFolderAsync(folder);
+                await App.Database.SaveAsync(folder);
                 await UpdateListView();
             }
         }
@@ -249,7 +256,7 @@ namespace Notes.Pages
             {
                 note.Name = result;
                 note.DateModified = DateTime.UtcNow;
-                await App.Database.SaveNoteAsync(note);
+                await App.Database.SaveAsync(note);
                 await UpdateListView();
             }
         }
@@ -272,7 +279,7 @@ namespace Notes.Pages
             bool answer = await DisplayAlert("Delete Note?", "Are you sure you want to permanently delete this note?", "Yes", "No");
             if (answer)
             {
-                await App.Database.DeleteNoteAsync(note);
+                await App.Database.DeleteAsync(note);
                 await UpdateListView();
             }
         }
@@ -298,14 +305,14 @@ namespace Notes.Pages
                         {
                             note.Name = newName;
                             note.IsQuickAccess = true;
-                            await App.Database.SaveNoteAsync(note);
+                            await App.Database.SaveAsync(note);
                             await UpdateListView();
                         }
                     }
                     else
                     {
                         note.IsQuickAccess = true;
-                        await App.Database.SaveNoteAsync(note);
+                        await App.Database.SaveAsync(note);
                         await UpdateListView();
                     }
                 }
@@ -317,7 +324,7 @@ namespace Notes.Pages
                 if (answer)
                 {
                     note.IsQuickAccess = false;
-                    await App.Database.SaveNoteAsync(note);
+                    await App.Database.SaveAsync(note);
                     await UpdateListView();
                 }
             }
@@ -346,14 +353,14 @@ namespace Notes.Pages
                         {
                             folder.Name = newName;
                             folder.IsQuickAccess = true;
-                            await App.Database.SaveFolderAsync(folder);
+                            await App.Database.SaveAsync(folder);
                             await UpdateListView();
                         }
                     }
                     else
                     {
                         folder.IsQuickAccess = true;
-                        await App.Database.SaveFolderAsync(folder);
+                        await App.Database.SaveAsync(folder);
                         await UpdateListView();
                     }
                 }
@@ -365,7 +372,7 @@ namespace Notes.Pages
                 if (answer)
                 {
                     folder.IsQuickAccess = false;
-                    await App.Database.SaveFolderAsync(folder);
+                    await App.Database.SaveAsync(folder);
                     await UpdateListView();
                 }
             }

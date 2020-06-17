@@ -28,6 +28,13 @@ namespace Notes.Data
     {
         readonly SQLiteAsyncConnection _database;
 
+        /// <summary>
+        /// Test whether the file is a valid database by opening and grabbing a Note, Folder, or CSS.
+        /// Any errors encountered will be caught and result in a false return.
+        /// Thus a backup file must already have the necessary tables to be accepted.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static bool IsValid(string path)
         {
             try
@@ -79,62 +86,50 @@ namespace Notes.Data
             await _database.DeleteAllAsync<CSS>();
         }
 
-        /// <summary>
-        /// Only use on an empty database
-        /// </summary>
-        /// <param name="notes"></param>
-        public async Task PopulateEmpty(IEnumerable<Note> notes, IEnumerable<Folder> folders, IEnumerable<CSS> styleSheets)
-        {
-            await _database.InsertAllAsync(notes);
-            await _database.InsertAllAsync(folders);
-            await _database.InsertAllAsync(styleSheets);
-            return;
-        }
-
         #region Sorting Methods
-        public static AsyncTableQuery<Note> SortNotes(AsyncTableQuery<Note> query)
-        {
-            SortingMode sortingMode = App.SortingMode;
+        //public static AsyncTableQuery<Note> SortNotes(AsyncTableQuery<Note> query)
+        //{
+        //    SortingMode sortingMode = App.SortingMode;
 
-            switch (sortingMode)
-            {
-                case SortingMode.Name:
-                    query = query.OrderBy(i => i.Name);
-                    break;
-                case SortingMode.DateCreated:
-                    query = query.OrderByDescending(i => i.DateCreated);
-                    break;
-                case SortingMode.DateModified:
-                    query = query.OrderByDescending(i => i.DateModified);
-                    break;
-                default:
-                    query = query.OrderBy(i => i.Name);
-                    break;
-            }
-            return query;
-        }
+        //    switch (sortingMode)
+        //    {
+        //        case SortingMode.Name:
+        //            query = query.OrderBy(i => i.Name);
+        //            break;
+        //        case SortingMode.DateCreated:
+        //            query = query.OrderByDescending(i => i.DateCreated);
+        //            break;
+        //        case SortingMode.DateModified:
+        //            query = query.OrderByDescending(i => i.DateModified);
+        //            break;
+        //        default:
+        //            query = query.OrderBy(i => i.Name);
+        //            break;
+        //    }
+        //    return query;
+        //}
 
-        public static AsyncTableQuery<Folder> SortFolders(AsyncTableQuery<Folder> query)
-        {
-            SortingMode sortingMode = App.SortingMode;
+        //public static AsyncTableQuery<Folder> SortFolders(AsyncTableQuery<Folder> query)
+        //{
+        //    SortingMode sortingMode = App.SortingMode;
 
-            switch (sortingMode)
-            {
-                case SortingMode.Name:
-                    query = query.OrderBy(i => i.Name);
-                    break;
-                case SortingMode.DateCreated:
-                    query = query.OrderByDescending(i => i.DateCreated);
-                    break;
-                case SortingMode.DateModified:
-                    query = query.OrderByDescending(i => i.DateModified);
-                    break;
-                default:
-                    query = query.OrderBy(i => i.Name);
-                    break;
-            }
-            return query;
-        }
+        //    switch (sortingMode)
+        //    {
+        //        case SortingMode.Name:
+        //            query = query.OrderBy(i => i.Name);
+        //            break;
+        //        case SortingMode.DateCreated:
+        //            query = query.OrderByDescending(i => i.DateCreated);
+        //            break;
+        //        case SortingMode.DateModified:
+        //            query = query.OrderByDescending(i => i.DateModified);
+        //            break;
+        //        default:
+        //            query = query.OrderBy(i => i.Name);
+        //            break;
+        //    }
+        //    return query;
+        //}
 
         #endregion
 
@@ -142,22 +137,16 @@ namespace Notes.Data
 
         public Task<List<Note>> GetNotesAsync(Guid folderID)
         {
-            var query = _database.Table<Note>()
-                                 .Where(i => i.FolderID == folderID);
-
-            query = SortNotes(query);
-
-            return query.ToListAsync();
+            return _database.Table<Note>()
+                            .Where(i => i.FolderID == folderID)
+                            .ToListAsync();
         }
 
         public Task<List<Folder>> GetFoldersAsync(Guid folderID)
         {
-            var query = _database.Table<Folder>()
-                            .Where(i => i.ParentID == folderID);
-
-            query = SortFolders(query);
-
-            return query.ToListAsync();
+            return _database.Table<Folder>()
+                            .Where(i => i.ParentID == folderID)
+                            .ToListAsync();
         }
 
         #endregion
@@ -166,23 +155,17 @@ namespace Notes.Data
 
         public Task<List<Note>> GetQuickAccessNotesAsync()
         {
-            var query = _database.Table<Note>()
-                                 .Where(i => i.IsQuickAccess == true);
-
-            query = SortNotes(query);
-
-            return query.ToListAsync();
+            return _database.Table<Note>()
+                                 .Where(i => i.IsQuickAccess == true)
+                                 .ToListAsync();
 
         }
 
         public Task<List<Folder>> GetQuickAccessFoldersAsync()
         {
-            var query = _database.Table<Folder>()
-                            .Where(i => i.IsQuickAccess == true);
-
-            query = SortFolders(query);
-
-            return query.ToListAsync();
+            return _database.Table<Folder>()
+                            .Where(i => i.IsQuickAccess == true)
+                            .ToListAsync();
         }
 
         #endregion
@@ -243,7 +226,7 @@ namespace Notes.Data
 
         #region Save Object
 
-        public Task<int> SaveNoteAsync(Note note)
+        public Task<int> SaveAsync(Note note)
         {
             if (note.ID != Guid.Empty)
             {
@@ -256,7 +239,7 @@ namespace Notes.Data
             }
         }
 
-        public Task<int> SaveFolderAsync(Folder folder)
+        public Task<int> SaveAsync(Folder folder)
         {
             if (folder.ID != Guid.Empty)
             {
@@ -271,9 +254,26 @@ namespace Notes.Data
 
         #endregion
 
+        #region Insert Multiple
+
+        public Task<int> InsertAllAsync(IEnumerable<Note> enumerable)
+        {
+            return _database.InsertAllAsync(enumerable);
+        }
+        public Task<int> InsertAllAsync(IEnumerable<Folder> enumerable)
+        {
+            return _database.InsertAllAsync(enumerable);
+        }
+        public Task<int> InsertAllAsync(IEnumerable<CSS> enumerable)
+        {
+            return _database.InsertAllAsync(enumerable);
+        }
+        
+        #endregion
+
         #region Delete Object
 
-        public Task<int> DeleteNoteAsync(Note note)
+        public Task<int> DeleteAsync(Note note)
         {
             return _database.DeleteAsync(note);
         }
@@ -399,11 +399,6 @@ namespace Notes.Data
 
             return default;
         }
-
-        //public Task<int> CreateFolderAsync(Folder folder)
-        //{
-        //    return _database.InsertAsync(folder);
-        //}
 
         #region Template Stuff
 

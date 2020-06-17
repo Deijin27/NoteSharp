@@ -67,6 +67,12 @@
     <Compile Update="Views\ListViewItem_CSSReadonly.xaml.cs">
       <DependentUpon>ListViewItem_CSSReadonly.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\ListViewItem_FileNameSize.xaml.cs">
+      <DependentUpon>ListViewItem_FileNameSize.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ListViewItem_FolderNameSize.xaml.cs">
+      <DependentUpon>ListViewItem_FolderNameSize.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ListViewItem_FolderNameOnly.xaml.cs">
       <DependentUpon>ListViewItem_FolderNameOnly.xaml</DependentUpon>
     </Compile>

@@ -121,7 +121,7 @@ namespace Notes.Pages
                             note.Name = newName;
                             note.DateModified = DateTime.UtcNow;
                             note.DateCreated = note.DateModified;
-                            await App.Database.SaveNoteAsync(note);
+                            await App.Database.SaveAsync(note);
                             await NavigateBack();
                         }
                     }
@@ -129,7 +129,7 @@ namespace Notes.Pages
                     {
                         note.DateModified = DateTime.UtcNow;
                         note.DateCreated = note.DateModified;
-                        await App.Database.SaveNoteAsync(note);
+                        await App.Database.SaveAsync(note);
                         UnfocusAll();
                         await NavigateBack();
                     }
@@ -142,7 +142,7 @@ namespace Notes.Pages
                         note.Name = newName;
                         note.DateModified = DateTime.UtcNow;
                         note.DateCreated = note.DateModified;
-                        await App.Database.SaveNoteAsync(note);
+                        await App.Database.SaveAsync(note);
                         await NavigateBack();
                     }
                 }
@@ -158,14 +158,14 @@ namespace Notes.Pages
                     {
                         note.Name = newName;
                         note.DateModified = DateTime.UtcNow;
-                        await App.Database.SaveNoteAsync(note);
+                        await App.Database.SaveAsync(note);
                         await NavigateBack();
                     }
                 }
                 else
                 {
                     note.DateModified = DateTime.UtcNow;
-                    await App.Database.SaveNoteAsync(note);
+                    await App.Database.SaveAsync(note);
                     UnfocusAll();
                     await NavigateBack();
                 }

@@ -202,7 +202,7 @@ namespace Notes
         {
             get
             {
-                return (SortingMode)Preferences.Get("SortingMode", defaultValue: 0);
+                return (SortingMode)Preferences.Get("SortingMode", defaultValue: (int)SortingMode.Name);
             }
 
             set
@@ -210,6 +210,8 @@ namespace Notes
                 Preferences.Set("SortingMode", (int)value);
             }
         }
+
+        public static string ExternalStoragePath => DependencyService.Get<IFileSystem>().GetExternalStoragePath();
 
         private CSS GetNonUserStyleSheet(Guid id)
         {

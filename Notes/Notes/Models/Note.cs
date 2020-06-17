@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Text.Json.Serialization;
+using Notes.Data;
 using SQLite;
 
 namespace Notes.Models
@@ -27,6 +29,9 @@ namespace Notes.Models
         {
             get { return DateModified.ToLocalTime(); }
         }
+
+        [JsonIgnore]
+        public string ReadableSize => $"Size: {Text.ByteCount().ToReadableByteCountString()}";
 
     }
 }

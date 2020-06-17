@@ -48,8 +48,10 @@ namespace Notes.Pages
 
         public async Task UpdateListView()
         {
-            var folderItems = await App.Database.GetFoldersAsync(FolderID);
-            var fileItems = await App.Database.GetNotesAsync(FolderID);
+            SortingMode sortingMode = App.SortingMode;
+
+            var folderItems = (await App.Database.GetFoldersAsync(FolderID)).OrderBySortingMode(sortingMode).ToList();
+            var fileItems = (await App.Database.GetNotesAsync(FolderID)).OrderBySortingMode(sortingMode).ToList();
 
             var listViewItems = new List<FolderContentItem>();
 
@@ -93,7 +95,7 @@ namespace Notes.Pages
             if (option == Option.OK)
             {
                 DateTime dateTime = DateTime.UtcNow;
-                await App.Database.SaveFolderAsync(new Folder
+                await App.Database.SaveAsync(new Folder
                 {
                     Name = result,
                     ParentID = FolderID,
@@ -173,7 +175,7 @@ namespace Notes.Pages
                         FolderToMove.ParentID = FolderID;
                         FolderToMove.DateModified = DateTime.UtcNow;
                         FolderToMove.Name = newName;
-                        await App.Database.SaveFolderAsync(FolderToMove);
+                        await App.Database.SaveAsync(FolderToMove);
                         await Navigation.PopModalAsync();
                     }
                 }
@@ -187,7 +189,7 @@ namespace Notes.Pages
                         FolderToMove.ParentID = FolderID;
                         FolderToMove.DateModified = DateTime.UtcNow;
                         FolderToMove.Name = newName;
-                        await App.Database.SaveFolderAsync(FolderToMove);
+                        await App.Database.SaveAsync(FolderToMove);
                         await Navigation.PopModalAsync();
                     }
                 }
@@ -195,7 +197,7 @@ namespace Notes.Pages
                 { 
                     FolderToMove.ParentID = FolderID;
                     FolderToMove.DateModified = DateTime.UtcNow;
-                    await App.Database.SaveFolderAsync(FolderToMove);
+                    await App.Database.SaveAsync(FolderToMove);
                     await Navigation.PopModalAsync();
                 }
             }
@@ -211,7 +213,7 @@ namespace Notes.Pages
                         NoteToMove.FolderID = FolderID;
                         NoteToMove.DateModified = DateTime.UtcNow;
                         NoteToMove.Name = newName;
-                        await App.Database.SaveNoteAsync(NoteToMove);
+                        await App.Database.SaveAsync(NoteToMove);
                         await Navigation.PopModalAsync();
                     }
                 }
@@ -225,7 +227,7 @@ namespace Notes.Pages
                         NoteToMove.FolderID = FolderID;
                         NoteToMove.DateModified = DateTime.UtcNow;
                         NoteToMove.Name = newName;
-                        await App.Database.SaveNoteAsync(NoteToMove);
+                        await App.Database.SaveAsync(NoteToMove);
                         await Navigation.PopModalAsync();
                     }
                 }
@@ -233,7 +235,7 @@ namespace Notes.Pages
                 {
                     NoteToMove.FolderID = FolderID;
                     NoteToMove.DateModified = DateTime.UtcNow;
-                    await App.Database.SaveNoteAsync(NoteToMove);
+                    await App.Database.SaveAsync(NoteToMove);
                     await Navigation.PopModalAsync();
                 }
             }
