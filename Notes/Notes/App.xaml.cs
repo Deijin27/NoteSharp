@@ -175,7 +175,11 @@ namespace Notes
                             case AppAccentColor.Red:
                                 mergedDictionaries.Add(new RedAccentDark());
                                 break;
+                            case AppAccentColor.Green:
+                                mergedDictionaries.Add(new GreenAccentDark());
+                                break;
                             case AppAccentColor.Blue:
+                            default:
                                 mergedDictionaries.Add(new BlueAccentDark());
                                 break;
                         }
@@ -189,7 +193,11 @@ namespace Notes
                             case AppAccentColor.Red:
                                 mergedDictionaries.Add(new RedAccentLight());
                                 break;
+                            case AppAccentColor.Green:
+                                mergedDictionaries.Add(new GreenAccentLight());
+                                break;
                             case AppAccentColor.Blue:
+                            default:
                                 mergedDictionaries.Add(new BlueAccentLight());
                                 break;
                         }

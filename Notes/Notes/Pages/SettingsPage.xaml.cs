@@ -3,11 +3,15 @@ using Xamarin.Forms;
 using Xamarin.Essentials;
 using Notes.Data;
 using Notes.AccentColors;
+using Notes.Controls;
+using System.Linq;
 
 namespace Notes.Pages
 {
     public partial class SettingsPage : ContentPage
     {
+        private RadioContentViewGroup radioContentViewGroup;
+
         public SettingsPage()
         {
             InitializeComponent();
@@ -16,9 +20,21 @@ namespace Notes.Pages
             else ThemeSwitch.IsToggled = false;
             ThemeSwitch.Toggled += ThemeSwitch_Toggled; // doing this here might avoid updating theme when i set the thing if that does happen
 
-            SetAccentColorButtonChecked(App.AccentColor);
-
             SpellCheckSwitch.IsToggled = App.IsSpellCheckEnabled;
+
+
+            RedAccentColorRadioCircle.AssociatedEnum = (int)AppAccentColor.Red;
+            BlueAccentColorRadioCircle.AssociatedEnum = (int)AppAccentColor.Blue;
+            GreenAccentColorRadioCircle.AssociatedEnum = (int)AppAccentColor.Green;
+            radioContentViewGroup = new AccentColorRadioContentViewGroup
+            {
+                RedAccentColorRadioCircle,
+                BlueAccentColorRadioCircle,
+                GreenAccentColorRadioCircle
+            };
+            radioContentViewGroup.SelectedID = radioContentViewGroup.Where(i => (AppAccentColor)i.AssociatedEnum == App.AccentColor)
+                                                                    .First()
+                                                                    .RadioGroupID;
         }
 
         private void ThemeSwitch_Toggled(object sender, ToggledEventArgs e)
@@ -47,46 +63,6 @@ namespace Notes.Pages
         {
             await Backup.GetPermissionAndRestoreBackup(this);
         }
-
-        private void AccentColorRadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
-        {
-            RadioButton chosen = sender as RadioButton;
-            
-            switch (chosen.Text)
-            {
-                case "Red":
-                    App.AccentColor = AppAccentColor.Red;
-                    break;
-                case "Blue":
-                default:
-                    App.AccentColor = AppAccentColor.Blue;
-                    break;
-            }
-        }
-
-        private void RedAccentColorButton_Pressed(object sender, EventArgs e) => UpdateAccentColor(AppAccentColor.Red);
-        private void BlueAccentColorButton_Pressed(object sender, EventArgs e) => UpdateAccentColor(AppAccentColor.Blue);
-
-        private void UpdateAccentColor(AppAccentColor accentColor)
-        {
-            App.AccentColor = accentColor;
-            SetAccentColorButtonChecked(accentColor);
-        }
-
-        private void SetAccentColorButtonChecked(AppAccentColor accentColor)
-        {
-
-            switch (accentColor)
-            {
-                case AppAccentColor.Blue:
-                    BlueAccentColorCheck.IsVisible = true;
-                    RedAccentColorCheck.IsVisible = false;
-                    break;
-                case AppAccentColor.Red:
-                    BlueAccentColorCheck.IsVisible = false;
-                    RedAccentColorCheck.IsVisible = true;
-                    break;
-            }
-        }
+    
     }
 }

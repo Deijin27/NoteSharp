@@ -19,5 +19,6 @@
 
     <Color x:Key="BlueAccentColor">#6ea3f7</Color>
     <Color x:Key="RedAccentColor">#f76e6e</Color>
+    <Color x:Key="GreenAccentColor">#6ef76e</Color>
 
 </ResourceDictionary>

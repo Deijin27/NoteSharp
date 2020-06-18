@@ -28,6 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="AccentColors\GreenAccentLight.xaml.cs">
+      <DependentUpon>GreenAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\GreenAccentDark.xaml.cs">
+      <DependentUpon>GreenAccentDark.xaml</DependentUpon>
+    </Compile>
     <Compile Update="AccentColors\BlueAccentLight.xaml.cs">
       <DependentUpon>BlueAccentLight.xaml</DependentUpon>
     </Compile>
@@ -39,6 +45,9 @@
     </Compile>
     <Compile Update="AccentColors\RedAccentDark.xaml.cs">
       <DependentUpon>RedAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\RadioCircle.xaml.cs">
+      <DependentUpon>RadioCircle.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\MardownViewPage.xaml.cs">
       <DependentUpon>MardownViewPage.xaml</DependentUpon>
@@ -79,6 +88,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Controls\RadioCircle.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Pages\NoteEntryPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

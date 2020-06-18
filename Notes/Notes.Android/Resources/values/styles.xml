@@ -29,7 +29,7 @@
     <item name="android:colorFocusedHighlight">@color/ListViewSelected</item>
     <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
     <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
-    
+    <item name="android:textAllCaps">false</item>
     <!-- Custom Stuff Added End -->
   </style>
 

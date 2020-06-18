@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<local:RadioContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:local="clr-namespace:Notes.Controls"
+             x:Class="Notes.Controls.RadioCircle">
+    <Grid>
+        <Button x:Name="BackgroundButton"
+                BackgroundColor="{Binding BackgroundColor}"
+                BorderWidth="0"
+                />
+        <Label x:Name="CheckLabel"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"
+               FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+               Text="{StaticResource IconGlyph_Check}"
+               />
+        <Button x:Name="ForegroundButton" 
+                Clicked="SubComponent_Clicked"
+                BackgroundColor="Transparent"
+                BorderWidth="0"
+                />
+    </Grid>
+</local:RadioContentView>

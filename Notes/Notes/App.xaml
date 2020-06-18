@@ -41,6 +41,14 @@
             <Setter Property="ThumbColor" Value="#FFFFFF"/>
         </Style>
 
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryAccentColor}"/>
+            <Setter Property="TextColor" Value="{DynamicResource AppBackgroundColor}"/>
+            <Setter Property="HeightRequest" Value="35" />
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+
         <!-- Font Families -->
             <OnPlatform x:Key="FontFamily_MaterialDesignIconic"  x:TypeArguments="x:String">
             <On Platform="Android" Value="Material-Design-Iconic-Font.ttf#Material-Design-Iconic-Font" />
