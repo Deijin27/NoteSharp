@@ -7,14 +7,50 @@ using Xamarin.Forms;
 
 namespace Notes.Controls
 {
-    public class RadioContentView : CheckableContentView
+    public class RadioContentView : ContentView // : CheckableContentView
     {
         public int RadioGroupID;
 
-        public void SubComponent_Clicked(object sender, EventArgs e)
+        public object AssociatedObject; // store a reference to some associated object
+
+        public static readonly BindableProperty IsCheckedProperty = BindableProperty.Create
+        (
+            nameof(IsChecked),
+            typeof(bool),
+            typeof(RadioContentView),
+            default(bool),
+            BindingMode.TwoWay
+        );
+
+        public bool IsChecked
         {
-            SendClicked();
+            get
+            {
+                return (bool)GetValue(IsCheckedProperty);
+            }
+
+            set
+            {
+                SetValue(IsCheckedProperty, value);
+            }
         }
+
+        public event EventHandler Clicked;
+
+        /// <summary>
+        /// Add to the Clicked EventHandler for the sub component to pass that event up to this component
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public virtual void SendClicked(object sender, EventArgs e)
+        {
+            Clicked?.Invoke(this, EventArgs.Empty);
+        }
+
+        //public void SubComponent_Clicked(object sender, EventArgs e)
+        //{
+        //    SendClicked();
+        //}
     }
 
     public class RadioContentViewGroup : IEnumerable<RadioContentView>
@@ -24,19 +60,13 @@ namespace Notes.Controls
 
         IEnumerator IEnumerable.GetEnumerator() => internalList.GetEnumerator();
 
+        // When inheriting, create a custom Add to be used by the constructor, add your own events and associated objects 
+        // to the item then call base.Add(item) to finish.
         public virtual void Add(RadioContentView item)
         {
             item.Clicked += OnItemClicked;
             item.RadioGroupID = internalList.Count;
             internalList.Add(item);
-        }
-
-        public void AddRange(IEnumerable<RadioContentView> collection)
-        {
-            foreach (RadioContentView item in collection)
-            {
-                Add(item);
-            }
         }
 
         public RadioContentView this[int index ]

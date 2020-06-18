@@ -10,7 +10,7 @@ namespace Notes.Pages
 {
     public partial class SettingsPage : ContentPage
     {
-        private RadioContentViewGroup radioContentViewGroup;
+        private AccentColorRadioContentViewGroup accentRadioGroup;
 
         public SettingsPage()
         {
@@ -22,19 +22,13 @@ namespace Notes.Pages
 
             SpellCheckSwitch.IsToggled = App.IsSpellCheckEnabled;
 
-
-            RedAccentColorRadioCircle.AssociatedEnum = (int)AppAccentColor.Red;
-            BlueAccentColorRadioCircle.AssociatedEnum = (int)AppAccentColor.Blue;
-            GreenAccentColorRadioCircle.AssociatedEnum = (int)AppAccentColor.Green;
-            radioContentViewGroup = new AccentColorRadioContentViewGroup
+            accentRadioGroup = new AccentColorRadioContentViewGroup()
             {
-                RedAccentColorRadioCircle,
-                BlueAccentColorRadioCircle,
-                GreenAccentColorRadioCircle
+                { RedAccentColorRadioCircle, AppAccentColor.Red },
+                { BlueAccentColorRadioCircle, AppAccentColor.Blue },
+                { GreenAccentColorRadioCircle, AppAccentColor.Green }
             };
-            radioContentViewGroup.SelectedID = radioContentViewGroup.Where(i => (AppAccentColor)i.AssociatedEnum == App.AccentColor)
-                                                                    .First()
-                                                                    .RadioGroupID;
+            accentRadioGroup.InitializeSelected(App.AccentColor);
         }
 
         private void ThemeSwitch_Toggled(object sender, ToggledEventArgs e)

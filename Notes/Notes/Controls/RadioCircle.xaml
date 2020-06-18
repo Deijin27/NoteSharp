@@ -18,7 +18,7 @@
                Text="{StaticResource IconGlyph_Check}"
                />
         <Button x:Name="ForegroundButton" 
-                Clicked="SubComponent_Clicked"
+                Clicked="SendClicked"
                 BackgroundColor="Transparent"
                 BorderWidth="0"
                 />

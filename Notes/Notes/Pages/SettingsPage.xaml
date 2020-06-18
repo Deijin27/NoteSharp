@@ -29,7 +29,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout Margin="10">
-            <Grid >
+            <Grid>
                 <!--ColumnDefinitions="*, Auto" RowDefinitions="40"-->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
