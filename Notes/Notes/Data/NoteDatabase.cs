@@ -3,18 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SQLite;
 using Notes.Models;
-using Xamarin.Forms.Internals;
 using System.Linq;
-using System.Collections;
-using SQLitePCL;
-using System.Runtime.InteropServices.ComTypes;
 using Xamarin.Forms;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using System.Net;
-using Notes.Pages;
-using System.Dynamic;
-using System.ComponentModel.Design;
 
 namespace Notes.Data
 {
@@ -65,6 +56,7 @@ namespace Notes.Data
             _database.CreateTableAsync<Note>().Wait();
             _database.CreateTableAsync<Folder>().Wait();
             _database.CreateTableAsync<CSS>().Wait();
+            _database.CreateTableAsync<DeletedItem>().Wait();
         }
 
         /// <summary>
@@ -77,13 +69,14 @@ namespace Notes.Data
         }
 
         /// <summary>
-        /// WARNING, really does delete everything permanently.
+        /// WARNING, really does delete everything permanently INCLUDING CLEARING DeletedItem TABLE!
         /// </summary>
         public async Task DeleteAllAsync()
         {
             await _database.DeleteAllAsync<Note>();
             await _database.DeleteAllAsync<Folder>();
             await _database.DeleteAllAsync<CSS>();
+            await _database.DeleteAllAsync<DeletedItem>();
         }
 
         #region Sorting Methods
@@ -273,9 +266,13 @@ namespace Notes.Data
 
         #region Delete Object
 
-        public Task<int> DeleteAsync(Note note)
+        public async Task DeleteAsync(Note note)
         {
-            return _database.DeleteAsync(note);
+            await _database.InsertAsync(new DeletedItem() { ID = note.ID, DateDeleted = DateTime.UtcNow });
+
+            await _database.DeleteAsync(note);
+
+            return;
         }
 
         #endregion
@@ -358,9 +355,13 @@ namespace Notes.Data
             }
         }
 
-        public Task<int> DeleteSheetAsync(CSS sheet)
+        public async Task DeleteSheetAsync(CSS sheet)
         {
-            return _database.DeleteAsync(sheet);
+            await _database.InsertAsync(new DeletedItem() { ID = sheet.ID, DateDeleted = DateTime.UtcNow });
+
+            await _database.DeleteAsync(sheet);
+
+            return;
         }
 
         #endregion
@@ -385,7 +386,7 @@ namespace Notes.Data
 
         #endregion
 
-        public async Task<int> DeleteFolderAndAllContentsAsync(Folder folder)
+        public async Task DeleteFolderAndAllContentsAsync(Folder folder)
         {
             List<Folder> query = await _database.Table<Folder>().Where(i => i.ParentID == folder.ID).ToListAsync();
 
@@ -394,10 +395,25 @@ namespace Notes.Data
                 await DeleteFolderAndAllContentsAsync(subfolder);
             }
 
-            await _database.Table<Note>().Where(i => i.FolderID == folder.ID).DeleteAsync();
+            // I do the following rather than use the AsyncTableQuery.DeleteAllAsync so that I can add the ids to the deleted item table
+            List<Note> containedNotes = await _database.Table<Note>().Where(i => i.FolderID == folder.ID).ToListAsync();
+            foreach (Note note in containedNotes)
+            {
+                await DeleteAsync(note); 
+            }
+
+            await DeleteFolderNotContentAsync(folder);
+
+            return;
+        }
+
+        public async Task DeleteFolderNotContentAsync(Folder folder)
+        {
+            await _database.InsertAsync(new DeletedItem() { ID = folder.ID, DateDeleted = DateTime.UtcNow });
+
             await _database.DeleteAsync(folder);
 
-            return default;
+            return;
         }
 
         #region Template Stuff
