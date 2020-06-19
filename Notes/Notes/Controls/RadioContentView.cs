@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
-using System.ComponentModel;
-using System.Text;
 using Xamarin.Forms;
 
 namespace Notes.Controls
@@ -11,7 +9,7 @@ namespace Notes.Controls
     {
         public int RadioGroupID;
 
-        public object AssociatedObject; // store a reference to some associated object
+        public object AssociatedObject; // store a reference to some associated object for use in custom inherior of RadioContentViewGroup
 
         public static readonly BindableProperty IsCheckedProperty = BindableProperty.Create
         (
@@ -46,11 +44,6 @@ namespace Notes.Controls
         {
             Clicked?.Invoke(this, EventArgs.Empty);
         }
-
-        //public void SubComponent_Clicked(object sender, EventArgs e)
-        //{
-        //    SendClicked();
-        //}
     }
 
     public class RadioContentViewGroup : IEnumerable<RadioContentView>

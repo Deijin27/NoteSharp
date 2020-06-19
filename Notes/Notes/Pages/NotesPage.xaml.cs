@@ -6,6 +6,7 @@ using Notes.Models;
 using System.Threading.Tasks;
 using Notes.Data;
 using Notes.Constants;
+using Notes.Controls;
 
 namespace Notes.Pages
 {
@@ -63,6 +64,8 @@ namespace Notes.Pages
     {
         public Guid FolderID;
         public bool IsQuickAccessPage = false;
+        private List<FolderContentItem> FolderContentItems;
+        string SearchFor = null;
 
         public NotesPage()
         {
@@ -84,42 +87,59 @@ namespace Notes.Pages
             await UpdateListView();
         }
 
-        public async void InitializeListView()
-        {
-            await UpdateListView();
-        }
-
         public async Task UpdateListView()
         {
-            List<Folder> folderItems;
-            List<Note> fileItems;
+            await GetAllFoldersAndNotes();
+
+            SearchUpdate();
+        }
+
+        public void SearchUpdate()
+        {
+            if (string.IsNullOrEmpty(SearchFor))
+            {
+                listView.ItemsSource = FolderContentItems;
+            }
+            else 
+            { 
+                listView.ItemsSource = FolderContentItems.Where
+                    (
+                        i => (i.ContentFolder?.Name.Contains(SearchFor) ?? false)
+                            || (i.ContentNote?.Name.Contains(SearchFor) ?? false)
+                            || (i.ContentNote?.Text.Contains(SearchFor) ?? false)
+                    ).ToList();
+            }
+        }
+
+        public async Task GetAllFoldersAndNotes()
+        {
             SortingMode sortingMode = App.SortingMode;
+
+            FolderContentItems = new List<FolderContentItem>();
+
+            List<Folder> contentFolders;
+            List<Note> contentNotes;
 
             if (IsQuickAccessPage)
             {
-                folderItems = (await App.Database.GetQuickAccessFoldersAsync()).OrderBySortingMode(sortingMode).ToList();
-                fileItems = (await App.Database.GetQuickAccessNotesAsync()).OrderBySortingMode(sortingMode).ToList();
+                contentFolders = (await App.Database.GetQuickAccessFoldersAsync()).OrderBySortingMode(sortingMode).ToList();
+                contentNotes = (await App.Database.GetQuickAccessNotesAsync()).OrderBySortingMode(sortingMode).ToList();
             }
             else
-            { 
-                folderItems = (await App.Database.GetFoldersAsync(FolderID)).OrderBySortingMode(sortingMode).ToList();
-                fileItems = (await App.Database.GetNotesAsync(FolderID)).OrderBySortingMode(sortingMode).ToList();
-            }
-
-            var listViewItems = new List<FolderContentItem>();
-
-            foreach (Folder folder in folderItems)
             {
-                listViewItems.Add(new FolderContentItem(folder));
-            }
-            foreach (Note file in fileItems)
-            {
-                listViewItems.Add(new FolderContentItem(file));
+                contentFolders = (await App.Database.GetFoldersAsync(FolderID)).OrderBySortingMode(sortingMode).ToList();
+                contentNotes = (await App.Database.GetNotesAsync(FolderID)).OrderBySortingMode(sortingMode).ToList();
             }
 
-            listView.ItemsSource = listViewItems;
+            foreach (Folder folder in contentFolders)
+            {
+                FolderContentItems.Add(new FolderContentItem(folder));
+            }
+            foreach (Note file in contentNotes)
+            {
+                FolderContentItems.Add(new FolderContentItem(file));
+            }
         }
-
 
         async void OnNoteAddedClicked(object sender, EventArgs e)
         {
@@ -384,6 +404,47 @@ namespace Notes.Pages
                     await UpdateListView();
                 }
             }
+        }
+
+
+        private async void Search_Clicked(object sender, EventArgs e)
+        {
+            var searchBar = new CustomSearchBar()
+            {
+                TextColor = Color.White,
+                PlaceholderColor = Color.Gray,
+                SearchIconColor = Color.White,
+                CloseIconColor = Color.White,
+                Placeholder = "Search Folder..."
+            };
+            searchBar.TextChanged += GetSearchResults;
+            searchBar.CloseClicked += CloseSearchBar;
+
+            NavigationPage.SetTitleView(this, searchBar);
+            await Task.Delay(500); // necessary so that keyboard shows when searchBar.Focus is called
+            searchBar.Focus();
+            
+        }
+
+        private void GetSearchResults(object sender, TextChangedEventArgs e)
+        {
+            SearchFor = e.NewTextValue;
+            SearchUpdate();
+        }
+
+        private void CloseSearchBar(object sender, EventArgs e)
+        {
+            var lb = new Label()
+            {
+                Text = Title,
+                TextColor = Color.White,
+                FontAttributes = FontAttributes.Bold,
+                FontSize = 20
+            };
+
+            NavigationPage.SetTitleView(this, lb);
+            SearchFor = null;
+            SearchUpdate();
         }
     }
 }

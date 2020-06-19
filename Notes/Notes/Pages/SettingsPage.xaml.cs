@@ -4,7 +4,6 @@ using Xamarin.Essentials;
 using Notes.Data;
 using Notes.AccentColors;
 using Notes.Controls;
-using System.Linq;
 
 namespace Notes.Pages
 {
@@ -18,7 +17,7 @@ namespace Notes.Pages
 
             if (App.Theme == AppTheme.Dark) ThemeSwitch.IsToggled = true;
             else ThemeSwitch.IsToggled = false;
-            ThemeSwitch.Toggled += ThemeSwitch_Toggled; // doing this here might avoid updating theme when i set the thing if that does happen
+            ThemeSwitch.Toggled += ThemeSwitch_Toggled; // doing this here avoids updating theme when setting toggled state
 
             SpellCheckSwitch.IsToggled = App.IsSpellCheckEnabled;
 
@@ -33,6 +32,8 @@ namespace Notes.Pages
 
         private void ThemeSwitch_Toggled(object sender, ToggledEventArgs e)
         {
+            Console.WriteLine("DEBUG: Theme Switch toggled");
+
             if (e.Value)
             {
                 App.Theme = AppTheme.Dark;
