@@ -12,13 +12,19 @@
         </Style>
     </ContentPage.Resources>
 
-    <Editor x:Name="HtmlEditor"
+    <Grid>
+        <Editor x:Name="HtmlEditor"
             IsReadOnly="True"
-            Placeholder="Enter you   "
+            Placeholder="Wut? Nothing lol"
             TextColor="{DynamicResource PrimaryContentTextColor}"
             VerticalOptions="FillAndExpand"
             FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
             Margin="10, 10, 10, 10">
-    </Editor>
+        </Editor>
+        <ActivityIndicator x:Name="activityIndicator" IsRunning="True"
+                           HorizontalOptions="Center" VerticalOptions="Center"
+                           Color="{DynamicResource PrimaryAccentColor}"/>
+    </Grid>
+    
 
 </ContentPage>

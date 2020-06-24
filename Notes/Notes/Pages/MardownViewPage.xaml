@@ -25,7 +25,8 @@
                      Navigating="MarkdownWebView_Navigating"
                      />
             <ActivityIndicator x:Name="activityIndicator" IsRunning="True"
-                               HorizontalOptions="Center" VerticalOptions="Center" /> <!-- Color=""  -->
+                               HorizontalOptions="Center" VerticalOptions="Center" 
+                               Color="{DynamicResource PrimaryAccentColor}"/> <!-- Color=""  -->
         </Grid>
     </ContentPage.Content>
 

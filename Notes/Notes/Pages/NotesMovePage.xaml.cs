@@ -16,6 +16,19 @@ namespace Notes.Pages
         Folder
     }
 
+    public class MoveCompletedEventArgs : EventArgs
+    {
+        public MoveCompletedEventArgs(Guid folderIDMovedTo, Guid folderIDMovedFrom)
+        {
+            FolderIDMovedTo = folderIDMovedTo;
+            FolderIDMovedFrom = folderIDMovedFrom;
+        }
+        public readonly Guid FolderIDMovedTo;
+        public readonly Guid FolderIDMovedFrom;
+    }
+
+    public delegate void MoveCompletedEventHandler(MoveCompletedEventArgs e);
+
     public partial class NotesMovePage : ContentPage
     {
         public Guid FolderID;
@@ -25,12 +38,15 @@ namespace Notes.Pages
 
         public string CurrentFolderName { set { Title = "Move To: " + value; } }
 
+        public event MoveCompletedEventHandler MoveCompleted;
+
         public NotesMovePage(Folder folderToMove)
         {
             InitializeComponent();
             FolderID = folderToMove.ParentID;
             FolderToMove = folderToMove;
             MoveMode = MoveMode.Folder;
+            UpdateListView();
         }
         public NotesMovePage(Note noteToMove)
         {
@@ -38,15 +54,10 @@ namespace Notes.Pages
             FolderID = noteToMove.FolderID;
             NoteToMove = noteToMove;
             MoveMode = MoveMode.Note;
+            UpdateListView();
         }
 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            await UpdateListView();
-        }
-
-        public async Task UpdateListView()
+        public async void UpdateListView()
         {
             SortingMode sortingMode = App.SortingMode;
 
@@ -78,7 +89,7 @@ namespace Notes.Pages
                     Folder folder = folderContentItem.ContentFolder;
                     CurrentFolderName = folder.Name;
                     FolderID = folder.ID;
-                    await UpdateListView();
+                    UpdateListView();
                 }
                 else
                 {
@@ -102,13 +113,8 @@ namespace Notes.Pages
                     DateCreated = dateTime,
                     DateModified = dateTime
                 });
-                await UpdateListView();
+                UpdateListView();
             }
-        }
-
-        async void OnSettingsButtonClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new SettingsPage());
         }
 
         private async void OrderBy_Clicked(object sender, EventArgs e)
@@ -137,7 +143,7 @@ namespace Notes.Pages
                         break;
                 }
                 App.SortingMode = sortingMode;
-                await UpdateListView();
+                UpdateListView();
             }
         }
 
@@ -149,7 +155,7 @@ namespace Notes.Pages
                 Folder currentFolder = await App.Database.GetFolderAsync(FolderID);
                 Guid parentID = currentFolder.ParentID;
                 FolderID = parentID;
-                await UpdateListView();
+                UpdateListView();
                 if (parentID != Guid.Empty)
                 {
                     CurrentFolderName = (await App.Database.GetFolderAsync(parentID)).Name; 
@@ -172,10 +178,12 @@ namespace Notes.Pages
                         message: "A folder of the same name already exists in the destination, please input a different name");
                     if (option == Option.OK)
                     {
+                        Guid sourceFolderID = FolderToMove.ParentID;
                         FolderToMove.ParentID = FolderID;
                         FolderToMove.DateModified = DateTime.UtcNow;
                         FolderToMove.Name = newName;
                         await App.Database.SaveAsync(FolderToMove);
+                        MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
                         await Navigation.PopModalAsync();
                     }
                 }
@@ -186,18 +194,22 @@ namespace Notes.Pages
                         message: "A folder of the same name already exists in the QuickAccess, please input a different name");
                     if (option == Option.OK)
                     {
+                        Guid sourceFolderID = FolderToMove.ParentID;
                         FolderToMove.ParentID = FolderID;
                         FolderToMove.DateModified = DateTime.UtcNow;
                         FolderToMove.Name = newName;
                         await App.Database.SaveAsync(FolderToMove);
+                        MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
                         await Navigation.PopModalAsync();
                     }
                 }
                 else
-                { 
+                {
+                    Guid sourceFolderID = FolderToMove.ParentID;
                     FolderToMove.ParentID = FolderID;
                     FolderToMove.DateModified = DateTime.UtcNow;
                     await App.Database.SaveAsync(FolderToMove);
+                    MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
                     await Navigation.PopModalAsync();
                 }
             }
@@ -210,10 +222,12 @@ namespace Notes.Pages
                         message: "A note of the same name already exists in the destination, please input a different name");
                     if (option == Option.OK)
                     {
+                        Guid sourceFolderID = NoteToMove.FolderID;
                         NoteToMove.FolderID = FolderID;
                         NoteToMove.DateModified = DateTime.UtcNow;
                         NoteToMove.Name = newName;
                         await App.Database.SaveAsync(NoteToMove);
+                        MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
                         await Navigation.PopModalAsync();
                     }
                 }
@@ -224,18 +238,22 @@ namespace Notes.Pages
                         message: "A note of the same name already exists in the QuickAccess, please input a different name");
                     if (option == Option.OK)
                     {
+                        Guid sourceFolderID = NoteToMove.FolderID;
                         NoteToMove.FolderID = FolderID;
                         NoteToMove.DateModified = DateTime.UtcNow;
                         NoteToMove.Name = newName;
                         await App.Database.SaveAsync(NoteToMove);
+                        MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
                         await Navigation.PopModalAsync();
                     }
                 }
                 else
                 {
+                    Guid sourceFolderID = NoteToMove.FolderID;
                     NoteToMove.FolderID = FolderID;
                     NoteToMove.DateModified = DateTime.UtcNow;
                     await App.Database.SaveAsync(NoteToMove);
+                    MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
                     await Navigation.PopModalAsync();
                 }
             }

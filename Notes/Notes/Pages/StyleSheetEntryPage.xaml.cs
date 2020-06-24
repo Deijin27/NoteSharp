@@ -59,6 +59,8 @@ namespace Notes.Pages
             NameEntry.Unfocus();
         }
 
+        public event ChangesSavedEventHandler ChangesSaved;
+
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             var sheet = (CSS)BindingContext;
@@ -68,6 +70,7 @@ namespace Notes.Pages
                 sheet.DateCreated = sheet.DateModified;
             }
             await App.Database.SaveSheetAsync(sheet);
+            ChangesSaved?.Invoke();
             UnfocusAll();
             await Navigation.PopModalAsync();
         }

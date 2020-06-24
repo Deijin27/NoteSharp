@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-
 using Xamarin.Forms;
 using Xamarin.Essentials;
-
 using Notes.Data;
 using Notes.Pages;
 using Notes.Themes;
@@ -87,7 +85,7 @@ namespace Notes
                 ID = DefaultStyleSheetGuids[2],
                 IsReadOnly = true,
                 Name = "Default3 - Green",
-                Text = "h1 { color: blue; }"
+                Text = "h1 { color: green; }"
             });
         }
 

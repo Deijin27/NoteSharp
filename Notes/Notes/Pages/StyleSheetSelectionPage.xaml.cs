@@ -8,21 +8,19 @@ using System.Threading.Tasks;
 
 namespace Notes.Pages
 {
+    public delegate void StyleSheetSelectedEventHandler(CSS Sheet);
 
     public partial class StyleSheetSelectionPage : ContentPage
     {
         public StyleSheetSelectionPage()
         {
             InitializeComponent();
+            UpdateListView();
         }
 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            await UpdateListView();
-        }
+        public event StyleSheetSelectedEventHandler StyleSheetSelected;
 
-        public async Task UpdateListView()
+        public async void UpdateListView()
         {
             List<CSS> listViewItems = await App.GetAllStyleSheetsAsync();
             listView.ItemsSource = listViewItems;
@@ -35,6 +33,8 @@ namespace Notes.Pages
                 var sheet = e.SelectedItem as CSS;
 
                 App.StyleSheetID = sheet.ID;
+
+                StyleSheetSelected?.Invoke(sheet);
 
                 await Navigation.PopAsync();
             }

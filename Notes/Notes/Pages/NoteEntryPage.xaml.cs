@@ -1,15 +1,13 @@
 ﻿using System;
-using System.IO;
 using Xamarin.Forms;
 using Notes.Models;
-using System.Text.RegularExpressions;
-using Markdig;
 using System.Threading.Tasks;
 using Notes.Data;
-using System.ComponentModel.Design;
 
 namespace Notes.Pages
 {
+    public delegate void ChangesSavedEventHandler();
+
     public partial class NoteEntryPage : ContentPage
     {
         public bool NewNote = false;
@@ -36,13 +34,6 @@ namespace Notes.Pages
 
             BindingContext = note;
         }
-
-        //protected override void OnAppearing()
-        //{
-        //    base.OnAppearing();
-
-        //    BindingContext = NoteStorage;
-        //}
 
         public void UnfocusAll() 
         {
@@ -92,13 +83,13 @@ namespace Notes.Pages
                 bool answer = await DisplayAlert("Exit?", "Exit without saving changes?", "Yes", "No");
                 if (answer)
                 {
-                    await NavigateBack();
+                    await Navigation.PopModalAsync();
                 }
             }
             else
             {
                 UnfocusAll();
-                await NavigateBack();
+                await Navigation.PopModalAsync();
             }
         }
 
@@ -122,7 +113,8 @@ namespace Notes.Pages
                             note.DateModified = DateTime.UtcNow;
                             note.DateCreated = note.DateModified;
                             await App.Database.SaveAsync(note);
-                            await NavigateBack();
+                            ChangesSaved?.Invoke();
+                            await Navigation.PopModalAsync();
                         }
                     }
                     else
@@ -130,8 +122,9 @@ namespace Notes.Pages
                         note.DateModified = DateTime.UtcNow;
                         note.DateCreated = note.DateModified;
                         await App.Database.SaveAsync(note);
+                        ChangesSaved?.Invoke();
                         UnfocusAll();
-                        await NavigateBack();
+                        await Navigation.PopModalAsync();
                     }
                 }
                 else
@@ -143,7 +136,8 @@ namespace Notes.Pages
                         note.DateModified = DateTime.UtcNow;
                         note.DateCreated = note.DateModified;
                         await App.Database.SaveAsync(note);
-                        await NavigateBack();
+                        ChangesSaved?.Invoke();
+                        await Navigation.PopModalAsync();
                     }
                 }
 
@@ -159,81 +153,35 @@ namespace Notes.Pages
                         note.Name = newName;
                         note.DateModified = DateTime.UtcNow;
                         await App.Database.SaveAsync(note);
-                        await NavigateBack();
+                        ChangesSaved?.Invoke();
+                        await Navigation.PopModalAsync();
                     }
                 }
                 else
                 {
                     note.DateModified = DateTime.UtcNow;
                     await App.Database.SaveAsync(note);
+                    ChangesSaved?.Invoke();
                     UnfocusAll();
-                    await NavigateBack();
+                    await Navigation.PopModalAsync();
                 }
             }
         }
 
-        private async Task NavigateBack()
-        {
-            // thiss is weird but necessary, the reason weridly specific
-            // When you close the app (by that I just mean press the home button or something)
-            // then open it again, then click save, you are pushed to the NotesPage
-            // but for some reason the notes page doesn't update
-            // this means the note changes are saved, but if you click on 
-            // the same note before doing something to force an update
-            // it will have the old content when you look at it.
-            // plus it will of course be listed as the wrong name
-            // if you changed the name
-            await PreviousPage.UpdateListView();
-            await Navigation.PopModalAsync();
-        }
-
-        async void OnSettingsButtonClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new SettingsPage());
-        }
-
-        string NoteMarkdownToHtml()
-        {
-            var note = (Note)BindingContext;
-            string markdownText = note.Text;
-
-            MarkdownPipeline pipeline = new MarkdownPipelineBuilder()
-                                            .UseAdvancedExtensions()
-                                            .Build();
-
-            string html = Markdown.ToHtml(markdownText, pipeline);
-
-            return html;
-        }
+        public event ChangesSavedEventHandler ChangesSaved;
 
         async void HtmlPreview_Clicked(object sender, EventArgs e)
         {
-            string htmlString = await Task.Run(() => NoteMarkdownToHtml());
-            await Navigation.PushAsync(new HtmlPreviewPage(htmlString));
+            var note = (Note)BindingContext;
+            string markdownText = note.Text;
+            await Navigation.PushAsync(new HtmlPreviewPage(markdownText, note.FolderID));
         }
 
         async void MarkdownView_Clicked(object sender, EventArgs e)
         {
             var note = (Note)BindingContext;
-
-            //NoteStorage = note;
-
             string markdownText = note.Text;
             await Navigation.PushAsync(new MarkdownViewPage(markdownText, note.FolderID));
         }
-
-        //private async void RenameNote_Clicked(object sender, EventArgs e)
-        //{
-        //    var note = (Note)BindingContext;
-
-        //    (Option option, string result) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Rename Note",
-        //        isQuickAccess: note.IsQuickAccess,
-        //        initialValue: note.Name);
-        //    if (option == Option.OK)
-        //    {
-        //        note.Name = result;
-        //        BindingContext = note;
-        //    }
-        //}
     }
 }

@@ -32,26 +32,26 @@ namespace Notes.Pages
         public StyleSheetsPage()
         {
             InitializeComponent();
+            UpdateListView();
         }
 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            await UpdateListView();
-        }
-
-        
-
-        public async Task UpdateListView()
+        public async void UpdateListView()
         {
             List<CSS> listViewItems = await App.GetAllStyleSheetsAsync();
             listView.ItemsSource = listViewItems;
         }
 
+        public void ChangesSavedHandler()
+        {
+            UpdateListView();
+        }
+
 
         async void OnCSSAddedClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new StyleSheetEntryPage()));
+            var page = new StyleSheetEntryPage();
+            page.ChangesSaved += ChangesSavedHandler;
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
         
         async void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -60,7 +60,9 @@ namespace Notes.Pages
             {
                 var sheet = e.SelectedItem as CSS;
 
-                await Navigation.PushModalAsync(new NavigationPage(new StyleSheetEntryPage(sheet)));
+                var page = new StyleSheetEntryPage(sheet);
+                page.ChangesSaved += ChangesSavedHandler;
+                await Navigation.PushModalAsync(new NavigationPage(page));
                 listView.SelectedItem = null;
             }
         }
@@ -78,7 +80,7 @@ namespace Notes.Pages
                     App.StyleSheetID = App.DefaultStyleSheetID;
                 }
                 await App.Database.DeleteSheetAsync(sheet);
-                await UpdateListView();
+                UpdateListView();
             }
         }
 
@@ -93,13 +95,8 @@ namespace Notes.Pages
             {
                 sheet.Name = newName;
                 await App.Database.SaveSheetAsync(sheet);
-                await UpdateListView();
+                UpdateListView();
             }
-        }
-
-        async void OnSettingsButtonClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new SettingsPage());
         }
     }
 }

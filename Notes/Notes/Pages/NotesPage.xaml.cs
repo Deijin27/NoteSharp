@@ -72,6 +72,7 @@ namespace Notes.Pages
             InitializeComponent();
             //InitializeListView();
             FolderID = Guid.Empty;
+            UpdateListView();
         }
 
         public NotesPage(Folder folder)
@@ -79,19 +80,44 @@ namespace Notes.Pages
             InitializeComponent();
             Title = folder.Name;
             FolderID = folder.ID;
+            UpdateListView();
         }
 
-        protected override async void OnAppearing()
+        //protected override async void OnAppearing()
+        //{
+        //    base.OnAppearing();
+        //    UpdateListView();
+        //}
+
+        public void ChangesSavedHandler()
         {
-            base.OnAppearing();
-            await UpdateListView();
+            UpdateListView();
         }
 
-        public async Task UpdateListView()
+        public async void UpdateListView()
         {
             await GetAllFoldersAndNotes();
 
             SearchUpdate();
+        }
+
+        public MoveCompletedEventHandler FolderContentMoved;
+
+        
+        public void MoveCompletedHandler(MoveCompletedEventArgs e)
+        {
+            if (FolderID == e.FolderIDMovedFrom)
+            {
+                UpdateListView();
+            }
+            if (FolderID == e.FolderIDMovedTo)
+            {
+                UpdateListView();
+            }
+            else // because if the folder moved to exists in the stack, it is for certian above the folder moved from.
+            {
+                FolderContentMoved?.Invoke(e);
+            }
         }
 
         public void SearchUpdate()
@@ -143,7 +169,9 @@ namespace Notes.Pages
 
         async void OnNoteAddedClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new NoteEntryPage(FolderID, this)));
+            var page = new NoteEntryPage(FolderID, this);
+            page.ChangesSaved += ChangesSavedHandler;
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         async void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -155,12 +183,15 @@ namespace Notes.Pages
                 if (folderContentItem.Identifier == FolderContentItemIdentifier.Folder)
                 {
                     Folder folder = folderContentItem.ContentFolder;
-
-                    await Navigation.PushAsync(new NotesPage(folder));
+                    var page = new NotesPage(folder);
+                    page.FolderContentMoved += MoveCompletedHandler;
+                    await Navigation.PushAsync(page);
                 }
                 else // Note
                 {
-                    await Navigation.PushModalAsync(new NavigationPage(new NoteEntryPage(folderContentItem.ContentNote, this)));
+                    var page = new NoteEntryPage(folderContentItem.ContentNote, this);
+                    page.ChangesSaved += ChangesSavedHandler;
+                    await Navigation.PushModalAsync(new NavigationPage(page));
                 }
                 listView.SelectedItem = null;
             }
@@ -180,14 +211,9 @@ namespace Notes.Pages
                     DateCreated = dateTime,
                     DateModified = dateTime
                 });
-                await UpdateListView();
+                UpdateListView();
             }
 
-        }
-
-        async void OnSettingsButtonClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new SettingsPage());
         }
 
         private async void OrderBy_Clicked(object sender, EventArgs e)
@@ -226,7 +252,7 @@ namespace Notes.Pages
                         break;
                 }
                 App.SortingMode = sortingMode;
-                await UpdateListView();
+                UpdateListView();
             }
         }
 
@@ -244,7 +270,7 @@ namespace Notes.Pages
                 folder.Name = result;
                 folder.DateModified = DateTime.UtcNow;
                 await App.Database.SaveAsync(folder);
-                await UpdateListView();
+                UpdateListView();
             }
         }
 
@@ -253,8 +279,9 @@ namespace Notes.Pages
             var mi = ((MenuItem)sender);
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Folder folder = folderContentItem.ContentFolder;
-
-            await Navigation.PushModalAsync(new NavigationPage(new NotesMovePage(folder) { CurrentFolderName = this.Title }));
+            var page = new NotesMovePage(folder) { CurrentFolderName = this.Title };
+            page.MoveCompleted += MoveCompletedHandler;
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async void DeleteFolder_Clicked(object sender, EventArgs e)
@@ -267,7 +294,7 @@ namespace Notes.Pages
             if (answer)
             {
                 await App.Database.DeleteFolderAndAllContentsAsync(folder);
-                await UpdateListView();
+                UpdateListView();
             }
         }
 
@@ -285,7 +312,7 @@ namespace Notes.Pages
                 note.Name = result;
                 note.DateModified = DateTime.UtcNow;
                 await App.Database.SaveAsync(note);
-                await UpdateListView();
+                UpdateListView();
             }
         }
 
@@ -294,8 +321,9 @@ namespace Notes.Pages
             var mi = ((MenuItem)sender);
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Note note = folderContentItem.ContentNote;
-
-            await Navigation.PushModalAsync(new NavigationPage(new NotesMovePage(note) { CurrentFolderName = this.Title }));
+            var page = new NotesMovePage(note) { CurrentFolderName = this.Title };
+            page.MoveCompleted += MoveCompletedHandler;
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async void DeleteNote_Clicked(object sender, EventArgs e)
@@ -308,7 +336,7 @@ namespace Notes.Pages
             if (answer)
             {
                 await App.Database.DeleteAsync(note);
-                await UpdateListView();
+                UpdateListView();
             }
         }
 
@@ -334,14 +362,14 @@ namespace Notes.Pages
                             note.Name = newName;
                             note.IsQuickAccess = true;
                             await App.Database.SaveAsync(note);
-                            await UpdateListView();
+                            UpdateListView();
                         }
                     }
                     else
                     {
                         note.IsQuickAccess = true;
                         await App.Database.SaveAsync(note);
-                        await UpdateListView();
+                        UpdateListView();
                     }
                 }
             }
@@ -353,12 +381,10 @@ namespace Notes.Pages
                 {
                     note.IsQuickAccess = false;
                     await App.Database.SaveAsync(note);
-                    await UpdateListView();
+                    UpdateListView();
                 }
             }
         }
-
-        
 
         private async void ToggleFolderQuickAccess_Clicked(object sender, EventArgs e)
         {
@@ -382,14 +408,14 @@ namespace Notes.Pages
                             folder.Name = newName;
                             folder.IsQuickAccess = true;
                             await App.Database.SaveAsync(folder);
-                            await UpdateListView();
+                            UpdateListView();
                         }
                     }
                     else
                     {
                         folder.IsQuickAccess = true;
                         await App.Database.SaveAsync(folder);
-                        await UpdateListView();
+                        UpdateListView();
                     }
                 }
             }
@@ -401,11 +427,10 @@ namespace Notes.Pages
                 {
                     folder.IsQuickAccess = false;
                     await App.Database.SaveAsync(folder);
-                    await UpdateListView();
+                    UpdateListView();
                 }
             }
         }
-
 
         private async void Search_Clicked(object sender, EventArgs e)
         {
