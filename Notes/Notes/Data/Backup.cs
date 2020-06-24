@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Notes.Models;
 using Notes.Constants;
 using System.Text.Json;
+//using Newtonsoft.Json;
 
 namespace Notes.Data
 {
@@ -71,6 +72,40 @@ namespace Notes.Data
 
             return newBackupFile;
         }
+
+        /*private static async Task<string> CreateBackupJsonWithoutLoatingEverythingAtOnce()
+        {
+            string newBackupFile = NewBackupFilePath(".json");
+
+            var db = App.Database;
+
+            using (FileStream fs = File.Create(newBackupFile))
+            using (StreamWriter writer = new StreamWriter(fs))
+            {
+                // Notes
+                writer.Write("{\"Notes\":[");
+
+                int noteCount = await db.CountNotesAsync();
+
+                for (int i = 0; i < noteCount; i++)
+                {
+                    Note note = await db.NoteAtIndexAsync(i);
+                    string snote = JsonSerializer.Serialize(note);
+                    writer.Write(snote);
+                    if (i != noteCount - 1)
+                    {
+                        writer.Write(",");
+                    }
+                }
+
+                // Folders
+                writer.Write("],\"Folders\":[");
+
+                
+            }
+
+            return newBackupFile;
+        }*/
 
         private static async Task<string> CreateBackupDatabase()
         {
@@ -283,7 +318,7 @@ namespace Notes.Data
             return;
         }
 
-        private static async Task<PermissionStatus> CheckAndRequestStorageWritePermission()
+        public static async Task<PermissionStatus> CheckAndRequestStorageWritePermission()
         {
             var status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
             if (status != PermissionStatus.Granted)
@@ -296,7 +331,7 @@ namespace Notes.Data
             return status;
         }
 
-        private static async Task<PermissionStatus> CheckAndRequestStorageReadPermission()
+        public static async Task<PermissionStatus> CheckAndRequestStorageReadPermission()
         {
             var status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
             if (status != PermissionStatus.Granted)

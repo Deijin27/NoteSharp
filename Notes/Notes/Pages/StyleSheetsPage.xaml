@@ -13,9 +13,9 @@
         </Style>-->
 
         <ResourceDictionary>
-            <DataTemplate x:Key="cssTemplate">
+            <DataTemplate x:Key="cssTemplate_NameOnly">
                 <ViewCell>
-                    <views:ListViewItem_CSS/>
+                    <views:ListViewItem_CSSNameOnly/>
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="Rename_Clicked"
                                       CommandParameter="{Binding .}"
@@ -35,7 +35,7 @@
             </DataTemplate>
 
             <local:StyleSheetDataTemplateSelector x:Key="styleSheetDataTemplateSelector"
-                                                  CSSTemplate="{StaticResource cssTemplate}"
+                                                  CSSTemplate_NameOnly="{StaticResource cssTemplate_NameOnly}"
                                                   CSSTemplate_ReadOnly="{StaticResource cssReadonlyTemplate}"
                                                      />
         </ResourceDictionary>

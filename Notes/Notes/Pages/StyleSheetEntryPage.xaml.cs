@@ -11,6 +11,7 @@ namespace Notes.Pages
     {
         string InitialName;
         string InitialText;
+        bool NewSheet = false;
 
         public StyleSheetEntryPage(CSS sheet)
         {
@@ -42,6 +43,8 @@ namespace Notes.Pages
 
             ToolbarItems.Remove(CopyButton);
 
+            NewSheet = true;
+
             CSS sheet = new CSS() { IsReadOnly = false };
 
             InitialText = string.Copy(sheet.Text);
@@ -59,7 +62,11 @@ namespace Notes.Pages
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             var sheet = (CSS)BindingContext;
-
+            sheet.DateModified = DateTime.UtcNow;
+            if (NewSheet)
+            {
+                sheet.DateCreated = sheet.DateModified;
+            }
             await App.Database.SaveSheetAsync(sheet);
             UnfocusAll();
             await Navigation.PopModalAsync();

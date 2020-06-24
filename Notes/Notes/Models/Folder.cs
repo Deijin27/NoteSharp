@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Notes.Models
 {
-    public class Folder
+    public class Folder : IChangeTracked
     {
         [PrimaryKey]
         public Guid ID { get; set; }

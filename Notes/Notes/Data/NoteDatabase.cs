@@ -50,6 +50,28 @@ namespace Notes.Data
             return _database.BackupAsync(path);
         }
 
+        //public async IEnumerable<Note> IterateAllNotes() // why is this not in 7.3 aaaa update xamarin aaa
+        //{
+        //    var noteTable = _database.Table<Note>();
+
+        //    int number = await noteTable.CountAsync();
+
+        //    for (int i = 0; i < number; i++)
+        //    {
+        //        yield return await noteTable.ElementAtAsync(i);
+        //    }
+        //}
+
+        //public Task<Note> NoteAtIndexAsync(int index)
+        //{
+        //    return _database.Table<Note>().ElementAtAsync(index);
+        //}
+
+        //public Task<int> CountNotesAsync()
+        //{
+        //    return _database.Table<Note>().CountAsync();
+        //}
+
         public NoteDatabase(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);

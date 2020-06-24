@@ -5,11 +5,26 @@ using Xamarin.Forms;
 
 namespace Notes.Controls
 {
-    public class RadioContentView : ContentView // : CheckableContentView
-    {
-        public int RadioGroupID;
+    public delegate void IRadioObjectEventHandler(IRadioObject sender, EventArgs e);
 
-        public object AssociatedObject; // store a reference to some associated object for use in custom inherior of RadioContentViewGroup
+    public interface IRadioObject
+    {
+        int RadioGroupID { get; set; }
+
+        bool IsChecked { get; set; }
+
+        event IRadioObjectEventHandler Clicked;
+
+        object AssociatedObject { get; set; }
+    }
+
+    
+
+    abstract public class RadioContentView : ContentView, IRadioObject // : CheckableContentView
+    {
+        public object AssociatedObject { get; set; }
+
+        public int RadioGroupID { get; set; }
 
         public static readonly BindableProperty IsCheckedProperty = BindableProperty.Create
         (
@@ -33,7 +48,7 @@ namespace Notes.Controls
             }
         }
 
-        public event EventHandler Clicked;
+        public event IRadioObjectEventHandler Clicked;
 
         /// <summary>
         /// Add to the Clicked EventHandler for the sub component to pass that event up to this component
@@ -46,23 +61,32 @@ namespace Notes.Controls
         }
     }
 
-    public class RadioContentViewGroup : IEnumerable<RadioContentView>
+    public interface IRadioObjectGroup : IEnumerable<IRadioObject>
     {
-        private List<RadioContentView> internalList = new List<RadioContentView>();
-        public IEnumerator<RadioContentView> GetEnumerator() => internalList.GetEnumerator();
+        int SelectedID { get; set; }
+
+        void Add(IRadioObject item);
+
+        void OnItemClicked(IRadioObject sender, EventArgs e);
+    }
+
+    public class RadioObjectGroup : IRadioObjectGroup // IEnumerable<RadioContentView>, 
+    {
+        private List<IRadioObject> internalList { get; set; } = new List<IRadioObject>();
+        public IEnumerator<IRadioObject> GetEnumerator() => internalList.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => internalList.GetEnumerator();
 
         // When inheriting, create a custom Add to be used by the constructor, add your own events and associated objects 
         // to the item then call base.Add(item) to finish.
-        public virtual void Add(RadioContentView item)
+        public virtual void Add(IRadioObject item)
         {
             item.Clicked += OnItemClicked;
             item.RadioGroupID = internalList.Count;
             internalList.Add(item);
         }
 
-        public RadioContentView this[int index ]
+        public IRadioObject this[int index ]
         {
             get { return internalList[index]; }
         }
@@ -83,10 +107,53 @@ namespace Notes.Controls
             }
         }
 
-        public void OnItemClicked(object sender, EventArgs e)
+        public void OnItemClicked(IRadioObject sender, EventArgs e)
         {
-            RadioContentView item = (RadioContentView)sender;
-            SelectedID = item.RadioGroupID;
+            SelectedID = sender.RadioGroupID;
         }
     }
+
+    //public class RadioContentViewGroup : IRadioObjectGroup // IEnumerable<RadioContentView>, 
+    //{
+    //    private List<RadioContentView> internalList = new List<RadioContentView>();
+    //    public IEnumerator<RadioContentView> GetEnumerator() => internalList.GetEnumerator();
+
+    //    IEnumerator IEnumerable.GetEnumerator() => internalList.GetEnumerator();
+
+    //    // When inheriting, create a custom Add to be used by the constructor, add your own events and associated objects 
+    //    // to the item then call base.Add(item) to finish.
+    //    public virtual void Add(RadioContentView item)
+    //    {
+    //        item.Clicked += OnItemClicked;
+    //        item.RadioGroupID = internalList.Count;
+    //        internalList.Add(item);
+    //    }
+
+    //    public RadioContentView this[int index]
+    //    {
+    //        get { return internalList[index]; }
+    //    }
+
+    //    private int selectedID;
+
+    //    public int SelectedID
+    //    {
+    //        get
+    //        {
+    //            return selectedID;
+    //        }
+    //        set
+    //        {
+    //            internalList[selectedID].IsChecked = false;
+    //            internalList[value].IsChecked = true;
+    //            selectedID = value;
+    //        }
+    //    }
+
+    //    public void OnItemClicked(object sender, EventArgs e)
+    //    {
+    //        RadioContentView item = (RadioContentView)sender;
+    //        SelectedID = item.RadioGroupID;
+    //    }
+    //}
 }

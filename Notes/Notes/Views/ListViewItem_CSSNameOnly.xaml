@@ -5,12 +5,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:Notes.Views;assembly=Notes"
              mc:Ignorable="d"
-             x:Class="Notes.Views.ListViewItem_FileNameOnly">
-    <ContentView.Content>
-        <local:ListViewItem_NameOnly IconGlyph="{StaticResource IconGlyph_File}"
-                                     IconColor="{DynamicResource FileListIconColor}"
-                                     Name="{Binding ContentNote.Name}"
-                                     IsQuickAccess="{Binding ContentNote.IsQuickAccess}"
-                                     />
+             x:Class="Notes.Views.ListViewItem_CSSNameOnly">
+      <ContentView.Content>
+          <local:ListViewItem_NameOnly IconGlyph="{StaticResource IconGlyph_CSS}"
+                                       IconColor="{DynamicResource FileListIconColor}"
+                                       Name="{Binding Name}"
+                                       IsQuickAccess="False"
+                                       />
     </ContentView.Content>
 </ContentView>

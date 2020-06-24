@@ -9,7 +9,7 @@ namespace Notes.Pages
 {
     public partial class SettingsPage : ContentPage
     {
-        private AccentColorRadioContentViewGroup accentRadioGroup;
+        private AccentColorRadioObjectGroup accentRadioGroup;
 
         public SettingsPage()
         {
@@ -21,7 +21,7 @@ namespace Notes.Pages
 
             SpellCheckSwitch.IsToggled = App.IsSpellCheckEnabled;
 
-            accentRadioGroup = new AccentColorRadioContentViewGroup()
+            accentRadioGroup = new AccentColorRadioObjectGroup()
             {
                 { RedAccentColorRadioCircle, AppAccentColor.Red },
                 { BlueAccentColorRadioCircle, AppAccentColor.Blue },

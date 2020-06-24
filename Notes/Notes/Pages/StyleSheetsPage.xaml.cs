@@ -10,7 +10,7 @@ namespace Notes.Pages
 {
     public class StyleSheetDataTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate CSSTemplate { get; set; }
+        public DataTemplate CSSTemplate_NameOnly { get; set; }
         public DataTemplate CSSTemplate_ReadOnly { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
@@ -21,7 +21,7 @@ namespace Notes.Pages
             {
                 return CSSTemplate_ReadOnly;
             }
-            return CSSTemplate;
+            return CSSTemplate_NameOnly;
         }
     }
 

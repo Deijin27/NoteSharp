@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Drawing;
 using System.Text.Json.Serialization;
 using Notes.Data;
 using SQLite;
 
 namespace Notes.Models
 {
-    public class Note
+    public class Note : IChangeTracked
     {
         [PrimaryKey]
         public Guid ID { get; set; }

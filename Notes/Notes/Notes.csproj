@@ -73,6 +73,18 @@
     <Compile Update="Themes\LightTheme.xaml.cs">
       <DependentUpon>LightTheme.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\ListViewItem_FileNameDateCreated.xaml.cs">
+      <DependentUpon>ListViewItem_FileNameDateCreated.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ListViewItem_NameDetails.xaml.cs">
+      <DependentUpon>ListViewItem_NameDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ListViewItem_NameOnly.xaml.cs">
+      <DependentUpon>ListViewItem_NameOnly.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ListViewItem_CSSNameOnly.xaml.cs">
+      <DependentUpon>ListViewItem_CSSNameOnly.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ListViewItem_CSSReadonly.xaml.cs">
       <DependentUpon>ListViewItem_CSSReadonly.xaml</DependentUpon>
     </Compile>
@@ -112,10 +124,10 @@
     <EmbeddedResource Update="Themes\LightTheme.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ListViewItem_CSS.xaml">
+    <EmbeddedResource Update="Views\ListViewItem_CSSNameOnly.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ListViewItem_FileNameDateCreated.xaml">
+    <EmbeddedResource Update="Views\ListViewItem_NameDetails.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ListViewItem_FileNameDateModified.xaml">

@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace Notes.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ListViewItem_CSS : ContentView
+    public partial class ListViewItem_CSSNameOnly : ContentView
     {
-        public ListViewItem_CSS()
+        public ListViewItem_CSSNameOnly()
         {
             InitializeComponent();
         }

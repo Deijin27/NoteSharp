@@ -50,7 +50,7 @@
         </Style>
 
         <!-- Font Families -->
-            <OnPlatform x:Key="FontFamily_MaterialDesignIconic"  x:TypeArguments="x:String">
+        <OnPlatform x:Key="FontFamily_MaterialDesignIconic"  x:TypeArguments="x:String">
             <On Platform="Android" Value="Material-Design-Iconic-Font.ttf#Material-Design-Iconic-Font" />
         </OnPlatform>
 
@@ -139,6 +139,38 @@
                          Size="24"
                          Color="{DynamicResource ToolbarIconColor}"/>
 
+
+        <!-- Explicit styles -->
+
+        <Style x:Key="Style_ListViewItemIcon" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="FontFamily" Value="{StaticResource FontFamily_MaterialDesignIconic}"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+
+        <Style x:Key="Style_ListViewItemName" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="Small"/>
+            <Setter Property="TextColor" Value="{DynamicResource PrimaryContentTextColor}"/>
+            <Setter Property="MaxLines" Value="1"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+
+        <Style x:Key="Style_ListViewItemQuickAccessMarker" TargetType="{x:Type Label}">
+            <Setter Property="Text" Value="{StaticResource IconGlyph_Star}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextColor" Value="{DynamicResource QuickAccessMarkerColor}"/>
+            <Setter Property="FontFamily" Value="{StaticResource FontFamily_MaterialDesignIconic}"/>
+            <Setter Property="VerticalTextAlignment" Value="Center" />
+            <Setter Property="HorizontalTextAlignment" Value="Start"/>
+        </Style>
+
+        <Style x:Key="Style_ListViewItemDetails" TargetType="{x:Type Label}">
+            <Setter Property="TextColor" Value="{DynamicResource SecondaryContentTextColor}"/>
+            <Setter Property="FontSize" Value="Micro"/>
+            <Setter Property="VerticalOptions" Value="End"/>
+        </Style>
+        
     </Application.Resources>
     
 </Application>
