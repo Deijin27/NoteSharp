@@ -1,23 +1,20 @@
 ﻿using System;
-using System.IO;
 using Xamarin.Forms;
-using Notes.Models;
-using System.Text.RegularExpressions;
 using Notes.Data;
 using Xamarin.Essentials;
 
 namespace Notes.Pages
 {
-    public partial class HtmlPreviewPage : ContentPage
+    public partial class MarkdownPreviewPage : ContentPage
     {
-        public HtmlPreviewPage(string text, Guid folderID)
+        public MarkdownPreviewPage(string text, Guid folderID)
         {
             InitializeComponent();
-            InitialiseHtml(folderID, text);
+            InitialiseMarkdown(folderID, text);
             activityIndicator.IsRunning = false;
         }
 
-        async void InitialiseHtml(Guid folderID, string markdownText)
+        async void InitialiseMarkdown(Guid folderID, string markdownText)
         {
             (string markdownFinal, ErrorEncountered errorEncountered) = await MarkdownBuilder.BuildMarkdown(markdownText, this, folderID);
 
@@ -27,13 +24,14 @@ namespace Notes.Pages
             }
             else
             {
-                HtmlEditor.Text = MarkdownBuilder.BuildHtml(markdownFinal);
+                MarkdownEditor.Text = markdownFinal;
             }
         }
+
         private async void CopyButton_Clicked(object sender, EventArgs e)
         {
-            await Clipboard.SetTextAsync(HtmlEditor.Text);
-            await DisplayAlert("Copied HTML", "All text copied to clipboard", "OK");
+            await Clipboard.SetTextAsync(MarkdownEditor.Text);
+            await DisplayAlert("Copied Markdown", "All text copied to clipboard", "OK");
         }
     }
 }

@@ -8,6 +8,7 @@
         <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />
         <ToolbarItem Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
         <ToolbarItem Text="Markdown View" Clicked="MarkdownView_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
+        <ToolbarItem Text="Markdown Preview" Clicked="MarkdownPreview_Clicked" Order="Secondary" />
         <ToolbarItem Text="Html Preview" Clicked="HtmlPreview_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 

@@ -17,14 +17,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />
         <ToolbarItem x:Name="SaveButton" Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
-        <ToolbarItem x:Name="CopyButton" Text="Copy" Clicked="CopyButton_Clicked" Order="Primary">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                                 Glyph="{StaticResource IconGlyph_Copy}"
-                                 Size="24"
-                                 Color="{DynamicResource ToolbarIconColor}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
+        <ToolbarItem x:Name="CopyButton" Text="Copy" Clicked="CopyButton_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Copy}"/>
         <ToolbarItem x:Name="ColorPickerButton" Text="Color Picker" Clicked="ColorPickerButton_Clicked" Order="Primary">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"

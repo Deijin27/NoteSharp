@@ -138,6 +138,11 @@
                          Glyph="{StaticResource IconGlyph_Eye}"
                          Size="24"
                          Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Copy"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Copy}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
 
 
         <!-- Explicit styles -->

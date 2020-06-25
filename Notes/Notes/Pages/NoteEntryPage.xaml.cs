@@ -177,6 +177,13 @@ namespace Notes.Pages
             await Navigation.PushAsync(new HtmlPreviewPage(markdownText, note.FolderID));
         }
 
+        async void MarkdownPreview_Clicked(object sender, EventArgs e)
+        {
+            var note = (Note)BindingContext;
+            string markdownText = note.Text;
+            await Navigation.PushAsync(new MarkdownPreviewPage(markdownText, note.FolderID));
+        }
+
         async void MarkdownView_Clicked(object sender, EventArgs e)
         {
             var note = (Note)BindingContext;

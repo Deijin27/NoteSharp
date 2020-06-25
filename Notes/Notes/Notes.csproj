@@ -49,6 +49,9 @@
     <Compile Update="Controls\RadioCircle.xaml.cs">
       <DependentUpon>RadioCircle.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\MarkdownPreviewPage.xaml.cs">
+      <DependentUpon>MarkdownPreviewPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\MardownViewPage.xaml.cs">
       <DependentUpon>MardownViewPage.xaml</DependentUpon>
     </Compile>
