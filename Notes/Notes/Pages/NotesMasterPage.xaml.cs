@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Notes.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Notes.Resources;
 
 namespace Notes.Pages
 {
@@ -19,7 +20,7 @@ namespace Notes.Pages
         public NotesMasterPage()
         {
             InitializeComponent();
-            mainNavigation = new NavigationPage(new NotesPage { Title = "Root", FolderID = Guid.Empty });
+            mainNavigation = new NavigationPage(new NotesPage { Title = AppResources.PageTitle_RootFolder, FolderID = Guid.Empty });
             Detail = mainNavigation;
 
             masterPage = new NotesMasterPageMaster();
@@ -35,7 +36,11 @@ namespace Notes.Pages
             {
                 if (item.TargetType == typeof(NotesPage))
                 {
-                    await mainNavigation.PushAsync(new NotesPage() { Title = "Quick Access", IsQuickAccessPage = true });
+                    await mainNavigation.PushAsync(new NotesPage() 
+                    { 
+                        Title = AppResources.PageTitle_QuickAccess, 
+                        IsQuickAccessPage = true 
+                    });
                 }
                 else
                 { 

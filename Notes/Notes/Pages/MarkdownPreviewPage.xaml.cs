@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using Notes.Data;
 using Xamarin.Essentials;
+using Notes.Resources;
 
 namespace Notes.Pages
 {
@@ -31,7 +32,12 @@ namespace Notes.Pages
         private async void CopyButton_Clicked(object sender, EventArgs e)
         {
             await Clipboard.SetTextAsync(MarkdownEditor.Text);
-            await DisplayAlert("Copied Markdown", "All text copied to clipboard", "OK");
+            await DisplayAlert
+            (
+                AppResources.Alert_MarkdownCopied_Title, 
+                AppResources.Alert_MarkdownCopied_Message, 
+                AppResources.AlertOption_OK
+            );
         }
     }
 }

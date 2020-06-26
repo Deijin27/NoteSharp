@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Notes.Pages"
+             xmlns:resources="clr-namespace:Notes.Resources"
              xmlns:views="clr-namespace:Notes.Views;assembly=Notes"
              BackgroundColor="{DynamicResource AppBackgroundColor}"
              x:Class="Notes.Pages.NotesPage">
@@ -21,19 +22,19 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}"
                                   IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}"
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="ToggleFolderQuickAccess_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
                                   IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
                                   IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                 </ViewCell>
@@ -46,19 +47,19 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
                                   IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="ToggleFolderQuickAccess_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
                                   IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
                                   IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                 </ViewCell>
@@ -71,19 +72,19 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
                                   IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="ToggleFolderQuickAccess_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
                                   IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
                                   IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                 </ViewCell>
@@ -96,19 +97,19 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
                                   IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="ToggleFolderQuickAccess_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
                                   IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteFolder_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
                                   IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                 </ViewCell>
@@ -121,19 +122,19 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
                                   IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="ToggleNoteQuickAccess_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
                                   IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
                                   IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                     
@@ -147,19 +148,19 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
                                   IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="ToggleNoteQuickAccess_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
                                   IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
                                   IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                 </ViewCell>
@@ -172,19 +173,19 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
                                   IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="ToggleNoteQuickAccess_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
                                   IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
                                   IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                 </ViewCell>
@@ -197,19 +198,19 @@
                     <ViewCell.ContextActions>
                         <MenuItem Clicked="RenameNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Rename" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
                                   IconImageSource="{StaticResource FontImageSource_Edit}"/>
                         <MenuItem Clicked="MoveNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Move" 
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
                                   IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
                         <MenuItem Clicked="ToggleNoteQuickAccess_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Toggle Quick Access"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
                                   IconImageSource="{StaticResource FontImageSource_Star}"/>
                         <MenuItem Clicked="DeleteNote_Clicked"
                                   CommandParameter="{Binding .}"
-                                  Text="Delete" IsDestructive="True"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
                                   IconImageSource="{StaticResource FontImageSource_Delete}"/>
                     </ViewCell.ContextActions>
                 </ViewCell>
@@ -231,9 +232,9 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add Note" Clicked="OnNoteAddedClicked" Order="Primary" 
                      IconImageSource="{StaticResource FontImageSource_FilePlus}"/>
-        <ToolbarItem Text="Add Folder" Clicked="OnFolderAddedClicked" Order="Secondary" />
-        <ToolbarItem Text="Order By" Clicked="OrderBy_Clicked" Order="Secondary"/>
-        <ToolbarItem Text="Search Folder" Clicked="Search_Clicked" Order="Secondary" />
+        <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_AddFolder}" Clicked="OnFolderAddedClicked" Order="Secondary" />
+        <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_OrderBy}" Clicked="OrderBy_Clicked" Order="Secondary"/>
+        <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_SearchFolder}" Clicked="Search_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 
     <ListView x:Name="listView" 

@@ -32,8 +32,6 @@ namespace Notes.Pages
 
         private void ThemeSwitch_Toggled(object sender, ToggledEventArgs e)
         {
-            Console.WriteLine("DEBUG: Theme Switch toggled");
-
             if (e.Value)
             {
                 App.Theme = AppTheme.Dark;

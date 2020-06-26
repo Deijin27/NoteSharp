@@ -1,0 +1,455 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionSheetOption_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ActionSheetOption_LocalBackup_CreateBackup" xml:space="preserve">
+    <value>Create Backup</value>
+  </data>
+  <data name="ActionSheetOption_LocalBackup_DeletePermanently" xml:space="preserve">
+    <value>Delete Permanently</value>
+    <comment>Confirmation dialog action sheet option to delete existing database contents permanently</comment>
+  </data>
+  <data name="ActionSheetOption_OrderBy_DateCreated" xml:space="preserve">
+    <value>Date Created</value>
+    <comment>Action sheet option to order files by date created.</comment>
+  </data>
+  <data name="ActionSheetOption_OrderBy_DateModified" xml:space="preserve">
+    <value>Date Modified</value>
+    <comment>Action sheet option to order files by date modified.</comment>
+  </data>
+  <data name="ActionSheetOption_OrderBy_Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Action sheet option to order files by name.</comment>
+  </data>
+  <data name="ActionSheetOption_OrderBy_Size" xml:space="preserve">
+    <value>Size</value>
+    <comment>Action sheet option to order files by size (bytes, kilobytes etc.)</comment>
+  </data>
+  <data name="ActionSheetTitle_ChooseBackupFile" xml:space="preserve">
+    <value>Choose Backup File</value>
+  </data>
+  <data name="ActionSheetTitle_ChooseBackupFileFormat" xml:space="preserve">
+    <value>Backup to file format:</value>
+  </data>
+  <data name="ActionSheetTitle_OrderBy" xml:space="preserve">
+    <value>Order By:</value>
+  </data>
+  <data name="ActionSheetTitle_QueryBackupExisting" xml:space="preserve">
+    <value>Do what with existing notes, folders and style sheets?</value>
+    <comment>Options that follow include "Delete Permanently", "Create Backup"</comment>
+  </data>
+  <data name="AlertOption_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AlertOption_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="AlertOption_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="AlertOption_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Alert_AddFolderToQuickAccess_Message" xml:space="preserve">
+    <value>Add folder to quick access?</value>
+  </data>
+  <data name="Alert_AddFolderToQuickAccess_Title" xml:space="preserve">
+    <value>QuickAccess</value>
+  </data>
+  <data name="Alert_AddNoteToQuickAccess_Message" xml:space="preserve">
+    <value>Add note to quick access?</value>
+  </data>
+  <data name="Alert_AddNoteToQuickAccess_Title" xml:space="preserve">
+    <value>Quick Access</value>
+  </data>
+  <data name="Alert_BackupComplete_Message" xml:space="preserve">
+    <value>It can be found at:</value>
+    <comment>Will be followed by the path to the backup file that was just created</comment>
+  </data>
+  <data name="Alert_BackupComplete_Title" xml:space="preserve">
+    <value>Backup Complete</value>
+  </data>
+  <data name="Alert_BackupRestoreComplete_Message" xml:space="preserve">
+    <value>The backup was restored successfully.</value>
+  </data>
+  <data name="Alert_BackupRestoreComplete_Title" xml:space="preserve">
+    <value>Backup Restored</value>
+  </data>
+  <data name="Alert_BackupRestoreFailed_Message" xml:space="preserve">
+    <value>An error was encountered loading chosen backup file</value>
+  </data>
+  <data name="Alert_BackupRestoreFailed_Title" xml:space="preserve">
+    <value>Unable to Load Backup</value>
+  </data>
+  <data name="Alert_BackupsFolderEmpty_Message" xml:space="preserve">
+    <value>No local backups exist</value>
+  </data>
+  <data name="Alert_BackupsFolderEmpty_Title" xml:space="preserve">
+    <value>Backups Folder is Empty</value>
+  </data>
+  <data name="Alert_ConfirmDeleteExisting_Message" xml:space="preserve">
+    <value>All existing notes, folders, and style sheets will be deleted</value>
+  </data>
+  <data name="Alert_ConfirmDeleteExisting_OptionCancel" xml:space="preserve">
+    <value>Wait, NO!</value>
+  </data>
+  <data name="Alert_ConfirmDeleteExisting_OptionDelete" xml:space="preserve">
+    <value>Yes, Delete!</value>
+  </data>
+  <data name="Alert_ConfirmDeleteExisting_Title" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="Alert_ConfirmDeleteFolder_Message" xml:space="preserve">
+    <value>Permanently delete folder and all contents?</value>
+  </data>
+  <data name="Alert_ConfirmDeleteFolder_Title" xml:space="preserve">
+    <value>Delete Folder?</value>
+  </data>
+  <data name="Alert_ConfirmDeleteNote_Message" xml:space="preserve">
+    <value>Are you sure you want to permanently delete this note?</value>
+  </data>
+  <data name="Alert_ConfirmDeleteNote_Title" xml:space="preserve">
+    <value>Delete Note?</value>
+  </data>
+  <data name="Alert_CreateBackupPermissionDenied_Message" xml:space="preserve">
+    <value>Unable to create backup because permission to write to storage was denied.</value>
+  </data>
+  <data name="Alert_CreateBackupPermissionDenied_Title" xml:space="preserve">
+    <value>Permission Denied</value>
+  </data>
+  <data name="Alert_CSSCopied_Message" xml:space="preserve">
+    <value>All text copied to clipboard</value>
+  </data>
+  <data name="Alert_CSSCopied_Title" xml:space="preserve">
+    <value>Copied CSS</value>
+  </data>
+  <data name="Alert_ExitWithoutSaving_Message" xml:space="preserve">
+    <value>Exit without saving changes?</value>
+  </data>
+  <data name="Alert_ExitWithoutSaving_Title" xml:space="preserve">
+    <value>Exit?</value>
+  </data>
+  <data name="Alert_FolderNotFoundInFolder_Message" xml:space="preserve">
+    <value>Folder "{0}" not found in folder "{1}"</value>
+    <comment>{0} substituted for folder name looking in; {1} substituted for folder name looking for that wasn't found.</comment>
+  </data>
+  <data name="Alert_HtmlCopied_Message" xml:space="preserve">
+    <value>All text copied to clipboard</value>
+  </data>
+  <data name="Alert_HtmlCopied_Title" xml:space="preserve">
+    <value>Copied HTML</value>
+  </data>
+  <data name="Alert_MarkdownCopied_Message" xml:space="preserve">
+    <value>All text copied to clipboard</value>
+  </data>
+  <data name="Alert_MarkdownCopied_Title" xml:space="preserve">
+    <value>Copied Markdown</value>
+  </data>
+  <data name="Alert_NoteNotFoundInFolder_Message" xml:space="preserve">
+    <value>Note "{0}" not found in folder "{1}"</value>
+    <comment>{0} substituted for folder name looking in; {1} substituted for note name looking for that wasn't found.</comment>
+  </data>
+  <data name="Alert_QuickAccessFolderNotFound_Message" xml:space="preserve">
+    <value>Quick Access Folder "{0}" not found.</value>
+    <comment>{0} is substituted for the folder name</comment>
+  </data>
+  <data name="Alert_QuickAccessNoteNotFound_Message" xml:space="preserve">
+    <value>Quick Access Note "{0}" not found.</value>
+    <comment>{0} is substituted for the note name</comment>
+  </data>
+  <data name="Alert_RemoveFolderFromQuickAccess_Message" xml:space="preserve">
+    <value>Remove folder from quick access?</value>
+  </data>
+  <data name="Alert_RemoveFolderFromQuickAccess_Title" xml:space="preserve">
+    <value>Quick Access</value>
+  </data>
+  <data name="Alert_RemoveNoteFromQuickAccess_Message" xml:space="preserve">
+    <value>Remove note from quick access?</value>
+  </data>
+  <data name="Alert_RemoveNoteFromQuickAccess_Title" xml:space="preserve">
+    <value>QuickAccess</value>
+  </data>
+  <data name="Alert_RestoreBackupPermissionDenied_Message" xml:space="preserve">
+    <value>Unable to restore backup because permission to read from storage was denied.</value>
+  </data>
+  <data name="Alert_RestoreBackupPermissionDenied_Title" xml:space="preserve">
+    <value>Permission Denied</value>
+  </data>
+  <data name="Alert_RootFolderHasNoParent_Message" xml:space="preserve">
+    <value>Root folder does not have a parent folder.</value>
+  </data>
+  <data name="Alert_TemplateError_Title" xml:space="preserve">
+    <value>Template Error</value>
+  </data>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>NoteSharp</value>
+  </data>
+  <data name="ColorPicker_Copy_Button" xml:space="preserve">
+    <value>Copy</value>
+    <comment>Text on button that copies hex color string to clipboard</comment>
+  </data>
+  <data name="ColorPicker_Title" xml:space="preserve">
+    <value>Color Picker</value>
+  </data>
+  <data name="ContextAction_Delete" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Context Action text (when icon is not displayed)</comment>
+  </data>
+  <data name="ContextAction_Move" xml:space="preserve">
+    <value>Move</value>
+    <comment>Context Action text (when icon is not displayed)</comment>
+  </data>
+  <data name="ContextAction_Rename" xml:space="preserve">
+    <value>Rename</value>
+    <comment>Context Action text (when icon is not displayed)</comment>
+  </data>
+  <data name="ContextAction_ToggleQuickAccess" xml:space="preserve">
+    <value>Toggle Quick Access</value>
+    <comment>Context Action text (when icon is not displayed)</comment>
+  </data>
+  <data name="MasterOption_QuickAccess" xml:space="preserve">
+    <value>Quick Access</value>
+  </data>
+  <data name="MasterOption_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MasterOption_StyleSheets" xml:space="preserve">
+    <value>Style Sheets</value>
+  </data>
+  <data name="NoteEntryPage_NamePlaceholder" xml:space="preserve">
+    <value>Note Name...</value>
+  </data>
+  <data name="NoteEntryPage_TextPlaceholder" xml:space="preserve">
+    <value>Enter Note Text...</value>
+  </data>
+  <data name="PageTitle_HtmlPreview" xml:space="preserve">
+    <value>HTML Preview</value>
+    <comment>On page showing html that is produced from the markdown</comment>
+  </data>
+  <data name="PageTitle_MarkdownPreview" xml:space="preserve">
+    <value>Markdown Preview</value>
+    <comment>On page showing markdown with templates added</comment>
+  </data>
+  <data name="PageTitle_MarkdownView" xml:space="preserve">
+    <value>Markdown View</value>
+    <comment>On page showing the final rendered result</comment>
+  </data>
+  <data name="PageTitle_Move" xml:space="preserve">
+    <value>Move To:</value>
+    <comment>Is followed by the name of the currently selected</comment>
+  </data>
+  <data name="PageTitle_QuickAccess" xml:space="preserve">
+    <value>Quick Access</value>
+    <comment>NavigationPage title for Quick Access NotesPage</comment>
+  </data>
+  <data name="PageTitle_RootFolder" xml:space="preserve">
+    <value>Root</value>
+    <comment>NavigationPage title for NotesPage when in root folder</comment>
+  </data>
+  <data name="PageTitle_StyleSheets" xml:space="preserve">
+    <value>Cascading Style Sheets</value>
+  </data>
+  <data name="PageTitle_StyleSheetSelection" xml:space="preserve">
+    <value>Choose CSS</value>
+  </data>
+  <data name="Prompt_FolderNameConflict_Message" xml:space="preserve">
+    <value>A folder of the same name already exists in the folder; please input a different name</value>
+  </data>
+  <data name="Prompt_FolderNameConflict_Title" xml:space="preserve">
+    <value>Folder Name Conflict</value>
+  </data>
+  <data name="Prompt_GetFolderName_DefaultMessage" xml:space="preserve">
+    <value>Input name for folder</value>
+  </data>
+  <data name="Prompt_GetNoteName_DefaultMessage" xml:space="preserve">
+    <value>Input name for note</value>
+  </data>
+  <data name="Prompt_NameInvalid_Message" xml:space="preserve">
+    <value>Invalid name, please input a name that does not contain any of the characters</value>
+    <comment>If followed by a list of invalid characters</comment>
+  </data>
+  <data name="Prompt_NameNote_Title" xml:space="preserve">
+    <value>Name Note</value>
+  </data>
+  <data name="Prompt_NewFolder_Title" xml:space="preserve">
+    <value>New Folder</value>
+  </data>
+  <data name="Prompt_NoteNameConflict_Message" xml:space="preserve">
+    <value>A note of the same name already exists in the folder; please input a different name</value>
+  </data>
+  <data name="Prompt_NoteNameConflict_Title" xml:space="preserve">
+    <value>Note Name Conflict</value>
+  </data>
+  <data name="Prompt_QuickAccessFolderNameConflict_Message" xml:space="preserve">
+    <value>A folder of the same name already exists in QuickAccess, please input a different name</value>
+  </data>
+  <data name="Prompt_QuickAccessNoteNameConflict_Message" xml:space="preserve">
+    <value>A note of the same name already exists in QuickAccess, please input a different name</value>
+  </data>
+  <data name="Prompt_RenameFolder_Title" xml:space="preserve">
+    <value>Rename Folder</value>
+  </data>
+  <data name="Prompt_RenameNote_Title" xml:space="preserve">
+    <value>Rename Note</value>
+  </data>
+  <data name="ReadonlyMarkerText" xml:space="preserve">
+    <value>ReadOnly</value>
+  </data>
+  <data name="SearchBar_SearchFolder_Placeholder" xml:space="preserve">
+    <value>Search Folder...</value>
+  </data>
+  <data name="Settings_AccentColorSelector_Title" xml:space="preserve">
+    <value>Accent Color</value>
+  </data>
+  <data name="Settings_CreateLocalBackup_Button" xml:space="preserve">
+    <value>Create Backup</value>
+  </data>
+  <data name="Settings_DarkThemeSwitch_Title" xml:space="preserve">
+    <value>Dark Theme</value>
+  </data>
+  <data name="Settings_LocalBackup_Title" xml:space="preserve">
+    <value>Local Backup</value>
+  </data>
+  <data name="Settings_RestoreLocalBackup_Button" xml:space="preserve">
+    <value>Restore Backup</value>
+  </data>
+  <data name="Settings_SpellCheckEnabled_Title" xml:space="preserve">
+    <value>Spell Check Enabled</value>
+  </data>
+  <data name="StyleSheetEntryPage_NamePlaceholder" xml:space="preserve">
+    <value>Sheet Name...</value>
+  </data>
+  <data name="StyleSheetEntryPage_TextPlaceholder" xml:space="preserve">
+    <value>Enter CSS Text...</value>
+  </data>
+  <data name="Toolbar_AddFolder" xml:space="preserve">
+    <value>Add Folder</value>
+    <comment>Secondary order toolbar item text, which creates a new folder when pressed</comment>
+  </data>
+  <data name="Toolbar_OrderBy" xml:space="preserve">
+    <value>Order By</value>
+    <comment>Secondary order toolbar item text, which gives user sorting options when pressed</comment>
+  </data>
+  <data name="Toolbar_SearchFolder" xml:space="preserve">
+    <value>Search Folder</value>
+    <comment>Secondary order toolbar item text, which displays search bar when pressed.</comment>
+  </data>
+</root>

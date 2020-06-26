@@ -4,6 +4,7 @@ using Notes.Models;
 using Xamarin.Essentials;
 using System.Threading;
 using Amporis.Xamarin.Forms.ColorPicker;
+using Notes.Resources;
 
 namespace Notes.Pages
 {
@@ -85,7 +86,13 @@ namespace Notes.Pages
             }
             else if (sheet.Name != InitialName || sheet.Text != InitialText)
             {
-                bool answer = await DisplayAlert("Exit?", "Exit without saving changes?", "Yes", "No");
+                bool answer = await DisplayAlert
+                (
+                    AppResources.Alert_ExitWithoutSaving_Title,
+                    AppResources.Alert_ExitWithoutSaving_Message,
+                    AppResources.AlertOption_Yes,
+                    AppResources.AlertOption_No
+                );
                 if (answer)
                 {
                     UnfocusAll();
@@ -119,21 +126,31 @@ namespace Notes.Pages
         private async void CopyButton_Clicked(object sender, EventArgs e)
         {
             await Clipboard.SetTextAsync(TextEditor.Text);
-            await DisplayAlert("Copied CSS", "Style text copied to clipboard", "OK");
+            await DisplayAlert
+            (
+                AppResources.Alert_CSSCopied_Title, 
+                AppResources.Alert_CSSCopied_Message, 
+                AppResources.AlertOption_OK
+            );
         }
 
         private async void ColorPickerButton_Clicked(object sender, EventArgs e)
         {
             var colorDialogSettings = new ColorDialogSettings()
             {
-                OkButtonText = "Copy",
+                OkButtonText = AppResources.ColorPicker_Copy_Button,
                 EditAlfa = false,
                 DialogAnimation = false
                 // More Settings Can Go Here
             };
 
-            Color color = await ColorPickerDialog.Show(ColorPickerUtils.GetRootParent<Layout<View>>((View)TextEditor), 
-                "Color Picker", Color.White, colorDialogSettings);
+            Color color = await ColorPickerDialog.Show
+            (
+                ColorPickerUtils.GetRootParent<Layout<View>>((View)TextEditor), 
+                AppResources.ColorPicker_Title, 
+                Color.White, 
+                colorDialogSettings
+            );
 
             string hexNoAlpha = color.ToHex().Remove(1, 2);
 

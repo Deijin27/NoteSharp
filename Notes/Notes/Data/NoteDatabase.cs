@@ -6,6 +6,7 @@ using Notes.Models;
 using System.Linq;
 using Xamarin.Forms;
 using System.Text.RegularExpressions;
+using Notes.Resources;
 
 namespace Notes.Data
 {
@@ -463,7 +464,12 @@ namespace Notes.Data
 
                     if (currentFolder == null)
                     {
-                        await currentPage.DisplayAlert("Template Error", $"Quick Access Folder \"{currentFolder.Name}\" not found.", "OK");
+                        await currentPage.DisplayAlert
+                        (
+                            AppResources.Alert_TemplateError_Title, 
+                            string.Format(AppResources.Alert_QuickAccessFolderNotFound_Message, currentFolder.Name), 
+                            AppResources.AlertOption_OK
+                        );
                         return (null, ErrorEncountered.True);
                     }
                 }
@@ -471,13 +477,18 @@ namespace Notes.Data
                 {
                     if (currentFolder.ID == Guid.Empty) // current folder is root folder
                     {
-                        await currentPage.DisplayAlert("Template Error", "Root folder does not have a parent folder.", "OK");
+                        await currentPage.DisplayAlert
+                        (
+                            AppResources.Alert_TemplateError_Title, 
+                            AppResources.Alert_RootFolderHasNoParent_Message,
+                            AppResources.AlertOption_OK
+                        );
                         return (null, ErrorEncountered.True);
                     }
                     // current folder is not root folder
                     if (currentFolder.ParentID == Guid.Empty) // parent folder is root folder
                     {
-                        currentFolder = new Folder() { ID = Guid.Empty };
+                        currentFolder = new Folder() { ID = Guid.Empty, Name = AppResources.PageTitle_RootFolder };
                     }
                     else // parent folder is not root folder, i.e. it exists in database
                     {
@@ -494,7 +505,12 @@ namespace Notes.Data
 
                     if (newFolder == null)
                     {
-                        await currentPage.DisplayAlert("Template Error", $"Folder \"{folderName}\" not found in folder \"{currentFolder.Name}\"", "OK");
+                        await currentPage.DisplayAlert
+                        (
+                            AppResources.Alert_TemplateError_Title,
+                            string.Format(AppResources.Alert_FolderNotFoundInFolder_Message, folderName, currentFolder.Name),
+                            AppResources.AlertOption_OK
+                        );
                         return (null, ErrorEncountered.True);
                     }
 
@@ -526,7 +542,7 @@ namespace Notes.Data
 
             Folder startFolder;
             if (folderID == Guid.Empty) 
-                startFolder = new Folder() { ID = Guid.Empty };
+                startFolder = new Folder() { ID = Guid.Empty, Name = AppResources.PageTitle_RootFolder };
             else 
                 startFolder = await GetFolderAsync(folderID);
 
@@ -550,7 +566,12 @@ namespace Notes.Data
 
                 if (noteFile == null)
                 {
-                    await currentPage.DisplayAlert("Template Error", $"Quick Access Note \"{noteName}\" not found", "OK");
+                    await currentPage.DisplayAlert
+                    (
+                        AppResources.Alert_TemplateError_Title,
+                        string.Format(AppResources.Alert_QuickAccessNoteNotFound_Message, noteName),
+                        AppResources.AlertOption_OK
+                    );
                     return (null, ErrorEncountered.True);
                 }
             }
@@ -560,7 +581,12 @@ namespace Notes.Data
 
                 if (noteFile == null)
                 {
-                    await currentPage.DisplayAlert("Template Error", $"Note \"{noteName}\" not found in folder \"{endFolder.Name}\"", "OK");
+                    await currentPage.DisplayAlert
+                    (
+                        AppResources.Alert_TemplateError_Title,
+                        string.Format(AppResources.Alert_NoteNotFoundInFolder_Message, noteName, endFolder.Name),
+                        AppResources.AlertOption_OK
+                    );
                     return (null, ErrorEncountered.True);
                 }
             }

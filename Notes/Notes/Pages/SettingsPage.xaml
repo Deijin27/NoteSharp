@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:Notes"
+             xmlns:resources="clr-namespace:Notes.Resources"
              xmlns:controls="clr-namespace:Notes.Controls"
              mc:Ignorable="d"
              x:Class="Notes.Pages.SettingsPage"
@@ -38,18 +38,19 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
-                <Label Text="Dark Theme" 
-                               Grid.Column="0" 
-                               VerticalTextAlignment="Center" 
-                               TextColor="{DynamicResource PrimaryContentTextColor}"/>
+                <Label Text="{x:Static resources:AppResources.Settings_DarkThemeSwitch_Title}" 
+                       Grid.Column="0" 
+                       VerticalTextAlignment="Center" 
+                       TextColor="{DynamicResource PrimaryContentTextColor}"/>
                 <Switch x:Name="ThemeSwitch"
-                                Grid.Column="1"/>
+                        Grid.Column="1"/>
             </Grid>
             
             <BoxView Style="{StaticResource DividerStyle}" />
             
             <StackLayout Orientation="Vertical" Margin="0,5,0,5">
-                <Label Text="Accent Color" TextColor="{DynamicResource PrimaryContentTextColor}"/>
+                <Label Text="{x:Static resources:AppResources.Settings_AccentColorSelector_Title}" 
+                       TextColor="{DynamicResource PrimaryContentTextColor}"/>
                 <StackLayout Orientation="Horizontal" Padding="0,0,0,5">
 
                     <controls:RadioCircle x:Name="BlueAccentColorRadioCircle"
@@ -74,7 +75,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
-                <Label Text="Spell Check Enabled" 
+                <Label Text="{x:Static resources:AppResources.Settings_SpellCheckEnabled_Title}" 
                                Grid.Column="0" 
                                VerticalTextAlignment="Center" 
                                TextColor="{DynamicResource PrimaryContentTextColor}"/>
@@ -86,7 +87,7 @@
             <BoxView Style="{StaticResource DividerStyle}" />
 
 
-            <Label Text="Local Backup" 
+            <Label Text="{x:Static resources:AppResources.Settings_LocalBackup_Title}" 
                    Margin="0,5,0,0"
                    TextColor="{DynamicResource PrimaryContentTextColor}"/>
             <Grid>
@@ -94,8 +95,14 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="CreateBackupButton" Text="Create Backup" Clicked="CreateBackupButton_Clicked" Grid.Column="0"/>
-                <Button x:Name="RestoreBackupButton" Text="Restore Backup" Clicked="RestoreBackupButton_Clicked" Grid.Column="1"/>
+                <Button x:Name="CreateBackupButton" 
+                        Text="{x:Static resources:AppResources.Settings_CreateLocalBackup_Button}" 
+                        Clicked="CreateBackupButton_Clicked" 
+                        Grid.Column="0"/>
+                <Button x:Name="RestoreBackupButton" 
+                        Text="{x:Static resources:AppResources.Settings_RestoreLocalBackup_Button}" 
+                        Clicked="RestoreBackupButton_Clicked" 
+                        Grid.Column="1"/>
             </Grid>
             
         </StackLayout>

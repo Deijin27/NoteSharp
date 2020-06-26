@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:resources="clr-namespace:Notes.Resources"
              mc:Ignorable="d"
              x:Class="Notes.Pages.NotesMasterPageMaster"
              Title="Master"
@@ -22,7 +23,7 @@
                          Margin="0,0,0,0"
                          Spacing="0">
                 <Label HeightRequest="100"/>
-                <Label Text="NoteSharp"
+                <Label Text="{x:Static resources:AppResources.ApplicationName}"
                        TextColor="{DynamicResource NavigationBarTextColor}"
                        FontSize="Title"
                        FontAttributes="Bold"

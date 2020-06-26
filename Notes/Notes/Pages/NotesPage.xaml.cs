@@ -5,8 +5,8 @@ using Xamarin.Forms;
 using Notes.Models;
 using System.Threading.Tasks;
 using Notes.Data;
-using Notes.Constants;
 using Notes.Controls;
+using Notes.Resources;
 
 namespace Notes.Pages
 {
@@ -83,12 +83,6 @@ namespace Notes.Pages
             UpdateListView();
         }
 
-        //protected override async void OnAppearing()
-        //{
-        //    base.OnAppearing();
-        //    UpdateListView();
-        //}
-
         public void ChangesSavedHandler()
         {
             UpdateListView();
@@ -102,7 +96,6 @@ namespace Notes.Pages
         }
 
         public MoveCompletedEventHandler FolderContentMoved;
-
         
         public void MoveCompletedHandler(MoveCompletedEventArgs e)
         {
@@ -199,7 +192,12 @@ namespace Notes.Pages
 
         async void OnFolderAddedClicked(object sender, EventArgs e)
         {
-            (Option option, string result) = await NameValidation.GetUniqueFolderName(this, FolderID, "New Folder");
+            (Option option, string result) = await NameValidation.GetUniqueFolderName
+            (
+                this, 
+                FolderID, 
+                AppResources.Prompt_NewFolder_Title
+            );
 
             if (option == Option.OK)
             {
@@ -218,39 +216,33 @@ namespace Notes.Pages
 
         private async void OrderBy_Clicked(object sender, EventArgs e)
         {
+            string option_cancel = AppResources.ActionSheetOption_Cancel;
+            string option_name = AppResources.ActionSheetOption_OrderBy_Name;
+            string option_dateCreated = AppResources.ActionSheetOption_OrderBy_DateCreated;
+            string option_dateModified = AppResources.ActionSheetOption_OrderBy_DateModified;
+            string option_size = AppResources.ActionSheetOption_OrderBy_Size;
+
             string selected = await DisplayActionSheet
             (
-                "Order By:",
-                ActionSheetOption.Cancel,
+                AppResources.ActionSheetTitle_OrderBy,
+                option_cancel,
                 null,
-                ActionSheetOption.Name,
-                ActionSheetOption.DateCreated,
-                ActionSheetOption.DateModified,
-                ActionSheetOption.Size
+                option_name,
+                option_dateCreated,
+                option_dateModified,
+                option_size
             );
 
-            if (!string.IsNullOrEmpty(selected) && selected != ActionSheetOption.Cancel)
+            if (!string.IsNullOrEmpty(selected) && selected != option_cancel)
             {
                 SortingMode sortingMode;
 
-                switch (selected)
-                {
-                    case ActionSheetOption.Name:
-                        sortingMode = SortingMode.Name;
-                        break;
-                    case ActionSheetOption.DateCreated:
-                        sortingMode = SortingMode.DateCreated;
-                        break;
-                    case ActionSheetOption.DateModified:
-                        sortingMode = SortingMode.DateModified;
-                        break;
-                    case ActionSheetOption.Size:
-                        sortingMode = SortingMode.Size;
-                        break;
-                    default:
-                        sortingMode = SortingMode.Name;
-                        break;
-                }
+                if (selected == option_name) sortingMode = SortingMode.Name;
+                else if (selected == option_dateCreated) sortingMode = SortingMode.DateCreated;
+                else if (selected == option_dateModified) sortingMode = SortingMode.DateModified;
+                else if (selected == option_size) sortingMode = SortingMode.Size;
+                else sortingMode = SortingMode.Name;
+
                 App.SortingMode = sortingMode;
                 UpdateListView();
             }
@@ -262,9 +254,15 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Folder folder = folderContentItem.ContentFolder;
 
-            (Option option, string result) = await NameValidation.GetUniqueFolderName(this, folder.ParentID, "Rename Folder", 
+            (Option option, string result) = await NameValidation.GetUniqueFolderName
+            (
+                this, 
+                folder.ParentID, 
+                AppResources.Prompt_RenameFolder_Title, 
                 isQuickAccess: folder.IsQuickAccess,
-                initialValue: folder.Name);
+                initialValue: folder.Name
+            );
+
             if (option == Option.OK)
             {
                 folder.Name = result;
@@ -290,7 +288,14 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Folder folder = folderContentItem.ContentFolder;
 
-            bool answer = await DisplayAlert("Delete Folder?", "Permanently delete folder and all contents?", "Yes", "No");
+            bool answer = await DisplayAlert
+            (
+                AppResources.Alert_ConfirmDeleteFolder_Title, 
+                AppResources.Alert_ConfirmDeleteFolder_Message, 
+                AppResources.AlertOption_Yes, 
+                AppResources.AlertOption_No
+            );
+
             if (answer)
             {
                 await App.Database.DeleteFolderAndAllContentsAsync(folder);
@@ -304,9 +309,15 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Note note = folderContentItem.ContentNote;
 
-            (Option option, string result) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Rename Note", 
+            (Option option, string result) = await NameValidation.GetUniqueNoteName
+            (
+                this, 
+                note.FolderID, 
+                AppResources.Prompt_RenameNote_Title, 
                 isQuickAccess: note.IsQuickAccess,
-                initialValue: note.Name);
+                initialValue: note.Name
+            );
+
             if (option == Option.OK)
             {
                 note.Name = result;
@@ -332,7 +343,14 @@ namespace Notes.Pages
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Note note = folderContentItem.ContentNote;
 
-            bool answer = await DisplayAlert("Delete Note?", "Are you sure you want to permanently delete this note?", "Yes", "No");
+            bool answer = await DisplayAlert
+            (
+                AppResources.Alert_ConfirmDeleteNote_Title, 
+                AppResources.Alert_ConfirmDeleteNote_Message, 
+                AppResources.AlertOption_Yes, 
+                AppResources.AlertOption_No
+            );
+
             if (answer)
             {
                 await App.Database.DeleteAsync(note);
@@ -348,15 +366,27 @@ namespace Notes.Pages
 
             if (!note.IsQuickAccess)
             {
-                bool answer = await DisplayAlert("Quick Access", "Add note to quick access?", "Yes", "Cancel");
+                bool answer = await DisplayAlert
+                (
+                    AppResources.Alert_AddNoteToQuickAccess_Title, 
+                    AppResources.Alert_AddNoteToQuickAccess_Message, 
+                    AppResources.AlertOption_Yes, 
+                    AppResources.AlertOption_Cancel
+                );
 
                 if (answer)
                 {
                     if (await App.Database.DoesQuickAccessNoteNameExistAsync(note.Name))
                     {
-                        (Option option, string newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Note Name Conflict",
+                        (Option option, string newName) = await NameValidation.GetUniqueNoteName
+                        (
+                            this, 
+                            note.FolderID, 
+                            AppResources.Prompt_NoteNameConflict_Title,
                             isQuickAccess: true,
-                            message: "A note of the same name already exists in the QuickAccess, please input a different name");
+                            message: AppResources.Prompt_QuickAccessNoteNameConflict_Message
+                        );
+
                         if (option == Option.OK)
                         {
                             note.Name = newName;
@@ -375,7 +405,13 @@ namespace Notes.Pages
             }
             else
             {
-                bool answer = await DisplayAlert("Quick Access", "Remove note from quick access?", "Yes", "Cancel");
+                bool answer = await DisplayAlert
+                (
+                    AppResources.Alert_RemoveNoteFromQuickAccess_Title, 
+                    AppResources.Alert_RemoveNoteFromQuickAccess_Message, 
+                    AppResources.AlertOption_Yes, 
+                    AppResources.AlertOption_Cancel
+                );
 
                 if (answer)
                 {
@@ -394,15 +430,26 @@ namespace Notes.Pages
 
             if (!folder.IsQuickAccess)
             {
-                bool answer = await DisplayAlert("Quick Access", "Add folder to quick access?", "Yes", "Cancel");
+                bool answer = await DisplayAlert
+                (
+                    AppResources.Alert_AddFolderToQuickAccess_Title, 
+                    AppResources.Alert_AddFolderToQuickAccess_Message, 
+                    AppResources.AlertOption_Yes, 
+                    AppResources.AlertOption_Cancel
+                );
 
                 if (answer)
                 {
                     if (await App.Database.DoesQuickAccessFolderNameExistAsync(folder.Name))
                     {
-                        (Option option, string newName) = await NameValidation.GetUniqueFolderName(this, folder.ParentID, "Folder Name Conflict",
+                        (Option option, string newName) = await NameValidation.GetUniqueFolderName
+                        (
+                            this, 
+                            folder.ParentID, 
+                            AppResources.Prompt_FolderNameConflict_Title,
                             isQuickAccess: true,
-                            message: "A folder of the same name already exists in the QuickAccess, please input a different name");
+                            message: AppResources.Prompt_QuickAccessFolderNameConflict_Message
+                        );
                         if (option == Option.OK)
                         {
                             folder.Name = newName;
@@ -421,7 +468,13 @@ namespace Notes.Pages
             }
             else
             {
-                bool answer = await DisplayAlert("Quick Access", "Remove folder from quick access?", "Yes", "Cancel");
+                bool answer = await DisplayAlert
+                (
+                    AppResources.Alert_RemoveFolderFromQuickAccess_Title, 
+                    AppResources.Alert_RemoveFolderFromQuickAccess_Message, 
+                    AppResources.AlertOption_Yes, 
+                    AppResources.AlertOption_Cancel
+                );
 
                 if (answer)
                 {
@@ -440,7 +493,7 @@ namespace Notes.Pages
                 PlaceholderColor = Color.Gray,
                 SearchIconColor = Color.White,
                 CloseIconColor = Color.White,
-                Placeholder = "Search Folder..."
+                Placeholder = AppResources.SearchBar_SearchFolder_Placeholder
             };
             searchBar.TextChanged += GetSearchResults;
             searchBar.CloseClicked += CloseSearchBar;

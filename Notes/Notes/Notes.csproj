@@ -70,6 +70,11 @@
     <Compile Update="Pages\StyleSheetsPage.xaml.cs">
       <DependentUpon>StyleSheetsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Resources\AppResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Themes\DarkTheme.xaml.cs">
       <DependentUpon>DarkTheme.xaml</DependentUpon>
     </Compile>
@@ -123,6 +128,13 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\SettingsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AppResources.es.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\AppResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Themes\LightTheme.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>

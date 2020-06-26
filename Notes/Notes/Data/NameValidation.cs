@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Notes.Resources;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +23,10 @@ namespace Notes.Data
         /// <param name="title">Title of dialog</param>
         /// <param name="initialValue">Initial text in dialog entry when first raised</param>
         /// <returns>(Option option_clicked, string result)</returns>
-        public static async Task<(Option, string)> GetUniqueNoteName(Page page, Guid folderID, string title, bool isQuickAccess = false, string message = "Input name for note", string initialValue = "")
+        public static async Task<(Option, string)> GetUniqueNoteName(Page page, Guid folderID, string title, bool isQuickAccess = false, string message = null, string initialValue = "")
         {
+            message = message ?? AppResources.Prompt_GetNoteName_DefaultMessage;
+
             string result = await page.DisplayPromptAsync(title, message, initialValue: initialValue);
 
             if (result == null)
@@ -40,7 +43,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters \"/*.~",
+                        AppResources.Prompt_NameInvalid_Message + " \"/*.~",
                         initialValue: result
                     );
                 }
@@ -50,7 +53,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "A note of that name already exists in Quick Access; please input a different name",
+                        AppResources.Prompt_QuickAccessNoteNameConflict_Message,
                         initialValue: result
                     );
                 }
@@ -60,7 +63,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "A note of that name already exists in the current folder; please input a different name",
+                        AppResources.Prompt_NoteNameConflict_Message,
                         initialValue: result
                     );
                 }
@@ -82,8 +85,10 @@ namespace Notes.Data
         /// <param name="title">Title of dialog</param>
         /// <param name="initialValue">Initial text in dialog entry when first raised</param>
         /// <returns>(Option option_clicked, string result)</returns>
-        public static async Task<(Option, string)> GetUniqueFolderName(Page page, Guid parentID, string title, bool isQuickAccess = false, string message = "Input name for folder", string initialValue = "")
+        public static async Task<(Option, string)> GetUniqueFolderName(Page page, Guid parentID, string title, bool isQuickAccess = false, string message = null, string initialValue = "")
         {
+            message = message ?? AppResources.Prompt_GetFolderName_DefaultMessage;
+
             string result = await page.DisplayPromptAsync(title, message, initialValue: initialValue);
 
             if (result == null)
@@ -99,7 +104,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "Invalid name, please input a name that does not contain any of the characters \"/*.~",
+                        AppResources.Prompt_NameInvalid_Message + " \"/*.~",
                         initialValue: result
                     );
                 }
@@ -109,7 +114,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "A folder of that name already exists in Quick Access; please input a different name",
+                        AppResources.Prompt_QuickAccessFolderNameConflict_Message,
                         initialValue: result
                     );
                 }
@@ -119,7 +124,7 @@ namespace Notes.Data
                     result = await page.DisplayPromptAsync
                     (
                         title,
-                        "A folder of that name already exists in the current folder; please input a different name",
+                        AppResources.Prompt_FolderNameConflict_Message,
                         initialValue: result
                     );
                 }

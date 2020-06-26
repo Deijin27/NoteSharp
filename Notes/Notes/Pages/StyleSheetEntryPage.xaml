@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:resources="clr-namespace:Notes.Resources"
              x:Class="Notes.Pages.StyleSheetEntryPage"
              NavigationPage.HasBackButton="False">
 
     <NavigationPage.TitleView>
         <Entry x:Name="NameEntry"
                Text="{Binding Name}" 
-               Placeholder="Sheet Name..."
+               Placeholder="{x:Static resources:AppResources.StyleSheetEntryPage_NamePlaceholder}"
                TextColor="{DynamicResource NavigationBarTextColor}"
                PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
                IsSpellCheckEnabled="False"
@@ -34,7 +35,7 @@
         
             <StackLayout>
                 <Editor x:Name="TextEditor" 
-                        Placeholder="Enter your CSS..."
+                        Placeholder="{x:Static resources:AppResources.StyleSheetEntryPage_TextPlaceholder}"
                         Text="{Binding Text}"
                         AutoSize="TextChanges"
                         FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"

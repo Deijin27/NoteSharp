@@ -7,7 +7,7 @@ using Notes.Models;
 using System.Threading.Tasks;
 using Notes.Data;
 using Xamarin.Essentials;
-using Notes.Constants;
+using Notes.Resources;
 
 namespace Notes.Pages
 {
@@ -37,7 +37,7 @@ namespace Notes.Pages
         public Note NoteToMove;
         public MoveMode MoveMode;
 
-        public string CurrentFolderName { set { Title = "Move To: " + value; } }
+        public string CurrentFolderName { set { Title = AppResources.PageTitle_Move + " " + value; } }
 
         public event MoveCompletedEventHandler MoveCompleted;
 
@@ -79,30 +79,30 @@ namespace Notes.Pages
             listView.ItemsSource = listViewItems;
         }
         
-        async void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
+        void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem != null)
             {
                 var folderContentItem = e.SelectedItem as FolderContentItem;
 
-                if (folderContentItem.Identifier == FolderContentItemIdentifier.Folder)
-                {
-                    Folder folder = folderContentItem.ContentFolder;
-                    CurrentFolderName = folder.Name;
-                    FolderID = folder.ID;
-                    UpdateListView();
-                }
-                else
-                {
-                    await DisplayAlert("What", "This shouldnt be happening", "OK");
-                }
+                // no need to check identifier as only folders can be selected
+                Folder folder = folderContentItem.ContentFolder;
+                CurrentFolderName = folder.Name;
+                FolderID = folder.ID;
+                UpdateListView();
+                
                 listView.SelectedItem = null;
             }
         }
 
         async void OnFolderAddedClicked(object sender, EventArgs e)
         {
-            (Option option, string result) = await NameValidation.GetUniqueFolderName(this, FolderID, "New Folder");
+            (Option option, string result) = await NameValidation.GetUniqueFolderName
+            (
+                this, 
+                FolderID, 
+                AppResources.Prompt_NewFolder_Title
+            );
 
             if (option == Option.OK)
             {
@@ -120,39 +120,33 @@ namespace Notes.Pages
 
         private async void OrderBy_Clicked(object sender, EventArgs e)
         {
+            string option_cancel = AppResources.ActionSheetOption_Cancel;
+            string option_name = AppResources.ActionSheetOption_OrderBy_Name;
+            string option_dateCreated = AppResources.ActionSheetOption_OrderBy_DateCreated;
+            string option_dateModified = AppResources.ActionSheetOption_OrderBy_DateModified;
+            string option_size = AppResources.ActionSheetOption_OrderBy_Size;
+
             string selected = await DisplayActionSheet
             (
-                "Order By:",
-                ActionSheetOption.Cancel,
+                AppResources.ActionSheetTitle_OrderBy,
+                option_cancel,
                 null,
-                ActionSheetOption.Name,
-                ActionSheetOption.DateCreated,
-                ActionSheetOption.DateModified,
-                ActionSheetOption.Size
+                option_name,
+                option_dateCreated,
+                option_dateModified,
+                option_size
             );
 
-            if (!string.IsNullOrEmpty(selected) && selected != ActionSheetOption.Cancel)
+            if (!string.IsNullOrEmpty(selected) && selected != option_cancel)
             {
                 SortingMode sortingMode;
 
-                switch (selected)
-                {
-                    case ActionSheetOption.Name:
-                        sortingMode = SortingMode.Name;
-                        break;
-                    case ActionSheetOption.DateCreated:
-                        sortingMode = SortingMode.DateCreated;
-                        break;
-                    case ActionSheetOption.DateModified:
-                        sortingMode = SortingMode.DateModified;
-                        break;
-                    case ActionSheetOption.Size:
-                        sortingMode = SortingMode.Size;
-                        break;
-                    default:
-                        sortingMode = SortingMode.Name;
-                        break;
-                }
+                if (selected == option_name) sortingMode = SortingMode.Name;
+                else if (selected == option_dateCreated) sortingMode = SortingMode.DateCreated;
+                else if (selected == option_dateModified) sortingMode = SortingMode.DateModified;
+                else if (selected == option_size) sortingMode = SortingMode.Size;
+                else sortingMode = SortingMode.Name;
+
                 App.SortingMode = sortingMode;
                 UpdateListView();
             }
@@ -185,8 +179,13 @@ namespace Notes.Pages
                 bool exists = await App.Database.DoesFolderNameExistAsync(FolderToMove.Name, FolderID);
                 if (exists)
                 {
-                    (Option option, string newName) = await NameValidation.GetUniqueFolderName(this, FolderID, "Folder Name Conflict",
-                        message: "A folder of the same name already exists in the destination, please input a different name");
+                    (Option option, string newName) = await NameValidation.GetUniqueFolderName
+                    (
+                        this, 
+                        FolderID, 
+                        AppResources.Prompt_FolderNameConflict_Title,
+                        message: AppResources.Prompt_FolderNameConflict_Message
+                    );
                     if (option == Option.OK)
                     {
                         Guid sourceFolderID = FolderToMove.ParentID;
@@ -200,9 +199,14 @@ namespace Notes.Pages
                 }
                 else if (FolderToMove.IsQuickAccess && (await App.Database.DoesQuickAccessFolderNameExistAsync(FolderToMove.Name)))
                 {
-                    (Option option, string newName) = await NameValidation.GetUniqueFolderName(this, FolderID, "Folder Name Conflict",
+                    (Option option, string newName) = await NameValidation.GetUniqueFolderName
+                    (
+                        this, 
+                        FolderID,
+                        AppResources.Prompt_FolderNameConflict_Title,
                         isQuickAccess: true,
-                        message: "A folder of the same name already exists in the QuickAccess, please input a different name");
+                        message: AppResources.Prompt_QuickAccessFolderNameConflict_Message
+                    );
                     if (option == Option.OK)
                     {
                         Guid sourceFolderID = FolderToMove.ParentID;
@@ -229,8 +233,13 @@ namespace Notes.Pages
                 bool exists = await App.Database.DoesNoteNameExistAsync(NoteToMove.Name, FolderID);
                 if (exists)
                 {
-                    (Option option, string newName) = await NameValidation.GetUniqueNoteName(this, FolderID, "Note Name Conflict",
-                        message: "A note of the same name already exists in the destination, please input a different name");
+                    (Option option, string newName) = await NameValidation.GetUniqueNoteName
+                    (
+                        this, 
+                        FolderID, 
+                        AppResources.Prompt_NoteNameConflict_Title,
+                        message: AppResources.Prompt_NoteNameConflict_Message
+                    );
                     if (option == Option.OK)
                     {
                         Guid sourceFolderID = NoteToMove.FolderID;
@@ -244,9 +253,14 @@ namespace Notes.Pages
                 }
                 else if (NoteToMove.IsQuickAccess && (await App.Database.DoesQuickAccessNoteNameExistAsync(NoteToMove.Name)))
                 {
-                    (Option option, string newName) = await NameValidation.GetUniqueNoteName(this, FolderID, "Note Name Conflict",
+                    (Option option, string newName) = await NameValidation.GetUniqueNoteName
+                    (
+                        this, 
+                        FolderID, 
+                        AppResources.Prompt_NoteNameConflict_Title,
                         isQuickAccess: true,
-                        message: "A note of the same name already exists in the QuickAccess, please input a different name");
+                        message: AppResources.Prompt_QuickAccessNoteNameConflict_Message
+                    );
                     if (option == Option.OK)
                     {
                         Guid sourceFolderID = NoteToMove.FolderID;

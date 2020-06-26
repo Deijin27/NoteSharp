@@ -5,6 +5,7 @@ using Notes.Models;
 using System.Text.RegularExpressions;
 using Notes.Data;
 using Xamarin.Essentials;
+using Notes.Resources;
 
 namespace Notes.Pages
 {
@@ -33,7 +34,12 @@ namespace Notes.Pages
         private async void CopyButton_Clicked(object sender, EventArgs e)
         {
             await Clipboard.SetTextAsync(HtmlEditor.Text);
-            await DisplayAlert("Copied HTML", "All text copied to clipboard", "OK");
+            await DisplayAlert
+            (
+                AppResources.Alert_HtmlCopied_Title, 
+                AppResources.Alert_HtmlCopied_Message, 
+                AppResources.AlertOption_OK
+            );
         }
     }
 }

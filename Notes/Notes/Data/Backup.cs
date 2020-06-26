@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Notes.Models;
-using Notes.Constants;
 using System.Text.Json;
+using Notes.Resources;
 //using Newtonsoft.Json;
 
 namespace Notes.Data
@@ -140,14 +140,26 @@ namespace Notes.Data
 
             if (backupFiles.Length == 0)
             {
-                await page.DisplayAlert("Backups Folder is Empty", "Try the \"Create Backup\" option from the settings page", "OK");
+                await page.DisplayAlert
+                (
+                    AppResources.Alert_BackupsFolderEmpty_Title, 
+                    AppResources.Alert_BackupsFolderEmpty_Message, 
+                    AppResources.AlertOption_OK
+                );
                 return null;
             }
 
+            string option_cancel = AppResources.ActionSheetOption_Cancel;
             // I should use something other than an action sheet, but this works for now.
-            string result = await page.DisplayActionSheet("Choose Backup File", ActionSheetOption.Cancel, null, backupFiles);
+            string result = await page.DisplayActionSheet
+            (
+                AppResources.ActionSheetTitle_ChooseBackupFile, 
+                option_cancel, 
+                null, 
+                backupFiles
+            );
 
-            if (string.IsNullOrEmpty(result) || result == ActionSheetOption.Cancel) return null;
+            if (string.IsNullOrEmpty(result) || result == option_cancel) return null;
 
             return Path.Combine(backupFolderPath, result);
         }
@@ -156,7 +168,13 @@ namespace Notes.Data
         {
             if (!NoteDatabase.IsValid(chosenBackupPath))
             {
-                await page.DisplayAlert("Unable to Load Backup", $"An error was encountered loading chosen backup file", "OK");
+                await page.DisplayAlert
+                (
+                    AppResources.Alert_BackupRestoreFailed_Title, 
+                    AppResources.Alert_BackupRestoreFailed_Message, 
+                    AppResources.AlertOption_OK
+                );
+
                 return false;
             }
 
@@ -207,38 +225,44 @@ namespace Notes.Data
             PermissionStatus status = await CheckAndRequestStorageWritePermission();
             if (status != PermissionStatus.Granted)
             {
-                await page.DisplayAlert("Permission Denied", "Unable to create backup because permission to write to storage was denied.", "OK");
+                await page.DisplayAlert
+                (
+                    AppResources.Alert_CreateBackupPermissionDenied_Title, 
+                    AppResources.Alert_CreateBackupPermissionDenied_Message, 
+                    AppResources.AlertOption_OK
+                );
                 return false;
             }
-            
+
+            string option_sqlite3 = "SQLite3";
+            string option_json = "JSON";
+
             string option = await page.DisplayActionSheet
             (
-                "Backup to file format:",
-                ActionSheetOption.Cancel,
+                AppResources.ActionSheetTitle_ChooseBackupFileFormat,
+                AppResources.ActionSheetOption_Cancel,
                 null,
-                ActionSheetOption.SQLite3,
-                ActionSheetOption.JSON
+                option_sqlite3,
+                option_json
             );
 
             string backupPath;
-            switch (option)
-            {
-                case ActionSheetOption.SQLite3:
-                    backupPath = await CreateBackupDatabase();
-                    break;
-                case ActionSheetOption.JSON:
-                    backupPath = await CreateBackupJson();
-                    break;
-                case ActionSheetOption.Cancel:
-                default: // this includes the null when user clicks surroundings
-                    return false;
-            }
-            await page.DisplayAlert("Backup Complete", $"It can be found at: {backupPath}", "OK");
+            if (option == option_sqlite3) backupPath = await CreateBackupDatabase();
+            else if (option == option_json) backupPath = await CreateBackupJson();
+            else return false;
+            
+            await page.DisplayAlert
+            (
+                AppResources.Alert_BackupComplete_Title,
+                AppResources.Alert_BackupComplete_Message + backupPath, 
+                AppResources.AlertOption_OK
+            );
+
             return true;
             
         }
 
-        private static async Task<string> QueryBackupExisting(Page page)
+        private static async Task<string> QueryBackupExisting(Page page, string option_cancel, string option_deletePermanently, string option_createBackup)
         {
             string option;
 
@@ -247,20 +271,20 @@ namespace Notes.Data
             {
                 option = await page.DisplayActionSheet
                 (
-                    "Do what with existing notes, folders and style sheets?",
-                    ActionSheetOption.Cancel,
-                    ActionSheetOption.DeletePermanently,
-                    ActionSheetOption.CreateBackup
+                    AppResources.ActionSheetTitle_QueryBackupExisting,
+                    option_cancel,
+                    option_deletePermanently,
+                    option_createBackup
                 );
 
-                if (option == ActionSheetOption.DeletePermanently)
+                if (option == option_deletePermanently)
                 {
                     certain = await page.DisplayAlert
                     (
-                        "Are you sure?",
-                        "All existing notes, folders, and style sheets will be deleted",
-                        "Yes, Delete!",
-                        "Wait, NO!"
+                        AppResources.Alert_ConfirmDeleteExisting_Title,
+                        AppResources.Alert_ConfirmDeleteExisting_Message,
+                        AppResources.Alert_ConfirmDeleteExisting_OptionDelete,
+                        AppResources.Alert_ConfirmDeleteExisting_OptionCancel
                     );
                 }
                 else
@@ -275,24 +299,31 @@ namespace Notes.Data
 
         public static async Task GetPermissionAndRestoreBackup(Page page)
         {
-            string backupExistingOption = await QueryBackupExisting(page);
-            switch (backupExistingOption)
+            string option_cancel = AppResources.ActionSheetOption_Cancel;
+            string option_deletePermanently = AppResources.ActionSheetOption_LocalBackup_DeletePermanently;
+            string option_createBackup = AppResources.ActionSheetOption_LocalBackup_CreateBackup;
+
+            string backupExistingOption = await QueryBackupExisting(page, option_cancel, option_deletePermanently, option_createBackup);
+            if (backupExistingOption == option_createBackup)
             {
-                case ActionSheetOption.DeletePermanently:
-                    break;
-                case ActionSheetOption.CreateBackup:
-                    bool backupSuccessful = await GetPermissionAndCreateBackup(page);
-                    if (!backupSuccessful) return;
-                    break;
-                case ActionSheetOption.Cancel:
-                default: // includes null when user clicks surroundings
-                    return;
+                bool backupSuccessful = await GetPermissionAndCreateBackup(page);
+                if (!backupSuccessful) return;
+            }
+            else if (backupExistingOption == option_cancel || string.IsNullOrEmpty(backupExistingOption))
+            {
+                return;
             }
 
             PermissionStatus status = await CheckAndRequestStorageReadPermission();
             if (status != PermissionStatus.Granted)
             {
-                await page.DisplayAlert("Permission Denied", "Unable to restore backup because permission to read from storage was denied.", "OK");
+                await page.DisplayAlert
+                (
+                    AppResources.Alert_RestoreBackupPermissionDenied_Title, 
+                    AppResources.Alert_RestoreBackupPermissionDenied_Message, 
+                    AppResources.AlertOption_OK
+                );
+
                 return;
             }
 
@@ -313,7 +344,12 @@ namespace Notes.Data
 
             if (restoreSuccessful)
             {
-                await page.DisplayAlert("Backup Restored", $"The backup was restored successfully.", "OK");
+                await page.DisplayAlert
+                (
+                    AppResources.Alert_BackupRestoreComplete_Title, 
+                    AppResources.Alert_BackupRestoreComplete_Message, 
+                    AppResources.AlertOption_OK
+                );
             }
             return;
         }

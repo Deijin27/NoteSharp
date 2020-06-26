@@ -2,20 +2,21 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Notes.Pages.NoteEntryPage"
+             xmlns:resources="clr-namespace:Notes.Resources"
              NavigationPage.HasBackButton="False">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />
         <ToolbarItem Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
         <ToolbarItem Text="Markdown View" Clicked="MarkdownView_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
-        <ToolbarItem Text="Markdown Preview" Clicked="MarkdownPreview_Clicked" Order="Secondary" />
-        <ToolbarItem Text="Html Preview" Clicked="HtmlPreview_Clicked" Order="Secondary" />
+        <ToolbarItem Text="{x:Static resources:AppResources.PageTitle_MarkdownPreview}" Clicked="MarkdownPreview_Clicked" Order="Secondary" />
+        <ToolbarItem Text="{x:Static resources:AppResources.PageTitle_HtmlPreview}" Clicked="HtmlPreview_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 
     <NavigationPage.TitleView>
         <Entry x:Name="NameEntry"
                Text="{Binding Name}" 
-               Placeholder="Note Name..."
+               Placeholder="{x:Static resources:AppResources.NoteEntryPage_NamePlaceholder}"
                TextColor="{DynamicResource NavigationBarTextColor}"
                PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
                IsSpellCheckEnabled="False"
@@ -25,7 +26,7 @@
     <ScrollView>
         <StackLayout>
             <Editor x:Name="MainEditor" 
-                    Placeholder="Enter you   "
+                    Placeholder="{x:Static resources:AppResources.NoteEntryPage_TextPlaceholder}"
                     Text="{Binding Text}"
                     AutoSize="TextChanges"
                     FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"

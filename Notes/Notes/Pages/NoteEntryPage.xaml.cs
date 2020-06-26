@@ -3,6 +3,7 @@ using Xamarin.Forms;
 using Notes.Models;
 using System.Threading.Tasks;
 using Notes.Data;
+using Notes.Resources;
 
 namespace Notes.Pages
 {
@@ -80,7 +81,13 @@ namespace Notes.Pages
             Note note = (Note)BindingContext;
             if (note.Name != InitialName || note.Text != InitialText)
             {
-                bool answer = await DisplayAlert("Exit?", "Exit without saving changes?", "Yes", "No");
+                bool answer = await DisplayAlert
+                (
+                    AppResources.Alert_ExitWithoutSaving_Title, 
+                    AppResources.Alert_ExitWithoutSaving_Message, 
+                    AppResources.AlertOption_Yes, 
+                    AppResources.AlertOption_No
+                );
                 if (answer)
                 {
                     await Navigation.PopModalAsync();
@@ -105,8 +112,13 @@ namespace Notes.Pages
 
                     if (await App.Database.DoesNoteNameExistAsync(note.Name, note.FolderID))
                     { 
-                        (option, newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Note Name Conflict",
-                            message: "A note of the same name already exists in the current folder, please input a different name");
+                        (option, newName) = await NameValidation.GetUniqueNoteName
+                        (
+                            this, 
+                            note.FolderID, 
+                            AppResources.Prompt_NoteNameConflict_Title,
+                            message: AppResources.Prompt_NoteNameConflict_Message
+                        );
                         if (option == Option.OK)
                         {
                             note.Name = newName;
@@ -129,7 +141,12 @@ namespace Notes.Pages
                 }
                 else
                 { 
-                    (option, newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Name Note");
+                    (option, newName) = await NameValidation.GetUniqueNoteName
+                    (
+                        this, 
+                        note.FolderID, 
+                        AppResources.Prompt_NameNote_Title
+                    );
                     if (option == Option.OK)
                     {
                         note.Name = newName;
@@ -146,8 +163,13 @@ namespace Notes.Pages
             {
                 if (note.Name != InitialName && (await App.Database.DoesNoteNameExistAsync(note.Name, note.FolderID)))
                 {
-                    (option, newName) = await NameValidation.GetUniqueNoteName(this, note.FolderID, "Note Name Conflict",
-                        message: "A note of the same name already exists in the current folder, please input a different name");
+                    (option, newName) = await NameValidation.GetUniqueNoteName
+                    (
+                        this,
+                        note.FolderID,
+                        AppResources.Prompt_NoteNameConflict_Title,
+                        message: AppResources.Prompt_NoteNameConflict_Message
+                    );
                     if (option == Option.OK)
                     {
                         note.Name = newName;

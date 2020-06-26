@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Notes.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Notes.Resources;
 
 namespace Notes.Pages
 {
@@ -21,9 +15,9 @@ namespace Notes.Pages
             InitializeComponent();
 
             List<ListViewMenuItem> menuItems = new List<ListViewMenuItem>();
-            menuItems.Add(new ListViewMenuItem() { Icon = "\uf1c6", Text = "Settings", TargetType = typeof(SettingsPage)});
-            menuItems.Add(new ListViewMenuItem() { Icon = "\uf350", Text = "Style Sheets", TargetType = typeof(StyleSheetsPage)});
-            menuItems.Add(new ListViewMenuItem() { Icon = "\uf227", Text = "Quick Access", TargetType = typeof(NotesPage)});
+            menuItems.Add(new ListViewMenuItem() { Icon = "\uf1c6", Text = AppResources.MasterOption_Settings, TargetType = typeof(SettingsPage)});
+            menuItems.Add(new ListViewMenuItem() { Icon = "\uf350", Text = AppResources.MasterOption_StyleSheets, TargetType = typeof(StyleSheetsPage)});
+            menuItems.Add(new ListViewMenuItem() { Icon = "\uf227", Text = AppResources.MasterOption_QuickAccess, TargetType = typeof(NotesPage)});
 
             menu.ItemsSource = menuItems;
         }
