@@ -3,9 +3,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Notes.Themes.DarkTheme">
 
-    <Color x:Key="AppBackgroundColor">#181818</Color>
+    <Color x:Key="AppBackgroundColor">#1D1D1D</Color>
     <Color x:Key="AppSecondaryBackgroundColor">#121212</Color>
-    <Color x:Key="NavigationBarColor">#212121</Color>
+    <Color x:Key="NavigationBarColor">#2D2D2D</Color>
     <Color x:Key="NavigationBarTextColor">#E0E0E0</Color>
     <Color x:Key="NavigationBarPaleTextColor">#A0A0A0</Color>
     <Color x:Key="PrimaryContentTextColor">#E0E0E0</Color>
@@ -17,8 +17,21 @@
     <Color x:Key="SliderThumbColor">#FFFFFF</Color>
     <Color x:Key="QuickAccessMarkerColor">#e3d5af</Color>
 
-    <Color x:Key="BlueAccentColor">#6ea3f7</Color>
-    <Color x:Key="RedAccentColor">#f76e6e</Color>
-    <Color x:Key="GreenAccentColor">#6ef76e</Color>
+    <Color x:Key="RedAccentColor">#eF9a9a</Color>
+    <Color x:Key="PinkAccentColor">#f48fb1</Color>
+    <Color x:Key="PurpleAccentColor">#ce93d8</Color>
+    <Color x:Key="DeepPurpleAccentColor">#b39ddb</Color>
+    <Color x:Key="IndigoAccentColor">#9fa8da</Color>
+    <Color x:Key="BlueAccentColor">#90caf9</Color>
+    <Color x:Key="LightBlueAccentColor">#81d4fa</Color>
+    <Color x:Key="CyanAccentColor">#80deea</Color>
+    <Color x:Key="TealAccentColor">#80cbc4</Color>
+    <Color x:Key="GreenAccentColor">#a5d6a7</Color>
+    <Color x:Key="LightGreenAccentColor">#c5e1a5</Color>
+    <Color x:Key="LimeAccentColor">#e6ee9c</Color>
+    <Color x:Key="YellowAccentColor">#fff59d</Color>
+    <Color x:Key="AmberAccentColor">#ffe082</Color>
+    <Color x:Key="OrangeAccentColor">#ffcc80</Color>
+    <Color x:Key="DeepOrangeAccentColor">#ffab91</Color>
 
 </ResourceDictionary>

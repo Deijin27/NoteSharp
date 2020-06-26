@@ -3,8 +3,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Notes.AccentColors.GreenAccentLight">
 
-    <Color x:Key="PrimaryAccentColor">#48f448</Color>
-    <Color x:Key="FileListIconColor">#48f448</Color>
-    <Color x:Key="MasterDetailIconColor">#48f448</Color>
-    <Color x:Key="SwitchOnColor">#48f448</Color>
+    <Color x:Key="PrimaryAccentColor">#81c784</Color>
+    
 </ResourceDictionary>

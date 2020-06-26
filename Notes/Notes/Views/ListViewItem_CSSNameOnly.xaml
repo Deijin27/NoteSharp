@@ -8,7 +8,7 @@
              x:Class="Notes.Views.ListViewItem_CSSNameOnly">
       <ContentView.Content>
           <local:ListViewItem_NameOnly IconGlyph="{StaticResource IconGlyph_CSS}"
-                                       IconColor="{DynamicResource FileListIconColor}"
+                                       IconColor="{DynamicResource PrimaryAccentColor}"
                                        Name="{Binding Name}"
                                        IsQuickAccess="False"
                                        />

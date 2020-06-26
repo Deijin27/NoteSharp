@@ -8,7 +8,7 @@
              x:Class="Notes.Views.ListViewItem_FileNameDateModified">
     <ContentView.Content>
         <local:ListViewItem_NameDetails IconGlyph="{StaticResource IconGlyph_File}"
-                                        IconColor="{DynamicResource FileListIconColor}"
+                                        IconColor="{DynamicResource PrimaryAccentColor}"
                                         Name="{Binding ContentNote.Name}"
                                         Details="{Binding ContentNote.DateModifiedLocal, StringFormat='Modified: {0:MM/dd/yy H:mm:ss}'}"
                                         IsQuickAccess="{Binding ContentNote.IsQuickAccess}"

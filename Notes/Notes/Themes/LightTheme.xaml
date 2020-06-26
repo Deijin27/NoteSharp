@@ -17,8 +17,21 @@
     <Color x:Key="SliderThumbColor">#1D1F21</Color>
     <Color x:Key="QuickAccessMarkerColor">#bfae80</Color>
 
-    <Color x:Key="BlueAccentColor">#4688F4</Color>
-    <Color x:Key="RedAccentColor">#f44848</Color>
-    <Color x:Key="GreenAccentColor">#48f448</Color>
+    <Color x:Key="RedAccentColor">#e57373</Color>
+    <Color x:Key="PinkAccentColor">#f06292</Color>
+    <Color x:Key="PurpleAccentColor">#ba68c8</Color>
+    <Color x:Key="DeepPurpleAccentColor">#9575cd</Color>
+    <Color x:Key="IndigoAccentColor">#7986cb</Color>
+    <Color x:Key="BlueAccentColor">#64b5f6</Color>
+    <Color x:Key="LightBlueAccentColor">#4fc3f7</Color>
+    <Color x:Key="CyanAccentColor">#4dd0e1</Color>
+    <Color x:Key="TealAccentColor">#4db6ac</Color>
+    <Color x:Key="GreenAccentColor">#81c784</Color>
+    <Color x:Key="LightGreenAccentColor">#aed581</Color>
+    <Color x:Key="LimeAccentColor">#dce775</Color>
+    <Color x:Key="YellowAccentColor">#fff176</Color>
+    <Color x:Key="AmberAccentColor">#ffd54f</Color>
+    <Color x:Key="OrangeAccentColor">#ffb74d</Color>
+    <Color x:Key="DeepOrangeAccentColor">#ff8a65</Color>
 
 </ResourceDictionary>

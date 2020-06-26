@@ -8,7 +8,7 @@
              x:Class="Notes.Views.ListViewItem_FileNameSize">
     <ContentView.Content>
         <local:ListViewItem_NameDetails IconGlyph="{StaticResource IconGlyph_File}"
-                                        IconColor="{DynamicResource FileListIconColor}"
+                                        IconColor="{DynamicResource PrimaryAccentColor}"
                                         Name="{Binding ContentNote.Name}"
                                         Details="{Binding ContentNote.ReadableSize}"
                                         IsQuickAccess="{Binding ContentNote.IsQuickAccess}"

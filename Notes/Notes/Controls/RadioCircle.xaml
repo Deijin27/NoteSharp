@@ -6,16 +6,16 @@
              mc:Ignorable="d"
              xmlns:local="clr-namespace:Notes.Controls"
              x:Class="Notes.Controls.RadioCircle">
-    <Grid>
+    <Grid HeightRequest="30" WidthRequest="30">
         <Button x:Name="BackgroundButton"
                 BackgroundColor="{Binding BackgroundColor}"
                 BorderWidth="0"
                 />
         <Label x:Name="CheckLabel"
-               HorizontalTextAlignment="Center"
-               VerticalTextAlignment="Center"
                FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
                Text="{StaticResource IconGlyph_Check}"
+               HorizontalTextAlignment="Center"
+               VerticalTextAlignment="Center"
                />
         <Button x:Name="ForegroundButton" 
                 Clicked="SendClicked"

@@ -106,6 +106,7 @@ namespace Notes.Controls
             }
             else if (propertyName == IsCheckedProperty.PropertyName)
             {
+
                 CheckLabel.IsVisible = IsChecked;
             }
         }

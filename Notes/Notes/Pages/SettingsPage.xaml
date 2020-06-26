@@ -51,16 +51,59 @@
             <StackLayout Orientation="Vertical" Margin="0,5,0,5">
                 <Label Text="{x:Static resources:AppResources.Settings_AccentColorSelector_Title}" 
                        TextColor="{DynamicResource PrimaryContentTextColor}"/>
+
                 <StackLayout Orientation="Horizontal" Padding="0,0,0,5">
 
-                    <controls:RadioCircle x:Name="BlueAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource BlueAccentColor}"
-                                                  />
                     <controls:RadioCircle x:Name="RedAccentColorRadioCircle"
                                                   BackgroundColor="{DynamicResource RedAccentColor}"
                                                   />
+                    <controls:RadioCircle x:Name="PinkAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource PinkAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="PurpleAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource PurpleAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="DeepPurpleAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource DeepPurpleAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="IndigoAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource IndigoAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="BlueAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource BlueAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="LightBlueAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource LightBlueAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="CyanAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource CyanAccentColor}"
+                                                  />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Padding="0,0,0,5">
+                    
+                    <controls:RadioCircle x:Name="TealAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource TealAccentColor}"
+                                                  />
                     <controls:RadioCircle x:Name="GreenAccentColorRadioCircle"
                                                   BackgroundColor="{DynamicResource GreenAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="LightGreenAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource LightGreenAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="LimeAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource LimeAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="YellowAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource YellowAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="AmberAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource AmberAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="OrangeAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource OrangeAccentColor}"
+                                                  />
+                    <controls:RadioCircle x:Name="DeepOrangeAccentColorRadioCircle"
+                                                  BackgroundColor="{DynamicResource DeepOrangeAccentColor}"
                                                   />
                 </StackLayout>
             </StackLayout>

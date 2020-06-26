@@ -40,11 +40,83 @@
     <Compile Update="AccentColors\BlueAccentDark.xaml.cs">
       <DependentUpon>BlueAccentDark.xaml</DependentUpon>
     </Compile>
-    <Compile Update="AccentColors\RedAccentLight.xaml.cs">
-      <DependentUpon>RedAccentLight.xaml</DependentUpon>
+    <Compile Update="AccentColors\PinkAccentDark.xaml.cs">
+      <DependentUpon>PinkAccentDark.xaml</DependentUpon>
     </Compile>
-    <Compile Update="AccentColors\RedAccentDark.xaml.cs">
-      <DependentUpon>RedAccentDark.xaml</DependentUpon>
+    <Compile Update="AccentColors\PinkAccentLight.xaml.cs">
+      <DependentUpon>PinkAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\PurpleAccentDark.xaml.cs">
+      <DependentUpon>PurpleAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\PurpleAccentLight.xaml.cs">
+      <DependentUpon>PurpleAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\DeepPurpleAccentDark.xaml.cs">
+      <DependentUpon>DeepPurpleAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\DeepPurpleAccentLight.xaml.cs">
+      <DependentUpon>DeepPurpleAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\IndigoAccentDark.xaml.cs">
+      <DependentUpon>IndigoAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\IndigoAccentLight.xaml.cs">
+      <DependentUpon>IndigoAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\LightBlueAccentLight.xaml.cs">
+      <DependentUpon>LightBlueAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\LightBlueAccentDark.xaml.cs">
+      <DependentUpon>LightBlueAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\CyanAccentDark.xaml.cs">
+      <DependentUpon>CyanAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\CyanAccentLight.xaml.cs">
+      <DependentUpon>CyanAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\LightGreenAccentDark.xaml.cs">
+      <DependentUpon>LightGreenAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\LightGreenAccentLight.xaml.cs">
+      <DependentUpon>LightGreenAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\LimeAccentDark.xaml.cs">
+      <DependentUpon>LimeAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\LimeAccentLight.xaml.cs">
+      <DependentUpon>LimeAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\AmberAccentDark.xaml.cs">
+      <DependentUpon>AmberAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\AmberAccentLight.xaml.cs">
+      <DependentUpon>AmberAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\OrangeAccentDark.xaml.cs">
+      <DependentUpon>OrangeAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\OrangeAccentLight.xaml.cs">
+      <DependentUpon>OrangeAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\DeepOrangeAccentDark.xaml.cs">
+      <DependentUpon>DeepOrangeAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\DeepOrangeAccentLight.xaml.cs">
+      <DependentUpon>DeepOrangeAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\YellowAccentDark.xaml.cs">
+      <DependentUpon>YellowAccentDark.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\YellowAccentLight.xaml.cs">
+      <DependentUpon>YellowAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\TealAccentLight.xaml.cs">
+      <DependentUpon>TealAccentLight.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="AccentColors\TealAccentDark.xaml.cs">
+      <DependentUpon>TealAccentDark.xaml</DependentUpon>
     </Compile>
     <Compile Update="Controls\RadioCircle.xaml.cs">
       <DependentUpon>RadioCircle.xaml</DependentUpon>

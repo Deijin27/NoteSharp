@@ -24,8 +24,21 @@ namespace Notes.Pages
             accentRadioGroup = new AccentColorRadioObjectGroup()
             {
                 { RedAccentColorRadioCircle, AppAccentColor.Red },
+                { PinkAccentColorRadioCircle, AppAccentColor.Pink },
+                { PurpleAccentColorRadioCircle, AppAccentColor.Purple },
+                { DeepPurpleAccentColorRadioCircle, AppAccentColor.DeepPurple },
+                { IndigoAccentColorRadioCircle, AppAccentColor.Indigo },
                 { BlueAccentColorRadioCircle, AppAccentColor.Blue },
-                { GreenAccentColorRadioCircle, AppAccentColor.Green }
+                { LightBlueAccentColorRadioCircle, AppAccentColor.LightBlue },
+                { CyanAccentColorRadioCircle, AppAccentColor.Cyan },
+                { TealAccentColorRadioCircle, AppAccentColor.Teal },
+                { GreenAccentColorRadioCircle, AppAccentColor.Green },
+                { LightGreenAccentColorRadioCircle, AppAccentColor.LightGreen },
+                { LimeAccentColorRadioCircle, AppAccentColor.Lime },
+                { YellowAccentColorRadioCircle, AppAccentColor.Yellow },
+                { AmberAccentColorRadioCircle, AppAccentColor.Amber },
+                { OrangeAccentColorRadioCircle, AppAccentColor.Orange },
+                { DeepOrangeAccentColorRadioCircle, AppAccentColor.DeepOrange }
             };
             accentRadioGroup.InitializeSelected(App.AccentColor);
         }

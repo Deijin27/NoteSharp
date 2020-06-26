@@ -3,12 +3,24 @@ namespace Notes.AccentColors
 {
     public enum AppAccentColor
     {
-        Blue,
         Red,
-        Green,
-        Cyan,
-        Yellow,
         Pink,
-        Purple
+        Purple,
+        DeepPurple,
+        Indigo,
+        Blue,
+        LightBlue,
+        Cyan,
+        Teal,
+        Green,
+        LightGreen,
+        Lime,
+        Yellow,
+        Amber,
+        Orange,
+        DeepOrange,
+        Brown,
+        Grey,
+        BlueGrey
     }
 }
