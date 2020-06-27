@@ -9,6 +9,8 @@ namespace Notes.Pages
 {
     public partial class SettingsPage : ContentPage
     {
+        public delegate void BackupRestoredEventHandler();
+
         private AccentColorRadioObjectGroup accentRadioGroup;
 
         public SettingsPage()
@@ -68,7 +70,10 @@ namespace Notes.Pages
         private async void RestoreBackupButton_Clicked(object sender, EventArgs e)
         {
             await Backup.GetPermissionAndRestoreBackup(this);
+            RestoredBackupEvent?.Invoke();
         }
-    
+
+
+        public event BackupRestoredEventHandler RestoredBackupEvent;
     }
 }

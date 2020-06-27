@@ -34,4 +34,6 @@
     <Color x:Key="OrangeAccentColor">#ffcc80</Color>
     <Color x:Key="DeepOrangeAccentColor">#ffab91</Color>
 
+    <FileImageSource x:Key="FileImageSource_IconLarge" File="iconlarge_dark.png"/>
+
 </ResourceDictionary>

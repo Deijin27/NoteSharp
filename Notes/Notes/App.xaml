@@ -30,10 +30,12 @@
         <Style TargetType="{x:Type Editor}">
             <Setter Property="BackgroundColor" Value="{DynamicResource AppBackgroundColor}" />
             <Setter Property="TextColor" Value="{DynamicResource PrimaryContentTextColor}" />
+            <Setter Property="PlaceholderColor" Value="{DynamicResource SecondaryContentTextColor}"/>
         </Style>
 
         <Style TargetType="{x:Type Entry}">
             <Setter Property="TextColor" Value="{DynamicResource PrimaryContentTextColor}"/>
+            <Setter Property="PlaceholderColor" Value="{DynamicResource SecondaryContentTextColor}"/>
         </Style>
 
         <Style TargetType="{x:Type Switch}">
@@ -56,6 +58,10 @@
 
         <OnPlatform x:Key="FontFamily_ProductSans" x:TypeArguments="x:String">
             <On Platform="Android" Value="Product Sans Regular.ttf#Product Sans" />
+        </OnPlatform>
+
+        <OnPlatform x:Key="FontFamily_RobotoCondensed" x:TypeArguments="x:String">
+            <On Platform="Android" Value="RobotoCondensed-Regular.ttf#Roboto Condensed" />
         </OnPlatform>
 
         <OnPlatform x:Key="FontFamily_QuikscriptRoboto" x:TypeArguments="x:String">

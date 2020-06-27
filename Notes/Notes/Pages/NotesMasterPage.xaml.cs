@@ -42,6 +42,13 @@ namespace Notes.Pages
                         IsQuickAccessPage = true 
                     });
                 }
+                else if (item.TargetType == typeof(SettingsPage))
+                {
+                    var page = new SettingsPage();
+                    page.RestoredBackupEvent += ((NotesPage)mainNavigation.RootPage).UpdateListView;
+
+                    await mainNavigation.PushAsync(page);
+                }
                 else
                 { 
                     await mainNavigation.PushAsync((ContentPage)Activator.CreateInstance(item.TargetType));
