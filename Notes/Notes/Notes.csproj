@@ -19,8 +19,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Graphics\LogoDark.svg" />
+    <None Remove="Graphics\LogoLight.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Graphics\LogoDark.svg" />
+    <EmbeddedResource Include="Graphics\LogoLight.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Amporis.Xamarin.Forms.ColorPicker" Version="1.0.23" />
     <PackageReference Include="Markdig" Version="0.20.0" />
+    <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
     <PackageReference Include="Xamarin.Forms" Version="4.7.0.968" />

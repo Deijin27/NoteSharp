@@ -60,6 +60,8 @@ namespace Notes.Pages
         }
     }
 
+    public delegate void SortingModeChangedEventHandler();
+
     public partial class NotesPage : ContentPage
     {
         public Guid FolderID;
@@ -86,6 +88,12 @@ namespace Notes.Pages
         public void ChangesSavedHandler()
         {
             UpdateListView();
+        }
+
+        public void SortingModeChangedHandler()
+        {
+            UpdateListView();
+            SortingModeChanged?.Invoke();
         }
 
         public async void UpdateListView()
@@ -178,6 +186,7 @@ namespace Notes.Pages
                     Folder folder = folderContentItem.ContentFolder;
                     var page = new NotesPage(folder);
                     page.FolderContentMoved += MoveCompletedHandler;
+                    page.SortingModeChanged += SortingModeChangedHandler;
                     await Navigation.PushAsync(page);
                 }
                 else // Note
@@ -189,6 +198,8 @@ namespace Notes.Pages
                 listView.SelectedItem = null;
             }
         }
+
+
 
         async void OnFolderAddedClicked(object sender, EventArgs e)
         {
@@ -245,8 +256,11 @@ namespace Notes.Pages
 
                 App.SortingMode = sortingMode;
                 UpdateListView();
+                SortingModeChanged?.Invoke();
             }
         }
+
+        public event SortingModeChangedEventHandler SortingModeChanged;
 
         private async void RenameFolder_Clicked(object sender, EventArgs e)
         {

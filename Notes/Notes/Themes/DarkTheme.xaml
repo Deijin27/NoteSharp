@@ -36,4 +36,6 @@
 
     <FileImageSource x:Key="FileImageSource_IconLarge" File="iconlarge_dark.png"/>
 
+    <x:String x:Key="IconResourceID">Notes.Graphics.LogoDark.svg</x:String>
+
 </ResourceDictionary>

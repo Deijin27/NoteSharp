@@ -5,7 +5,7 @@
 
     <Color x:Key="AppBackgroundColor">#F6F5F5</Color>
     <Color x:Key="AppSecondaryBackgroundColor">#E1E2E1</Color>
-    <Color x:Key="NavigationBarColor">#212121</Color>
+    <Color x:Key="NavigationBarColor">#2D2D2D</Color>
     <Color x:Key="NavigationBarTextColor">#FFFFFF</Color>
     <Color x:Key="NavigationBarPaleTextColor">#A0A0A0</Color>
     <Color x:Key="PrimaryContentTextColor">#000000</Color>
@@ -35,5 +35,7 @@
     <Color x:Key="DeepOrangeAccentColor">#ff8a65</Color>
 
     <FileImageSource x:Key="FileImageSource_IconLarge" File="iconlarge_light.png"/>
+
+    <x:String x:Key="IconResourceID">Notes.Graphics.LogoLight.svg</x:String>
 
 </ResourceDictionary>

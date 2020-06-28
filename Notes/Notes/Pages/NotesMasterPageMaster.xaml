@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:resources="clr-namespace:Notes.Resources"
+             xmlns:controls="clr-namespace:Notes.Controls"
              mc:Ignorable="d"
              x:Class="Notes.Pages.NotesMasterPageMaster"
              Title="Master"
@@ -11,10 +11,20 @@
     
     <ContentPage.Content>
         <StackLayout Spacing="0">
-            <Image Source="{DynamicResource FileImageSource_IconLarge}"
-                   HorizontalOptions="Center" 
-                   Margin="0,25,0,25"
-                   />
+            <StackLayout Orientation="Horizontal" Margin="10" HorizontalOptions="Center">
+                <controls:SvgImage ResourceId="{DynamicResource IconResourceID}" 
+                                   WidthRequest="40" 
+                                   HeightRequest="40" 
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center"
+                                   />
+                <Label Text="NoteSharp" 
+                       FontSize="30"
+                       TextColor="{DynamicResource PrimaryContentTextColor}"
+                       FontFamily="{StaticResource FontFamily_RobotoCondensed}"
+                       Margin="10,0,0,0"
+                       />
+            </StackLayout>
             <BoxView HeightRequest="1" HorizontalOptions="Fill" Color="{DynamicResource SecondaryContentTextColor}"/>
             <ListView x:Name="menu"
                       x:FieldModifier="public"
