@@ -637,6 +637,15 @@ namespace Notes.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string MasterOption_About {
+            get {
+                return ResourceManager.GetString("MasterOption_About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Quick Access.
         /// </summary>
         public static string MasterOption_QuickAccess {
@@ -678,6 +687,15 @@ namespace Notes.Resources {
         public static string NoteEntryPage_TextPlaceholder {
             get {
                 return ResourceManager.GetString("NoteEntryPage_TextPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string PageTitle_About {
+            get {
+                return ResourceManager.GetString("PageTitle_About", resourceCulture);
             }
         }
         

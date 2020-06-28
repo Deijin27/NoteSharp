@@ -14,9 +14,7 @@
             <StackLayout Orientation="Horizontal" Margin="10" HorizontalOptions="Center">
                 <controls:SvgImage ResourceId="{DynamicResource IconResourceID}" 
                                    WidthRequest="40" 
-                                   HeightRequest="40" 
-                                   HorizontalOptions="Center" 
-                                   VerticalOptions="Center"
+                                   HeightRequest="40"
                                    />
                 <Label Text="NoteSharp" 
                        FontSize="30"

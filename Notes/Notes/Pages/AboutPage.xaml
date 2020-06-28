@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Notes.Controls"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             mc:Ignorable="d"
+             Title="{x:Static resources:AppResources.PageTitle_About}"
+             x:Class="Notes.Pages.AboutPage">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="Center">
+            <controls:SvgImage ResourceId="{DynamicResource IconResourceID}" 
+                               WidthRequest="120" 
+                               HeightRequest="120"
+                               HorizontalOptions="Center"
+                               />
+            <Label Text="NoteSharp" 
+                   FontSize="40"
+                   TextColor="{DynamicResource PrimaryContentTextColor}"
+                   FontFamily="{StaticResource FontFamily_RobotoCondensed}"
+                   Margin="0,20,0,20"
+                   HorizontalOptions="Center"
+                   />
+            <Label Text="{StaticResource VersionNumber}" 
+                   TextColor="{DynamicResource SecondaryContentTextColor}"
+                   HorizontalOptions="Center"
+                   />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

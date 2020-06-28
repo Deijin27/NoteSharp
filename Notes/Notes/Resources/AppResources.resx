@@ -325,6 +325,9 @@
     <value>Toggle Quick Access</value>
     <comment>Context Action text (when icon is not displayed)</comment>
   </data>
+  <data name="MasterOption_About" xml:space="preserve">
+    <value>About</value>
+  </data>
   <data name="MasterOption_QuickAccess" xml:space="preserve">
     <value>Quick Access</value>
   </data>
@@ -339,6 +342,9 @@
   </data>
   <data name="NoteEntryPage_TextPlaceholder" xml:space="preserve">
     <value>Enter Note Text...</value>
+  </data>
+  <data name="PageTitle_About" xml:space="preserve">
+    <value>About</value>
   </data>
   <data name="PageTitle_HtmlPreview" xml:space="preserve">
     <value>HTML Preview</value>

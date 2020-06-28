@@ -18,6 +18,7 @@ namespace Notes.Pages
             menuItems.Add(new ListViewMenuItem() { Icon = "\uf1c6", Text = AppResources.MasterOption_Settings, TargetType = typeof(SettingsPage)});
             menuItems.Add(new ListViewMenuItem() { Icon = "\uf350", Text = AppResources.MasterOption_StyleSheets, TargetType = typeof(StyleSheetsPage)});
             menuItems.Add(new ListViewMenuItem() { Icon = "\uf227", Text = AppResources.MasterOption_QuickAccess, TargetType = typeof(NotesPage)});
+            menuItems.Add(new ListViewMenuItem() { Icon = "\uf1f8", Text = AppResources.MasterOption_About, TargetType = typeof(AboutPage) });
 
             menu.ItemsSource = menuItems;
         }
