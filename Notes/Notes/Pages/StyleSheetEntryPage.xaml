@@ -6,17 +6,28 @@
              NavigationPage.HasBackButton="False">
 
     <NavigationPage.TitleView>
-        <Entry x:Name="NameEntry"
+        <StackLayout Orientation="Horizontal" 
+                     Margin="-35,0,0,0" Padding="0">
+            <Button Text="{StaticResource IconGlyph_Close}" 
+                    FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                    TextColor="White"
+                    Clicked="Cancel_Clicked"
+                    BackgroundColor="Transparent"
+                    BorderWidth="0"
+                    FontSize="24"
+                    />
+            <Entry x:Name="NameEntry"
                Text="{Binding Name}" 
                Placeholder="{x:Static resources:AppResources.StyleSheetEntryPage_NamePlaceholder}"
                TextColor="{DynamicResource NavigationBarTextColor}"
                PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
                IsSpellCheckEnabled="False"
                />
+        </StackLayout>
     </NavigationPage.TitleView>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />
+        <!--<ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />-->
         <ToolbarItem x:Name="SaveButton" Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
         <ToolbarItem x:Name="CopyButton" Text="Copy" Clicked="CopyButton_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Copy}"/>
         <ToolbarItem x:Name="ColorPickerButton" Text="Color Picker" Clicked="ColorPickerButton_Clicked" Order="Primary">

@@ -6,7 +6,7 @@
              NavigationPage.HasBackButton="False">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />
+        <!--<ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />-->
         <ToolbarItem Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
         <ToolbarItem Text="Markdown View" Clicked="MarkdownView_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
         <ToolbarItem Text="{x:Static resources:AppResources.PageTitle_MarkdownPreview}" Clicked="MarkdownPreview_Clicked" Order="Secondary" />
@@ -14,13 +14,25 @@
     </ContentPage.ToolbarItems>
 
     <NavigationPage.TitleView>
-        <Entry x:Name="NameEntry"
+        <StackLayout Orientation="Horizontal" 
+                     Margin="-35,0,0,0" Padding="0">
+            <Button Text="{StaticResource IconGlyph_Close}" 
+                    FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                    TextColor="White"
+                    Clicked="Cancel_Clicked"
+                    BackgroundColor="Transparent"
+                    BorderWidth="0"
+                    FontSize="24"
+                    />
+            <Entry x:Name="NameEntry"
                Text="{Binding Name}" 
+               HorizontalOptions="Fill"
                Placeholder="{x:Static resources:AppResources.NoteEntryPage_NamePlaceholder}"
                TextColor="{DynamicResource NavigationBarTextColor}"
                PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
                IsSpellCheckEnabled="False"
                />
+        </StackLayout>
     </NavigationPage.TitleView>
     
     <ScrollView>
