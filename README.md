@@ -11,3 +11,7 @@ Cross platform Markdown notes mobile application, programmed in C# and XAML usin
 - Quick Access (more than just a favourites list; has unique behaviour in relation to templates)
 - Backup to local files
 - Light and Dark theme as well as choice of Accent Color
+
+# Screenshots
+
+![Screenshots](https://i.imgur.com/jU9UkxO.png)
