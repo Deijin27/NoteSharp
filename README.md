@@ -5,6 +5,7 @@ Cross platform Markdown notes mobile application, programmed in C# and XAML usin
 ## Supports (as of 6 July 2020)
 
 - Folder-File system
+- Search in folder
 - Viewing of rendered Markdown
 - Create and use your own custom CSS for rendering markdown
 - Load other notes as templates or data-sets within a note, where the template is filled in by the values from the data set
