@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:base="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             mc:Ignorable="d"
+             Padding="0,20,0,20"
+             x:Class="Notes.PopupPages.AlertPopupPage">
+    <base:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="0.9"
+            ScaleOut="0.9"
+            DurationIn="100"
+            DurationOut="100"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </base:PopupPage.Animation>
+    <base:PopupPage.Content>
+        <StackLayout WidthRequest="300"
+                     BackgroundColor="{DynamicResource AppBackgroundColor}"
+                     VerticalOptions="Center" 
+                     HorizontalOptions="Center" 
+                     Padding="20, 20, 20, 20"
+                     >
+            <Label x:Name="titleLabel"
+                   TextColor="{DynamicResource PrimaryContentTextColor}"
+                   FontSize="20"
+                   />
+            <ScrollView>
+                <Label x:Name="messageLabel"
+                       TextColor="{DynamicResource PrimaryContentTextColor}"
+                       FontSize="Small"
+                       />
+            </ScrollView>
+            <Button x:Name="dismissButton"
+                    HorizontalOptions="End"
+                    TextColor="{DynamicResource PrimaryAccentColor}"
+                    FontSize="Small"
+                    Clicked="Button_Clicked"
+                    BackgroundColor="Transparent"
+                    />
+        </StackLayout>
+    </base:PopupPage.Content>
+</base:PopupPage>

@@ -302,40 +302,99 @@ namespace Notes.Data
 
         #region Check Name Exists of Type in Folder
 
-        public async Task<bool> DoesNoteNameExistAsync(string name, Guid folderID)
+        public async Task<bool> DoesNoteNameExistAsync(string name, Guid folderID, Guid id)
         {
-            int count = await _database.Table<Note>()
-                                       .Where(i => i.FolderID == folderID && i.Name == name)
-                                       .CountAsync();
-            return count > 0;
+            var query = _database.Table<Note>().Where(i => i.FolderID == folderID && i.Name == name);
+
+            if (await query.CountAsync() > 0)
+            {
+                List<Note> notes = await query.ToListAsync();
+                if (notes.Any(i => i.ID != id)) // ensure that the thing with the same name isn't same note
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public async Task<bool> DoesFolderNameExistAsync(string name, Guid parentID)
+        public async Task<bool> DoesFolderNameExistAsync(string name, Guid parentID, Guid id)
         {
-            int count = await _database.Table<Folder>()
-                                       .Where(i => i.ParentID == parentID && i.Name == name)
-                                       .CountAsync();
-            return count > 0;
+            var query = _database.Table<Folder>().Where(i => i.ParentID == parentID && i.Name == name);
+
+            if (await query.CountAsync() > 0)
+            {
+                List<Folder> folders = await query.ToListAsync();
+                if (folders.Any(i => i.ID != id)) // ensure that the thing with the same name isn't same note
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
 
         #region Check Name Exists of Type in Quick Access
 
-        public async Task<bool> DoesQuickAccessFolderNameExistAsync(string name)
+        public async Task<bool> DoesQuickAccessFolderNameExistAsync(string name, Guid id)
         {
-            int count = await _database.Table<Folder>()
-                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
-                                       .CountAsync();
-            return count > 0;
+            var query = _database.Table<Folder>().Where(i => i.IsQuickAccess == true && i.Name == name);
+
+            if (await query.CountAsync() > 0)
+            {
+                List<Folder> folders = await query.ToListAsync();
+                if (folders.Any(i => i.ID != id)) // ensure that the thing with the same name isn't same note
+                {
+                    return true;
+                }
+            }
+            return false;
+
         }
 
-        public async Task<bool> DoesQuickAccessNoteNameExistAsync(string name)
+        public async Task<bool> DoesQuickAccessNoteNameExistAsync(string name, Guid id)
         {
-            int count = await _database.Table<Note>()
-                                       .Where(i => i.IsQuickAccess == true && i.Name == name)
-                                       .CountAsync();
-            return count > 0;
+            var query = _database.Table<Note>().Where(i => i.IsQuickAccess == true && i.Name == name);
+
+            if (await query.CountAsync() > 0)
+            {
+                List<Note> notes = await query.ToListAsync();
+                if (notes.Any(i => i.ID != id)) // ensure that the thing with the same name isn't same note
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async Task<bool> DoesQuickAccessOrOtherwiseFolderNameExistAsync(string name, Guid parentID, Guid id)
+        {
+            var query = _database.Table<Folder>().Where(i => (i.IsQuickAccess == true || i.ParentID == parentID) && i.Name == name);
+
+            if (await query.CountAsync() > 0)
+            {
+                List<Folder> folders = await query.ToListAsync();
+                if (folders.Any(i => i.ID != id)) // ensure that the thing with the same name isn't same note
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async Task<bool> DoesQuickAccessOrOtherwiseNoteNameExistAsync(string name, Guid folderID, Guid id)
+        {
+            var query = _database.Table<Note>().Where(i => (i.IsQuickAccess == true || i.FolderID == folderID) && i.Name == name);
+
+            if (await query.CountAsync() > 0)
+            {
+                List<Note> notes = await query.ToListAsync();
+                if (notes.Any(i => i.ID != id)) // ensure that the thing with the same name isn't same note
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion

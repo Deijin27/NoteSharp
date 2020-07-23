@@ -235,6 +235,7 @@
         <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_AddFolder}" Clicked="OnFolderAddedClicked" Order="Secondary" />
         <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_OrderBy}" Clicked="OrderBy_Clicked" Order="Secondary"/>
         <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_SearchFolder}" Clicked="Search_Clicked" Order="Secondary" />
+        <!--<ToolbarItem Text="Test Popup" Clicked="DisplayTestPopup" />-->
     </ContentPage.ToolbarItems>
 
     <ListView x:Name="listView" 

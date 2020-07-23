@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Notes.Data;
 using Xamarin.Essentials;
 using Notes.Resources;
+using Rg.Plugins.Popup.Services;
+using Notes.PopupPages;
 
 namespace Notes.Pages
 {
@@ -95,28 +97,52 @@ namespace Notes.Pages
             }
         }
 
+        #region Add Folder
+
         async void OnFolderAddedClicked(object sender, EventArgs e)
         {
-            (Option option, string result) = await NameValidation.GetUniqueFolderName
+            var popup = new UniqueNamePromptPopupPage
             (
-                this, 
-                FolderID, 
-                AppResources.Prompt_NewFolder_Title
+                "New Folder",
+                "Input name for folder",
+                "Create",
+                "Cancel",
+                FolderID,
+                Guid.Empty,
+                App.Database.DoesFolderNameExistAsync,
+                "Name invalid, it contains one of" + " \"/*.~",
+                "Name conflict encountered; try a different name",
+                "",
+                "Input folder name..."
             );
+            popup.AcceptOptionClicked += ProceedAddFolder;
+            popup.CancelOptionClicked += CancelAddFolder;
+            popup.BackgroundClicked += CancelAddFolder;
+            popup.HardwareBackClicked += CancelAddFolder;
 
-            if (option == Option.OK)
-            {
-                DateTime dateTime = DateTime.UtcNow;
-                await App.Database.SaveAsync(new Folder
-                {
-                    Name = result,
-                    ParentID = FolderID,
-                    DateCreated = dateTime,
-                    DateModified = dateTime
-                });
-                UpdateListView();
-            }
+            await PopupNavigation.Instance.PushAsync(popup);
         }
+
+        private async void ProceedAddFolder(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+            DateTime dateTime = DateTime.UtcNow;
+            await App.Database.SaveAsync(new Folder
+            {
+                Name = e.Text,
+                ParentID = FolderID,
+                DateCreated = dateTime,
+                DateModified = dateTime
+            });
+            UpdateListView();
+        }
+
+        private async void CancelAddFolder(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+        }
+
+        #endregion
 
         private async void OrderBy_Clicked(object sender, EventArgs e)
         {
@@ -176,47 +202,33 @@ namespace Notes.Pages
         {
             if (MoveMode == MoveMode.Folder)
             {
-                bool exists = await App.Database.DoesFolderNameExistAsync(FolderToMove.Name, FolderID);
+                UniqueNamePromptPopupPage.DoesNameExist namechecker;
+                if (FolderToMove.IsQuickAccess) namechecker = App.Database.DoesQuickAccessOrOtherwiseFolderNameExistAsync;
+                else namechecker = App.Database.DoesFolderNameExistAsync;
+
+                bool exists = await namechecker.Invoke(FolderToMove.Name, FolderID, FolderToMove.ID);
                 if (exists)
                 {
-                    (Option option, string newName) = await NameValidation.GetUniqueFolderName
+                    var popup = new UniqueNamePromptPopupPage
                     (
-                        this, 
-                        FolderID, 
-                        AppResources.Prompt_FolderNameConflict_Title,
-                        message: AppResources.Prompt_FolderNameConflict_Message
-                    );
-                    if (option == Option.OK)
-                    {
-                        Guid sourceFolderID = FolderToMove.ParentID;
-                        FolderToMove.ParentID = FolderID;
-                        FolderToMove.DateModified = DateTime.UtcNow;
-                        FolderToMove.Name = newName;
-                        await App.Database.SaveAsync(FolderToMove);
-                        MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
-                        await Navigation.PopModalAsync();
-                    }
-                }
-                else if (FolderToMove.IsQuickAccess && (await App.Database.DoesQuickAccessFolderNameExistAsync(FolderToMove.Name)))
-                {
-                    (Option option, string newName) = await NameValidation.GetUniqueFolderName
-                    (
-                        this, 
+                        "Folder Name Conflict",
+                        "Rename folder in order to move to the destination",
+                        "OK",
+                        "Cancel",
                         FolderID,
-                        AppResources.Prompt_FolderNameConflict_Title,
-                        isQuickAccess: true,
-                        message: AppResources.Prompt_QuickAccessFolderNameConflict_Message
+                        FolderToMove.ID,
+                        namechecker,
+                        "Name invalid, it contains one of" + " \"/*.~",
+                        "Name conflict encountered; try a different name",
+                        FolderToMove.Name,
+                        "Input folder name..."
                     );
-                    if (option == Option.OK)
-                    {
-                        Guid sourceFolderID = FolderToMove.ParentID;
-                        FolderToMove.ParentID = FolderID;
-                        FolderToMove.DateModified = DateTime.UtcNow;
-                        FolderToMove.Name = newName;
-                        await App.Database.SaveAsync(FolderToMove);
-                        MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
-                        await Navigation.PopModalAsync();
-                    }
+                    popup.AcceptOptionClicked += ProceedRenameAndMoveFolder;
+                    popup.CancelOptionClicked += CancelRenameAndMoveFolder;
+                    popup.BackgroundClicked += CancelRenameAndMoveFolder;
+                    popup.HardwareBackClicked += CancelRenameAndMoveFolder;
+
+                    await PopupNavigation.Instance.PushAsync(popup);
                 }
                 else
                 {
@@ -230,50 +242,38 @@ namespace Notes.Pages
             }
             else // i.e. MoveMode == MoveMode.Note
             {
-                bool exists = await App.Database.DoesNoteNameExistAsync(NoteToMove.Name, FolderID);
+                UniqueNamePromptPopupPage.DoesNameExist namechecker;
+                if (NoteToMove.IsQuickAccess) namechecker = App.Database.DoesQuickAccessOrOtherwiseNoteNameExistAsync;
+                else namechecker = App.Database.DoesNoteNameExistAsync;
+
+                bool exists = await namechecker.Invoke(NoteToMove.Name, FolderID, NoteToMove.ID);
                 if (exists)
                 {
-                    (Option option, string newName) = await NameValidation.GetUniqueNoteName
+                    
+                    var popup = new UniqueNamePromptPopupPage
                     (
-                        this, 
-                        FolderID, 
-                        AppResources.Prompt_NoteNameConflict_Title,
-                        message: AppResources.Prompt_NoteNameConflict_Message
+                        "Note Name Conflict",
+                        "Rename note in order to move to the destination",
+                        "OK",
+                        "Cancel",
+                        FolderID,
+                        NoteToMove.ID,
+                        namechecker,
+                        "Name invalid, it contains one of" + " \"/*.~",
+                        "Name conflict encountered; try a different name",
+                        NoteToMove.Name,
+                        "Input folder name..."
                     );
-                    if (option == Option.OK)
-                    {
-                        Guid sourceFolderID = NoteToMove.FolderID;
-                        NoteToMove.FolderID = FolderID;
-                        NoteToMove.DateModified = DateTime.UtcNow;
-                        NoteToMove.Name = newName;
-                        await App.Database.SaveAsync(NoteToMove);
-                        MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
-                        await Navigation.PopModalAsync();
-                    }
-                }
-                else if (NoteToMove.IsQuickAccess && (await App.Database.DoesQuickAccessNoteNameExistAsync(NoteToMove.Name)))
-                {
-                    (Option option, string newName) = await NameValidation.GetUniqueNoteName
-                    (
-                        this, 
-                        FolderID, 
-                        AppResources.Prompt_NoteNameConflict_Title,
-                        isQuickAccess: true,
-                        message: AppResources.Prompt_QuickAccessNoteNameConflict_Message
-                    );
-                    if (option == Option.OK)
-                    {
-                        Guid sourceFolderID = NoteToMove.FolderID;
-                        NoteToMove.FolderID = FolderID;
-                        NoteToMove.DateModified = DateTime.UtcNow;
-                        NoteToMove.Name = newName;
-                        await App.Database.SaveAsync(NoteToMove);
-                        MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
-                        await Navigation.PopModalAsync();
-                    }
+                    popup.AcceptOptionClicked += ProceedRenameAndMoveNote;
+                    popup.CancelOptionClicked += CancelRenameAndMoveNote;
+                    popup.BackgroundClicked += CancelRenameAndMoveNote;
+                    popup.HardwareBackClicked += CancelRenameAndMoveNote;
+
+                    await PopupNavigation.Instance.PushAsync(popup);
                 }
                 else
                 {
+
                     Guid sourceFolderID = NoteToMove.FolderID;
                     NoteToMove.FolderID = FolderID;
                     NoteToMove.DateModified = DateTime.UtcNow;
@@ -282,6 +282,40 @@ namespace Notes.Pages
                     await Navigation.PopModalAsync();
                 }
             }
+        }
+
+        public async void ProceedRenameAndMoveFolder(PromptPopupOptionEventArgs e)
+        {
+            Guid sourceFolderID = FolderToMove.ParentID;
+            FolderToMove.ParentID = FolderID;
+            FolderToMove.DateModified = DateTime.UtcNow;
+            FolderToMove.Name = e.Text;
+            await App.Database.SaveAsync(FolderToMove);
+            await PopupNavigation.Instance.PopAsync();
+            MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
+            await Navigation.PopModalAsync();
+        }
+
+        public async void CancelRenameAndMoveFolder(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+        }
+
+        public async void CancelRenameAndMoveNote(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+        }
+
+        public async void ProceedRenameAndMoveNote(PromptPopupOptionEventArgs e)
+        {
+            Guid sourceFolderID = NoteToMove.FolderID;
+            NoteToMove.FolderID = FolderID;
+            NoteToMove.DateModified = DateTime.UtcNow;
+            NoteToMove.Name = e.Text;
+            await App.Database.SaveAsync(NoteToMove);
+            await PopupNavigation.Instance.PopAsync();
+            MoveCompleted?.Invoke(new MoveCompletedEventArgs(FolderID, sourceFolderID));
+            await Navigation.PopModalAsync();
         }
 
         private async void Cancel_Clicked(object sender, EventArgs e)

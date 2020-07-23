@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<base:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:base="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             mc:Ignorable="d"
+             Padding="0,20,0,20"
+             x:Class="Notes.PopupPages.UniqueNamePromptPopupPage">
+    <base:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="0.9"
+            ScaleOut="0.9"
+            DurationIn="100"
+            DurationOut="100"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </base:PopupPage.Animation>
+    <base:PopupPage.Content>
+        <StackLayout WidthRequest="300"
+                     BackgroundColor="{DynamicResource AppBackgroundColor}"
+                     VerticalOptions="Center" 
+                     HorizontalOptions="Center" 
+                     Padding="20, 20, 20, 20"
+                     >
+            <Label x:Name="TitleLabel"
+                   TextColor="{DynamicResource PrimaryContentTextColor}"
+                   FontSize="20"
+                   />
+            <ScrollView>
+                <Label x:Name="MessageLabel"
+                       TextColor="{DynamicResource PrimaryContentTextColor}"
+                       FontSize="Small"
+                       />
+            </ScrollView>
+            <Label x:Name="WarningLabel" HeightRequest="20" TextColor="Red" /> 
+            <Entry x:Name="InputEntry" HorizontalOptions="Fill"
+                   TextChanged="InputEntry_TextChanged"
+                   />
+            <StackLayout HorizontalOptions="End" 
+                         Orientation="Horizontal" 
+                         Spacing="10"
+                         >
+                <Button x:Name="AcceptButton"
+                        TextColor="{DynamicResource PrimaryAccentColor}"
+                        FontSize="Small"
+                        Clicked="AcceptButton_Clicked"
+                        BackgroundColor="Transparent"
+                        />
+                <Button x:Name="CancelButton"
+                        TextColor="{DynamicResource PrimaryAccentColor}"
+                        FontSize="Small"
+                        Clicked="CancelButton_Clicked"
+                        BackgroundColor="Transparent"
+                        />
+            </StackLayout>
+        </StackLayout>
+    </base:PopupPage.Content>
+</base:PopupPage>

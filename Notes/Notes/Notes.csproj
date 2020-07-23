@@ -31,6 +31,7 @@
   <ItemGroup>
     <PackageReference Include="Amporis.Xamarin.Forms.ColorPicker" Version="1.0.23" />
     <PackageReference Include="Markdig" Version="0.20.0" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.3" />
     <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.3" />
@@ -155,6 +156,15 @@
     <Compile Update="Pages\StyleSheetsPage.xaml.cs">
       <DependentUpon>StyleSheetsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="PopupPages\UniqueNamePromptPopupPage.xaml.cs">
+      <DependentUpon>UniqueNamePromptPopupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="PopupPages\TwoOptionPopupPage.xaml.cs">
+      <DependentUpon>TwoOptionPopupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="PopupPages\PromptPopupPage.xaml.cs">
+      <DependentUpon>PromptPopupPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Resources\AppResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -215,6 +225,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\SettingsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PopupPages\AlertPopupPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\AppResources.es.resx">

@@ -36,10 +36,9 @@ namespace Notes.Pages
             {
                 if (item.TargetType == typeof(NotesPage))
                 {
-                    await mainNavigation.PushAsync(new NotesPage() 
+                    await mainNavigation.PushAsync(new NotesPage(isQuickAccessPage: true) 
                     { 
-                        Title = AppResources.PageTitle_QuickAccess, 
-                        IsQuickAccessPage = true 
+                        Title = AppResources.PageTitle_QuickAccess
                     });
                 }
                 else if (item.TargetType == typeof(SettingsPage))

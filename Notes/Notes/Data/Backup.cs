@@ -222,44 +222,52 @@ namespace Notes.Data
 
         public static async Task<bool> GetPermissionAndCreateBackup(Page page)
         {
-            PermissionStatus status = await CheckAndRequestStorageWritePermission();
-            if (status != PermissionStatus.Granted)
+            try
             {
+                PermissionStatus status = await CheckAndRequestStorageWritePermission();
+                if (status != PermissionStatus.Granted)
+                {
+                    await page.DisplayAlert
+                    (
+                        AppResources.Alert_CreateBackupPermissionDenied_Title,
+                        AppResources.Alert_CreateBackupPermissionDenied_Message,
+                        AppResources.AlertOption_OK
+                    );
+                    return false;
+                }
+
+                string option_sqlite3 = "SQLite3";
+                string option_json = "JSON";
+
+                string option = await page.DisplayActionSheet
+                (
+                    AppResources.ActionSheetTitle_ChooseBackupFileFormat,
+                    AppResources.ActionSheetOption_Cancel,
+                    null,
+                    option_sqlite3,
+                    option_json
+                );
+
+                string backupPath;
+                if (option == option_sqlite3) backupPath = await CreateBackupDatabase();
+                else if (option == option_json) backupPath = await CreateBackupJson();
+                else return false;
+
                 await page.DisplayAlert
                 (
-                    AppResources.Alert_CreateBackupPermissionDenied_Title, 
-                    AppResources.Alert_CreateBackupPermissionDenied_Message, 
+                    AppResources.Alert_BackupComplete_Title,
+                    AppResources.Alert_BackupComplete_Message + backupPath,
                     AppResources.AlertOption_OK
                 );
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                await page.DisplayAlert("Error, Process cancelled", e.Message, "OK");
                 return false;
             }
 
-            string option_sqlite3 = "SQLite3";
-            string option_json = "JSON";
-
-            string option = await page.DisplayActionSheet
-            (
-                AppResources.ActionSheetTitle_ChooseBackupFileFormat,
-                AppResources.ActionSheetOption_Cancel,
-                null,
-                option_sqlite3,
-                option_json
-            );
-
-            string backupPath;
-            if (option == option_sqlite3) backupPath = await CreateBackupDatabase();
-            else if (option == option_json) backupPath = await CreateBackupJson();
-            else return false;
-            
-            await page.DisplayAlert
-            (
-                AppResources.Alert_BackupComplete_Title,
-                AppResources.Alert_BackupComplete_Message + backupPath, 
-                AppResources.AlertOption_OK
-            );
-
-            return true;
-            
         }
 
         private static async Task<string> QueryBackupExisting(Page page, string option_cancel, string option_deletePermanently, string option_createBackup)

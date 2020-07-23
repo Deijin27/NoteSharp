@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Notes.Data;
 using Notes.Controls;
 using Notes.Resources;
+using Rg.Plugins.Popup.Services;
+using Notes.PopupPages;
 
 namespace Notes.Pages
 {
@@ -69,8 +71,9 @@ namespace Notes.Pages
         private List<FolderContentItem> FolderContentItems;
         string SearchFor = null;
 
-        public NotesPage()
+        public NotesPage(bool isQuickAccessPage = false)
         {
+            IsQuickAccessPage = isQuickAccessPage;
             InitializeComponent();
             //InitializeListView();
             FolderID = Guid.Empty;
@@ -103,7 +106,7 @@ namespace Notes.Pages
             SearchUpdate();
         }
 
-        public MoveCompletedEventHandler FolderContentMoved;
+        public event MoveCompletedEventHandler FolderContentMoved;
         
         public void MoveCompletedHandler(MoveCompletedEventArgs e)
         {
@@ -199,10 +202,12 @@ namespace Notes.Pages
             }
         }
 
-
+        #region Add Folder
 
         async void OnFolderAddedClicked(object sender, EventArgs e)
         {
+            #region old stuff
+            /*
             (Option option, string result) = await NameValidation.GetUniqueFolderName
             (
                 this, 
@@ -222,8 +227,51 @@ namespace Notes.Pages
                 });
                 UpdateListView();
             }
+            */
+            #endregion
 
+            var popup = new UniqueNamePromptPopupPage
+            (
+                "New Folder",
+                "Input name for folder",
+                "Create",
+                "Cancel",
+                FolderID,
+                Guid.Empty,
+                App.Database.DoesFolderNameExistAsync,
+                "Name invalid, it contains one of" + " \"/*.~",
+                "Name conflict encountered; try a different name",
+                "",
+                "Input folder name..."
+            );
+            popup.AcceptOptionClicked += ProceedAddFolder;
+            popup.CancelOptionClicked += CancelAddFolder;
+            popup.BackgroundClicked += CancelAddFolder;
+            popup.HardwareBackClicked += CancelAddFolder;
+
+            await PopupNavigation.Instance.PushAsync(popup);
         }
+
+        private async void ProceedAddFolder(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+            DateTime dateTime = DateTime.UtcNow;
+            await App.Database.SaveAsync(new Folder
+            {
+                Name = e.Text,
+                ParentID = FolderID,
+                DateCreated = dateTime,
+                DateModified = dateTime
+            });
+            UpdateListView();
+        }
+
+        private async void CancelAddFolder(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+        }
+
+        #endregion
 
         private async void OrderBy_Clicked(object sender, EventArgs e)
         {
@@ -262,8 +310,12 @@ namespace Notes.Pages
 
         public event SortingModeChangedEventHandler SortingModeChanged;
 
+        #region Rename Folder
+
         private async void RenameFolder_Clicked(object sender, EventArgs e)
         {
+            #region Old Stuff
+            /*
             var mi = ((MenuItem)sender);
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Folder folder = folderContentItem.ContentFolder;
@@ -283,8 +335,64 @@ namespace Notes.Pages
                 folder.DateModified = DateTime.UtcNow;
                 await App.Database.SaveAsync(folder);
                 UpdateListView();
-            }
+            }*/
+            #endregion
+
+
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Folder folder = folderContentItem.ContentFolder;
+            FolderBeingProcessed = folder;
+
+            UniqueNamePromptPopupPage.DoesNameExist doesNameExistChecker;
+            if (folder.IsQuickAccess)
+                doesNameExistChecker = App.Database.DoesQuickAccessOrOtherwiseFolderNameExistAsync;
+            else
+                doesNameExistChecker = App.Database.DoesFolderNameExistAsync;
+
+            var popup = new UniqueNamePromptPopupPage
+            (
+                "Rename Folder",
+                "Input new name for folder",
+                "OK",
+                "Cancel",
+                folder.ParentID,
+                folder.ID,
+                doesNameExistChecker,
+                "Name invalid, it contains one of" +  " \"/*.~",
+                "Name conflict encountered; try a different name",
+                folder.Name,
+                "Input folder name..."
+            );
+            popup.AcceptOptionClicked += ProceedRenameFolder;
+            popup.CancelOptionClicked += CancelRenameFolder;
+            popup.BackgroundClicked += CancelRenameFolder;
+            popup.HardwareBackClicked += CancelRenameFolder;
+
+            await PopupNavigation.Instance.PushAsync(popup);
         }
+
+        private Folder FolderBeingProcessed;
+
+        private async void ProceedRenameFolder(PromptPopupOptionEventArgs e)
+        {
+
+            await PopupNavigation.Instance.PopAsync();
+            FolderBeingProcessed.Name = e.Text;
+            FolderBeingProcessed.DateModified = DateTime.UtcNow;
+            await App.Database.SaveAsync(FolderBeingProcessed);
+            FolderBeingProcessed = null;
+            UpdateListView();
+
+        }
+
+        private async void CancelRenameFolder(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+            FolderBeingProcessed = null;
+        }
+
+        #endregion
 
         private async void MoveFolder_Clicked(object sender, EventArgs e)
         {
@@ -296,29 +404,53 @@ namespace Notes.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
+        #region Delete Folder
+
         private async void DeleteFolder_Clicked(object sender, EventArgs e)
         {
             var mi = ((MenuItem)sender);
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
-            Folder folder = folderContentItem.ContentFolder;
+            FolderBeingProcessed = folderContentItem.ContentFolder;
 
-            bool answer = await DisplayAlert
+            var popup = new TwoOptionPopupPage
             (
-                AppResources.Alert_ConfirmDeleteFolder_Title, 
-                AppResources.Alert_ConfirmDeleteFolder_Message, 
-                AppResources.AlertOption_Yes, 
+                AppResources.Alert_ConfirmDeleteFolder_Title,
+                AppResources.Alert_ConfirmDeleteFolder_Message,
+                AppResources.AlertOption_Yes,
                 AppResources.AlertOption_No
             );
+            popup.LeftOptionClicked += ProceedDeleteFolder;
+            popup.RightOptionClicked += CancelDeleteFolder;
+            popup.BackgroundClicked += CancelDeleteFolder;
+            popup.HardwareBackClicked += CancelDeleteFolder;
 
-            if (answer)
-            {
-                await App.Database.DeleteFolderAndAllContentsAsync(folder);
-                UpdateListView();
-            }
+            await PopupNavigation.Instance.PushAsync(popup);
         }
+
+        private async void ProceedDeleteFolder()
+        {
+
+            await PopupNavigation.Instance.PopAsync();
+            await App.Database.DeleteFolderAndAllContentsAsync(FolderBeingProcessed);
+            FolderBeingProcessed = null;
+            UpdateListView();
+
+        }
+
+        private async void CancelDeleteFolder()
+        {
+            await PopupNavigation.Instance.PopAsync();
+            FolderBeingProcessed = null;
+        }
+
+        #endregion
+
+        #region Rename Note
 
         private async void RenameNote_Clicked(object sender, EventArgs e)
         {
+            #region old stuff
+            /*
             var mi = ((MenuItem)sender);
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Note note = folderContentItem.ContentNote;
@@ -339,7 +471,63 @@ namespace Notes.Pages
                 await App.Database.SaveAsync(note);
                 UpdateListView();
             }
+            */
+            #endregion
+
+            var mi = ((MenuItem)sender);
+            FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
+            Note note = folderContentItem.ContentNote;
+            NoteBeingProcessed = note;
+
+            UniqueNamePromptPopupPage.DoesNameExist doesNameExistChecker;
+            if (note.IsQuickAccess) 
+                doesNameExistChecker = App.Database.DoesQuickAccessOrOtherwiseNoteNameExistAsync;
+            else
+                doesNameExistChecker = App.Database.DoesNoteNameExistAsync;
+
+            var popup = new UniqueNamePromptPopupPage
+            (
+                "Rename Note",
+                "Input new name for note",
+                "OK",
+                "Cancel",
+                note.FolderID,
+                note.ID,
+                doesNameExistChecker,
+                "Name invalid, it contains one of" + " \"/*.~",
+                "Name conflict encountered; try a different name",
+                note.Name,
+                "Input note name..."
+            );
+            popup.AcceptOptionClicked += ProceedRenameNote;
+            popup.CancelOptionClicked += CancelRenameNote;
+            popup.BackgroundClicked += CancelRenameNote;
+            popup.HardwareBackClicked += CancelRenameNote;
+
+            await PopupNavigation.Instance.PushAsync(popup);
         }
+
+        private Note NoteBeingProcessed;
+
+        private async void ProceedRenameNote(PromptPopupOptionEventArgs e)
+        {
+            
+            await PopupNavigation.Instance.PopAsync();
+            NoteBeingProcessed.Name = e.Text;
+            NoteBeingProcessed.DateModified = DateTime.UtcNow;
+            await App.Database.SaveAsync(NoteBeingProcessed);
+            NoteBeingProcessed = null;
+            UpdateListView();
+            
+        }
+
+        private async void CancelRenameNote(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+            NoteBeingProcessed = null;
+        }
+
+        #endregion
 
         private async void MoveNote_Clicked(object sender, EventArgs e)
         {
@@ -351,32 +539,56 @@ namespace Notes.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
+        #region Delete Note
+
         private async void DeleteNote_Clicked(object sender, EventArgs e)
         {
             var mi = ((MenuItem)sender);
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
-            Note note = folderContentItem.ContentNote;
+            NoteBeingProcessed = folderContentItem.ContentNote;
 
-            bool answer = await DisplayAlert
+            var popup = new TwoOptionPopupPage
             (
-                AppResources.Alert_ConfirmDeleteNote_Title, 
-                AppResources.Alert_ConfirmDeleteNote_Message, 
-                AppResources.AlertOption_Yes, 
+                AppResources.Alert_ConfirmDeleteNote_Title,
+                AppResources.Alert_ConfirmDeleteNote_Message,
+                AppResources.AlertOption_Yes,
                 AppResources.AlertOption_No
             );
+            popup.LeftOptionClicked += ProceedDeleteNote;
+            popup.RightOptionClicked += CancelDeleteNote;
+            popup.BackgroundClicked += CancelDeleteNote;
+            popup.HardwareBackClicked += CancelDeleteNote;
 
-            if (answer)
-            {
-                await App.Database.DeleteAsync(note);
-                UpdateListView();
-            }
+            await PopupNavigation.Instance.PushAsync(popup);
         }
 
+        private async void ProceedDeleteNote()
+        {
+
+            await PopupNavigation.Instance.PopAsync();
+            await App.Database.DeleteAsync(NoteBeingProcessed);
+            NoteBeingProcessed = null;
+            UpdateListView();
+
+        }
+
+        private async void CancelDeleteNote()
+        {
+            await PopupNavigation.Instance.PopAsync();
+            NoteBeingProcessed = null;
+        }
+
+        #endregion
+
+        #region Toggle Note Quick Access
         private async void ToggleNoteQuickAccess_Clicked(object sender, EventArgs e)
         {
             var mi = ((MenuItem)sender);
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Note note = folderContentItem.ContentNote;
+
+            #region Old Stuff
+            /*
 
             if (!note.IsQuickAccess)
             {
@@ -434,14 +646,81 @@ namespace Notes.Pages
                     UpdateListView();
                 }
             }
+            */
+            #endregion
+
+            if (!note.IsQuickAccess)
+            {
+                if (await App.Database.DoesQuickAccessNoteNameExistAsync(note.Name, note.ID))
+                {
+                    NoteBeingProcessed = note;
+                    var popup = new UniqueNamePromptPopupPage
+                    (
+                        "Name Conflict Encountered",
+                        "In order to add the note to quick access, it must be renamed",
+                        "OK",
+                        "Cancel",
+                        note.FolderID,
+                        note.ID,
+                        App.Database.DoesQuickAccessOrOtherwiseNoteNameExistAsync,
+                        "Name invalid, it contains one of" + " \"/*.~",
+                        "Name conflict encountered; try a different name",
+                        note.Name,
+                        "Input note name..."
+                    );
+                    popup.AcceptOptionClicked += ProceedRenameNoteThenAddToQuickAccess;
+                    popup.CancelOptionClicked += CancelAddNoteToQuickAccess;
+                    popup.BackgroundClicked += CancelAddNoteToQuickAccess;
+                    popup.HardwareBackClicked += CancelAddNoteToQuickAccess;
+
+                    await PopupNavigation.Instance.PushAsync(popup);
+                }
+                else
+                {
+                    note.IsQuickAccess = true;
+                    note.DateModified = DateTime.UtcNow;
+                    await App.Database.SaveAsync(note);
+                    UpdateListView();
+                }
+            }
+            else
+            {
+                note.IsQuickAccess = false;
+                note.DateModified = DateTime.UtcNow;
+                await App.Database.SaveAsync(note);
+                UpdateListView();
+            }
         }
 
+        private async void ProceedRenameNoteThenAddToQuickAccess(PromptPopupOptionEventArgs e)
+        {
+
+            await PopupNavigation.Instance.PopAsync();
+            NoteBeingProcessed.Name = e.Text;
+            NoteBeingProcessed.IsQuickAccess = true;
+            NoteBeingProcessed.DateModified = DateTime.UtcNow;
+            await App.Database.SaveAsync(NoteBeingProcessed);
+            NoteBeingProcessed = null;
+            UpdateListView();
+
+        }
+
+        private async void CancelAddNoteToQuickAccess(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+            NoteBeingProcessed = null;
+        }
+        #endregion
+
+        #region Toggle Folder Quick Access
         private async void ToggleFolderQuickAccess_Clicked(object sender, EventArgs e)
         {
             var mi = ((MenuItem)sender);
             FolderContentItem folderContentItem = mi.CommandParameter as FolderContentItem;
             Folder folder = folderContentItem.ContentFolder;
 
+            #region Old Stuff
+            /*
             if (!folder.IsQuickAccess)
             {
                 bool answer = await DisplayAlert
@@ -496,8 +775,72 @@ namespace Notes.Pages
                     await App.Database.SaveAsync(folder);
                     UpdateListView();
                 }
+            }*/
+            #endregion
+
+            if (!folder.IsQuickAccess)
+            {
+                if (await App.Database.DoesQuickAccessFolderNameExistAsync(folder.Name, folder.ID))
+                {
+                    FolderBeingProcessed = folder;
+                    var popup = new UniqueNamePromptPopupPage
+                    (
+                        "Name Conflict Encountered",
+                        "In order to add the folder to quick access, it must be renamed",
+                        "OK",
+                        "Cancel",
+                        folder.ParentID,
+                        folder.ID,
+                        App.Database.DoesQuickAccessOrOtherwiseFolderNameExistAsync,
+                        "Name invalid, it contains one of" + " \"/*.~",
+                        "Name conflict encountered; try a different name",
+                        folder.Name,
+                        "Input folder name..."
+                    );
+                    popup.AcceptOptionClicked += ProceedRenameFolderThenAddToQuickAccess;
+                    popup.CancelOptionClicked += CancelAddFolderToQuickAccess;
+                    popup.BackgroundClicked += CancelAddFolderToQuickAccess;
+                    popup.HardwareBackClicked += CancelAddFolderToQuickAccess;
+
+                    await PopupNavigation.Instance.PushAsync(popup);
+                }
+                else
+                {
+                    folder.IsQuickAccess = true;
+                    folder.DateModified = DateTime.UtcNow;
+                    await App.Database.SaveAsync(folder);
+                    UpdateListView();
+                }
+            }
+            else
+            {
+                folder.IsQuickAccess = false;
+                folder.DateModified = DateTime.UtcNow;
+                await App.Database.SaveAsync(folder);
+                UpdateListView();
             }
         }
+
+        private async void ProceedRenameFolderThenAddToQuickAccess(PromptPopupOptionEventArgs e)
+        {
+
+            await PopupNavigation.Instance.PopAsync();
+            FolderBeingProcessed.Name = e.Text;
+            FolderBeingProcessed.IsQuickAccess = true;
+            FolderBeingProcessed.DateModified = DateTime.UtcNow;
+            await App.Database.SaveAsync(FolderBeingProcessed);
+            FolderBeingProcessed = null;
+            UpdateListView();
+
+        }
+
+        private async void CancelAddFolderToQuickAccess(PromptPopupOptionEventArgs e)
+        {
+            await PopupNavigation.Instance.PopAsync();
+            FolderBeingProcessed = null;
+        }
+
+        #endregion
 
         private async void Search_Clicked(object sender, EventArgs e)
         {
@@ -537,6 +880,36 @@ namespace Notes.Pages
             NavigationPage.SetTitleView(this, lb);
             SearchFor = null;
             SearchUpdate();
+        }
+
+        //public async void HandleOptionClicked(PromptPopupPage sender, PromptPopupOptionEventArgs e)
+        //{
+        //    switch (e.Option)
+        //    {
+        //        case PopupOption.Left:
+        //            await PopupNavigation.Instance.PushAsync(new AlertPopupPage("Left", e.Text, "OK"));
+        //            break;
+        //        case PopupOption.Right:
+        //            await PopupNavigation.Instance.PushAsync(new AlertPopupPage("Right", e.Text, "Righty o"));
+        //            break;
+        //    }
+        //}
+
+        private void DisplayTestPopup(object sender, EventArgs e)
+        {
+
+            //var popup = new PromptPopupPage
+            //(
+            //    "Hello",
+            //    "It erat id libero suscipit egestas. Duis eget enim scelerisque, gravida urna quis, accumsan turpis.",
+            //    "Left",
+            //    "Right",
+            //    "Initial is here",
+            //    "Placeholder is here"
+            //);
+            //popup.OptionClicked += HandleOptionClicked;
+
+            //await PopupNavigation.Instance.PushAsync(popup);
         }
     }
 }
