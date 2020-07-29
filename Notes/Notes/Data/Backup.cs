@@ -9,6 +9,8 @@ using Xamarin.Forms;
 using Notes.Models;
 using System.Text.Json;
 using Notes.Resources;
+using Rg.Plugins.Popup.Services;
+using Notes.PopupPages;
 //using Newtonsoft.Json;
 
 namespace Notes.Data
@@ -22,6 +24,12 @@ namespace Notes.Data
         public List<Note> Notes { get; set; }
         public List<Folder> Folders { get; set; }
         public List<CSS> Sheets { get; set; }
+    }
+
+    public enum BackupOption
+    {
+        SQLite3,
+        JSON
     }
 
     static class Backup
@@ -54,6 +62,7 @@ namespace Notes.Data
 
         private static async Task<string> CreateBackupJson()
         {
+            Directory.CreateDirectory(BackupFolderPath);
             string newBackupFile = NewBackupFilePath(".json");
 
             // Ideally I can in the future find some way to do this without having to load
@@ -109,6 +118,7 @@ namespace Notes.Data
 
         private static async Task<string> CreateBackupDatabase()
         {
+            Directory.CreateDirectory(BackupFolderPath);
             string newBackupFile = NewBackupFilePath(".sqlite3");
             await App.Database.BackupAsync(newBackupFile);
             return newBackupFile;
@@ -227,47 +237,75 @@ namespace Notes.Data
                 PermissionStatus status = await CheckAndRequestStorageWritePermission();
                 if (status != PermissionStatus.Granted)
                 {
-                    await page.DisplayAlert
+                    await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                     (
                         AppResources.Alert_CreateBackupPermissionDenied_Title,
                         AppResources.Alert_CreateBackupPermissionDenied_Message,
                         AppResources.AlertOption_OK
-                    );
+                    ));
                     return false;
                 }
 
-                string option_sqlite3 = "SQLite3";
-                string option_json = "JSON";
-
-                string option = await page.DisplayActionSheet
+                var popup = new ListPopupPage
                 (
                     AppResources.ActionSheetTitle_ChooseBackupFileFormat,
+                    "The database will be exported to your local storage in the selected file format",
                     AppResources.ActionSheetOption_Cancel,
-                    null,
-                    option_sqlite3,
-                    option_json
+                    new List<ListPopupPageItem>
+                    {
+                        new ListPopupPageItem { Name = "SQLite3", AssociatedObject = BackupOption.SQLite3 },
+                        new ListPopupPageItem { Name = "JSON", AssociatedObject = BackupOption.JSON }
+                    }
                 );
+                popup.CancelClicked += ClosePopupCancelBackup;
+                popup.BackgroundClicked += ClosePopupCancelBackup;
+                popup.HardwareBackClicked += ClosePopupCancelBackup;
+                popup.ListOptionClicked += ClosePopupProceedWithBackup;
 
-                string backupPath;
-                if (option == option_sqlite3) backupPath = await CreateBackupDatabase();
-                else if (option == option_json) backupPath = await CreateBackupJson();
-                else return false;
-
-                await page.DisplayAlert
-                (
-                    AppResources.Alert_BackupComplete_Title,
-                    AppResources.Alert_BackupComplete_Message + backupPath,
-                    AppResources.AlertOption_OK
-                );
+                await PopupNavigation.Instance.PushAsync(popup);
 
                 return true;
             }
             catch (Exception e)
             {
-                await page.DisplayAlert("Error, Process cancelled", e.Message, "OK");
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage("Error Encountered", e.Message, "OK"));
                 return false;
             }
 
+        }
+
+        private async static void ClosePopupProceedWithBackup(ListPopupPageItem selectedMode)
+        {
+            
+            await PopupNavigation.Instance.PopAsync();
+
+            // push loading popup here when i've created it
+
+            string backupPath;
+            switch ((BackupOption)selectedMode.AssociatedObject)
+            {
+                case BackupOption.JSON:
+                    backupPath = await CreateBackupJson();
+                    break;
+                case BackupOption.SQLite3:
+                    backupPath = await CreateBackupDatabase();
+                    break;
+                default:
+                    throw new Exception("BackupOption not recognised (ClosePopupProceedWithBackup)");
+            }
+
+            
+            await PopupNavigation.Instance.PushAsync(new AlertPopupPage
+            (
+                AppResources.Alert_BackupComplete_Title,
+                AppResources.Alert_BackupComplete_Message + backupPath,
+                AppResources.AlertOption_OK
+            ));
+        }
+
+        private static void ClosePopupCancelBackup()
+        {
+            PopupNavigation.Instance.PopAsync();
         }
 
         private static async Task<string> QueryBackupExisting(Page page, string option_cancel, string option_deletePermanently, string option_createBackup)

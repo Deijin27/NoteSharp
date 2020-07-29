@@ -156,6 +156,9 @@
     <Compile Update="Pages\StyleSheetsPage.xaml.cs">
       <DependentUpon>StyleSheetsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="PopupPages\ListPopupPage.xaml.cs">
+      <DependentUpon>ListPopupPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="PopupPages\UniqueNamePromptPopupPage.xaml.cs">
       <DependentUpon>UniqueNamePromptPopupPage.xaml</DependentUpon>
     </Compile>
