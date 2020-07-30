@@ -78,6 +78,12 @@ namespace Notes.Pages
             //InitializeListView();
             FolderID = Guid.Empty;
             UpdateListView();
+
+            if (isQuickAccessPage)
+            {
+                ToolbarItems.Remove(AddNoteButton);
+                ToolbarItems.Remove(AddFolderButton);
+            }
         }
 
         public NotesPage(Folder folder)

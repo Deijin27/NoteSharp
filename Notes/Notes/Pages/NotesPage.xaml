@@ -230,11 +230,11 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add Note" Clicked="OnNoteAddedClicked" Order="Primary" 
+        <ToolbarItem x:Name="AddNoteButton" Text="Add Note" Clicked="OnNoteAddedClicked" Order="Primary" 
                      IconImageSource="{StaticResource FontImageSource_FilePlus}"/>
-        <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_AddFolder}" Clicked="OnFolderAddedClicked" Order="Secondary" />
-        <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_OrderBy}" Clicked="OrderBy_Clicked" Order="Secondary"/>
-        <ToolbarItem Text="{x:Static resources:AppResources.Toolbar_SearchFolder}" Clicked="Search_Clicked" Order="Secondary" />
+        <ToolbarItem x:Name="AddFolderButton" Text="{x:Static resources:AppResources.Toolbar_AddFolder}" Clicked="OnFolderAddedClicked" Order="Secondary" />
+        <ToolbarItem x:Name="OrderByButton" Text="{x:Static resources:AppResources.Toolbar_OrderBy}" Clicked="OrderBy_Clicked" Order="Secondary"/>
+        <ToolbarItem x:Name="SearchButton" Text="{x:Static resources:AppResources.Toolbar_SearchFolder}" Clicked="Search_Clicked" Order="Secondary" />
         <!--<ToolbarItem Text="Test Popup" Clicked="DisplayTestPopup" />-->
     </ContentPage.ToolbarItems>
 
