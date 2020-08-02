@@ -3,8 +3,9 @@ using Xamarin.Forms;
 using Notes.Models;
 using Xamarin.Essentials;
 using System.Threading;
-using Amporis.Xamarin.Forms.ColorPicker;
 using Notes.Resources;
+using Rg.Plugins.Popup.Services;
+using Notes.PopupPages;
 
 namespace Notes.Pages
 {
@@ -126,35 +127,23 @@ namespace Notes.Pages
         private async void CopyButton_Clicked(object sender, EventArgs e)
         {
             await Clipboard.SetTextAsync(TextEditor.Text);
-            await DisplayAlert
-            (
-                AppResources.Alert_CSSCopied_Title, 
-                AppResources.Alert_CSSCopied_Message, 
-                AppResources.AlertOption_OK
-            );
+
+            // maybe a popup here that disappears on it's own
         }
 
         private async void ColorPickerButton_Clicked(object sender, EventArgs e)
         {
-            var colorDialogSettings = new ColorDialogSettings()
-            {
-                OkButtonText = AppResources.ColorPicker_Copy_Button,
-                EditAlfa = false,
-                DialogAnimation = false
-                // More Settings Can Go Here
-            };
-
-            Color color = await ColorPickerDialog.Show
+            var popup = new ColorPickerPopupPage
             (
-                ColorPickerUtils.GetRootParent<Layout<View>>((View)TextEditor), 
-                AppResources.ColorPicker_Title, 
-                Color.White, 
-                colorDialogSettings
+                "Color Picker",
+                "Note that to use transparency you need to use the Copy RGBA option.",
+                "Cancel",
+                "Copy Hex",
+                "Copy RGBA",
+                Color.IndianRed
             );
 
-            string hexNoAlpha = color.ToHex().Remove(1, 2);
-
-            await Clipboard.SetTextAsync(hexNoAlpha);
+            await PopupNavigation.Instance.PushAsync(popup);
         }
     }
 }

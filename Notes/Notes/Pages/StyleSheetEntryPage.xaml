@@ -33,7 +33,7 @@
         <ToolbarItem x:Name="ColorPickerButton" Text="Color Picker" Clicked="ColorPickerButton_Clicked" Order="Primary">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
-                                 Glyph="{StaticResource IconGlyph_EyeDropper}"
+                                 Glyph="{StaticResource IconGlyph_Palette}"
                                  Size="24"
                                  Color="{DynamicResource ToolbarIconColor}"/>
             </ToolbarItem.IconImageSource>
@@ -42,7 +42,7 @@
     </ContentPage.ToolbarItems>
 
     <ScrollView >
-    <Grid x:Name="MainLayout">
+    <Grid>
         
             <StackLayout>
                 <Editor x:Name="TextEditor" 

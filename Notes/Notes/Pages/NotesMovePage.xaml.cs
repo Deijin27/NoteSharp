@@ -144,40 +144,6 @@ namespace Notes.Pages
 
         #endregion
 
-        private async void OrderBy_Clicked(object sender, EventArgs e)
-        {
-            string option_cancel = AppResources.ActionSheetOption_Cancel;
-            string option_name = AppResources.ActionSheetOption_OrderBy_Name;
-            string option_dateCreated = AppResources.ActionSheetOption_OrderBy_DateCreated;
-            string option_dateModified = AppResources.ActionSheetOption_OrderBy_DateModified;
-            string option_size = AppResources.ActionSheetOption_OrderBy_Size;
-
-            string selected = await DisplayActionSheet
-            (
-                AppResources.ActionSheetTitle_OrderBy,
-                option_cancel,
-                null,
-                option_name,
-                option_dateCreated,
-                option_dateModified,
-                option_size
-            );
-
-            if (!string.IsNullOrEmpty(selected) && selected != option_cancel)
-            {
-                SortingMode sortingMode;
-
-                if (selected == option_name) sortingMode = SortingMode.Name;
-                else if (selected == option_dateCreated) sortingMode = SortingMode.DateCreated;
-                else if (selected == option_dateModified) sortingMode = SortingMode.DateModified;
-                else if (selected == option_size) sortingMode = SortingMode.Size;
-                else sortingMode = SortingMode.Name;
-
-                App.SortingMode = sortingMode;
-                UpdateListView();
-            }
-        }
-
         private async void ToParentFolder_Clicked(object sender, EventArgs e)
         {
             

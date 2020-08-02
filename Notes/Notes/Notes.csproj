@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amporis.Xamarin.Forms.ColorPicker" Version="1.0.23" />
     <PackageReference Include="Markdig" Version="0.20.0" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.3" />
     <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
@@ -158,6 +157,9 @@
     </Compile>
     <Compile Update="PopupPages\ListPopupPage.xaml.cs">
       <DependentUpon>ListPopupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="PopupPages\ColorPickerPopupPage.xaml.cs">
+      <DependentUpon>ColorPickerPopupPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="PopupPages\UniqueNamePromptPopupPage.xaml.cs">
       <DependentUpon>UniqueNamePromptPopupPage.xaml</DependentUpon>

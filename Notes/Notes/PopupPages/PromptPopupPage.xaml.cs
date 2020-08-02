@@ -257,10 +257,10 @@ namespace Notes.PopupPages
             return false; //base.OnBackgroundClicked();
         }
 
-        private event OptionClicked LeftOptionClicked;
-        private event OptionClicked RightOptionClicked;
-        private new event OptionClicked BackgroundClicked;
-        private event OptionClicked HardwareBackClicked;
+        public event OptionClicked LeftOptionClicked;
+        public event OptionClicked RightOptionClicked;
+        public new event OptionClicked BackgroundClicked;
+        public event OptionClicked HardwareBackClicked;
 
         private void RightButton_Clicked(object sender, EventArgs e)
         {

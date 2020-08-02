@@ -77,7 +77,7 @@
         <x:String x:Key="IconGlyph_Plus">&#xf278;</x:String>
         <x:String x:Key="IconGlyph_Eye">&#xf15c;</x:String>
         <x:String x:Key="IconGlyph_Copy">&#xf237;</x:String>
-        <x:String x:Key="IconGlyph_EyeDropper">&#xf15d;</x:String>
+        <x:String x:Key="IconGlyph_Palette">&#xf1a4;</x:String>
         <x:String x:Key="IconGlyph_SquareRight">&#xf309;</x:String>
         <x:String x:Key="IconGlyph_Edit">&#xf158;</x:String>
         <x:String x:Key="IconGlyph_Delete">&#xf154;</x:String>

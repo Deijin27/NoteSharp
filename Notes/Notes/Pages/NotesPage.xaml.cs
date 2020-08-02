@@ -9,6 +9,7 @@ using Notes.Controls;
 using Notes.Resources;
 using Rg.Plugins.Popup.Services;
 using Notes.PopupPages;
+using Notes.Views;
 
 namespace Notes.Pages
 {
@@ -279,42 +280,46 @@ namespace Notes.Pages
 
         #endregion
 
+        #region Order By
         private async void OrderBy_Clicked(object sender, EventArgs e)
         {
-            string option_cancel = AppResources.ActionSheetOption_Cancel;
-            string option_name = AppResources.ActionSheetOption_OrderBy_Name;
-            string option_dateCreated = AppResources.ActionSheetOption_OrderBy_DateCreated;
-            string option_dateModified = AppResources.ActionSheetOption_OrderBy_DateModified;
-            string option_size = AppResources.ActionSheetOption_OrderBy_Size;
+            var popup = new ListPopupPage
+                (
+                    "Order By",
+                    "Pick an sorting method",
+                    AppResources.ActionSheetOption_Cancel,
+                    new List<ListPopupPageItem>
+                    {
+                        new ListPopupPageItem { Name = AppResources.ActionSheetOption_OrderBy_Name, AssociatedObject = SortingMode.Name },
+                        new ListPopupPageItem { Name = AppResources.ActionSheetOption_OrderBy_DateCreated, AssociatedObject = SortingMode.DateCreated },
+                        new ListPopupPageItem { Name = AppResources.ActionSheetOption_OrderBy_DateModified, AssociatedObject = SortingMode.DateModified },
+                        new ListPopupPageItem { Name = AppResources.ActionSheetOption_OrderBy_Size, AssociatedObject = SortingMode.Size }
+                    }
+                );
+            popup.CancelClicked += CancelOrderBy;
+            popup.BackgroundClicked += CancelOrderBy;
+            popup.HardwareBackClicked += CancelOrderBy;
+            popup.ListOptionClicked += ProceedOrderBy;
 
-            string selected = await DisplayActionSheet
-            (
-                AppResources.ActionSheetTitle_OrderBy,
-                option_cancel,
-                null,
-                option_name,
-                option_dateCreated,
-                option_dateModified,
-                option_size
-            );
+            await PopupNavigation.Instance.PushAsync(popup);
+        }
 
-            if (!string.IsNullOrEmpty(selected) && selected != option_cancel)
-            {
-                SortingMode sortingMode;
+        async void ProceedOrderBy(ListPopupPageItem selected)
+        {
+            await PopupNavigation.Instance.PopAsync();
+            App.SortingMode = (SortingMode)selected.AssociatedObject;
+            UpdateListView();
+            SortingModeChanged?.Invoke();
+        }
 
-                if (selected == option_name) sortingMode = SortingMode.Name;
-                else if (selected == option_dateCreated) sortingMode = SortingMode.DateCreated;
-                else if (selected == option_dateModified) sortingMode = SortingMode.DateModified;
-                else if (selected == option_size) sortingMode = SortingMode.Size;
-                else sortingMode = SortingMode.Name;
-
-                App.SortingMode = sortingMode;
-                UpdateListView();
-                SortingModeChanged?.Invoke();
-            }
+        async void CancelOrderBy()
+        {
+            await PopupNavigation.Instance.PopAsync();
         }
 
         public event SortingModeChangedEventHandler SortingModeChanged;
+
+        #endregion
 
         #region Rename Folder
 
@@ -901,21 +906,9 @@ namespace Notes.Pages
         //    }
         //}
 
-        private void DisplayTestPopup(object sender, EventArgs e)
-        {
-
-            //var popup = new PromptPopupPage
-            //(
-            //    "Hello",
-            //    "It erat id libero suscipit egestas. Duis eget enim scelerisque, gravida urna quis, accumsan turpis.",
-            //    "Left",
-            //    "Right",
-            //    "Initial is here",
-            //    "Placeholder is here"
-            //);
-            //popup.OptionClicked += HandleOptionClicked;
-
-            //await PopupNavigation.Instance.PushAsync(popup);
-        }
+        //private async void DisplayTestPopup(object sender, EventArgs e)
+        //{
+            
+        //}
     }
 }
