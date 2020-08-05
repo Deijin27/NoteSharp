@@ -64,15 +64,17 @@ namespace Notes.Pages
         
         private async void CreateBackupButton_Clicked(object sender, EventArgs e)
         {
-            await Backup.GetPermissionAndCreateBackup(this);
+            await Backup.GetPermissionAndCreateBackup();
         }
 
-        private async void RestoreBackupButton_Clicked(object sender, EventArgs e)
+        private void RestoreBackupButton_Clicked(object sender, EventArgs e)
         {
-            await Backup.GetPermissionAndRestoreBackup(this);
-            RestoredBackupEvent?.Invoke();
+            if (Backup.BackupRestored == null)
+            {
+                Backup.BackupRestored += RestoredBackupEvent.Invoke;
+            }
+            Backup.GetPermissionAndRestoreBackup();
         }
-
 
         public event BackupRestoredEventHandler RestoredBackupEvent;
     }

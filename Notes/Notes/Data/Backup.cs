@@ -34,6 +34,9 @@ namespace Notes.Data
 
     static class Backup
     {
+        public delegate void BackupRestoredEventHandler();
+        static public BackupRestoredEventHandler BackupRestored;
+
         private static string BackupFolderPath => Path.Combine(App.ExternalStoragePath, "NoteSharp", "Backups");
 
         /// <summary>
@@ -60,130 +63,83 @@ namespace Notes.Data
             return newBackupFile;
         }
 
-        private static async Task<string> CreateBackupJson()
-        {
-            Directory.CreateDirectory(BackupFolderPath);
-            string newBackupFile = NewBackupFilePath(".json");
 
-            // Ideally I can in the future find some way to do this without having to load
-            // everything into memory at once.
-            var serializable = new JsonBackupSerializable
-            {
-                Sheets = await App.Database.GetAllSheetsAsync(),
-                Folders = await App.Database.GetAllFoldersAsync(),
-                Notes = await App.Database.GetAllNotesAsync()
-            };
-
-            using (FileStream fs = File.Create(newBackupFile))
-            {
-                await JsonSerializer.SerializeAsync(fs, serializable);
-            }
-
-            return newBackupFile;
-        }
-
-        /*private static async Task<string> CreateBackupJsonWithoutLoatingEverythingAtOnce()
-        {
-            string newBackupFile = NewBackupFilePath(".json");
-
-            var db = App.Database;
-
-            using (FileStream fs = File.Create(newBackupFile))
-            using (StreamWriter writer = new StreamWriter(fs))
-            {
-                // Notes
-                writer.Write("{\"Notes\":[");
-
-                int noteCount = await db.CountNotesAsync();
-
-                for (int i = 0; i < noteCount; i++)
-                {
-                    Note note = await db.NoteAtIndexAsync(i);
-                    string snote = JsonSerializer.Serialize(note);
-                    writer.Write(snote);
-                    if (i != noteCount - 1)
-                    {
-                        writer.Write(",");
-                    }
-                }
-
-                // Folders
-                writer.Write("],\"Folders\":[");
-
-                
-            }
-
-            return newBackupFile;
-        }*/
+        const string SqliteExt = ".sqlite3";
 
         private static async Task<string> CreateBackupDatabase()
         {
             Directory.CreateDirectory(BackupFolderPath);
-            string newBackupFile = NewBackupFilePath(".sqlite3");
+            string newBackupFile = NewBackupFilePath(SqliteExt);
             await App.Database.BackupAsync(newBackupFile);
             return newBackupFile;
         }
 
-
-        private static List<string> JsonFileExtensions = new List<string>
+        private static async void ChooseBackupFile()
         {
-            ".json"
-        };
-
-        private static List<string> SQLite3FileExtensions = new List<string>
-        {
-            ".db",
-            ".sqlite",
-            ".sqlite3"
-        };
-
-        private static IEnumerable<string> ValidBackupFileExtensions => JsonFileExtensions.Concat(SQLite3FileExtensions);
-
-        private static async Task<string> ChooseBackupFile(Page page)
-        {
-            string backupFolderPath = BackupFolderPath;
-
-            var backupFiles = Directory.GetFiles(backupFolderPath)
+            
+            var backupFiles = Directory.GetFiles(BackupFolderPath)
                                        .Select(Path.GetFileName)
-                                       .Where(i => ValidBackupFileExtensions.Contains(Path.GetExtension(i)))
-                                       .ToArray();
+                                       .Where(i => Path.GetExtension(i) == SqliteExt)
+                                       .Select(i => new ListPopupPageItem { Name = Path.GetFileNameWithoutExtension(i), AssociatedObject = i})
+                                       .ToList();
 
-            if (backupFiles.Length == 0)
+            if (backupFiles.Count == 0)
             {
-                await page.DisplayAlert
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                 (
                     AppResources.Alert_BackupsFolderEmpty_Title, 
                     AppResources.Alert_BackupsFolderEmpty_Message, 
                     AppResources.AlertOption_OK
-                );
-                return null;
+                ));
             }
 
-            string option_cancel = AppResources.ActionSheetOption_Cancel;
+            
             // I should use something other than an action sheet, but this works for now.
-            string result = await page.DisplayActionSheet
+            var popup = new ListPopupPage
             (
                 AppResources.ActionSheetTitle_ChooseBackupFile, 
-                option_cancel, 
-                null, 
+                "Pick a backup file to restore.",
+                AppResources.ActionSheetOption_Cancel, 
                 backupFiles
             );
+            popup.CancelClicked += CancelBackupRestore;
+            popup.BackgroundClicked += CancelBackupRestore;
+            popup.HardwareBackClicked += CancelBackupRestore;
+            popup.ListOptionClicked += ProceedBackupRestore;
 
-            if (string.IsNullOrEmpty(result) || result == option_cancel) return null;
-
-            return Path.Combine(backupFolderPath, result);
+            await PopupNavigation.Instance.PushAsync(popup);
         }
 
-        private static async Task<bool> RestoreBackupDatabase(string chosenBackupPath, Page page)
+        static async void CancelBackupRestore() { await PopupNavigation.Instance.PopAsync(); }
+
+        static async void ProceedBackupRestore(ListPopupPageItem selectedItem)
+        {
+            await PopupNavigation.Instance.PopAsync();
+            string chosenBackupPath = Path.Combine(BackupFolderPath, (string)selectedItem.AssociatedObject);
+            bool restoreSuccessful = await RestoreBackupDatabase(chosenBackupPath);
+
+            if (restoreSuccessful)
+            {
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage
+                (
+                    AppResources.Alert_BackupRestoreComplete_Title,
+                    AppResources.Alert_BackupRestoreComplete_Message,
+                    AppResources.AlertOption_OK
+                ));
+                BackupRestored?.Invoke();
+            }
+        }
+
+        private static async Task<bool> RestoreBackupDatabase(string chosenBackupPath)
         {
             if (!NoteDatabase.IsValid(chosenBackupPath))
             {
-                await page.DisplayAlert
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                 (
-                    AppResources.Alert_BackupRestoreFailed_Title, 
-                    AppResources.Alert_BackupRestoreFailed_Message, 
+                    AppResources.Alert_BackupRestoreFailed_Title,
+                    AppResources.Alert_BackupRestoreFailed_Message + $" ({chosenBackupPath})",
                     AppResources.AlertOption_OK
-                );
+                ));
 
                 return false;
             }
@@ -196,41 +152,9 @@ namespace Notes.Data
             return true;
         }
 
-        private static async Task<bool> RestoreBackupJson(string chosenBackupPath, Page page)
-        {
-            JsonBackupSerializable deserialized;
-            try
-            {
-                using (FileStream fs = File.OpenRead(chosenBackupPath))
-                {
-                    deserialized = await JsonSerializer.DeserializeAsync<JsonBackupSerializable>(fs);
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+        
 
-            NoteDatabase db = App.Database;
-            await db.DeleteAllAsync();
-            
-            if (deserialized.Notes != null)
-            {
-                await db.InsertAllAsync(deserialized.Notes);
-            }
-            if (deserialized.Folders != null)
-            {
-                await db.InsertAllAsync(deserialized.Folders);
-            }
-            if (deserialized.Sheets != null)
-            {
-                await db.InsertAllAsync(deserialized.Sheets);
-            }
-
-            return true;
-        }
-
-        public static async Task<bool> GetPermissionAndCreateBackup(Page page)
+        public static async Task<bool> GetPermissionAndCreateBackup()
         {
             try
             {
@@ -246,23 +170,15 @@ namespace Notes.Data
                     return false;
                 }
 
-                var popup = new ListPopupPage
-                (
-                    AppResources.ActionSheetTitle_ChooseBackupFileFormat,
-                    "The database will be exported to your local storage in the selected file format",
-                    AppResources.ActionSheetOption_Cancel,
-                    new List<ListPopupPageItem>
-                    {
-                        new ListPopupPageItem { Name = "SQLite3", AssociatedObject = BackupOption.SQLite3 },
-                        new ListPopupPageItem { Name = "JSON", AssociatedObject = BackupOption.JSON }
-                    }
-                );
-                popup.CancelClicked += ClosePopupCancelBackup;
-                popup.BackgroundClicked += ClosePopupCancelBackup;
-                popup.HardwareBackClicked += ClosePopupCancelBackup;
-                popup.ListOptionClicked += ClosePopupProceedWithBackup;
+                // new stuff
+                string backupPath = await CreateBackupDatabase();
 
-                await PopupNavigation.Instance.PushAsync(popup);
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage
+                (
+                    AppResources.Alert_BackupComplete_Title,
+                    AppResources.Alert_BackupComplete_Message + "\n" + backupPath,
+                    AppResources.AlertOption_OK
+                ));
 
                 return true;
             }
@@ -274,130 +190,73 @@ namespace Notes.Data
 
         }
 
-        private async static void ClosePopupProceedWithBackup(ListPopupPageItem selectedMode)
+        public static async void GetPermissionAndRestoreBackup()
         {
-            
-            await PopupNavigation.Instance.PopAsync();
-
-            // push loading popup here when i've created it
-
-            string backupPath;
-            switch ((BackupOption)selectedMode.AssociatedObject)
-            {
-                case BackupOption.JSON:
-                    backupPath = await CreateBackupJson();
-                    break;
-                case BackupOption.SQLite3:
-                    backupPath = await CreateBackupDatabase();
-                    break;
-                default:
-                    throw new Exception("BackupOption not recognised (ClosePopupProceedWithBackup)");
-            }
-
-            
-            await PopupNavigation.Instance.PushAsync(new AlertPopupPage
+            var popup = new TwoOptionPopupPage
             (
-                AppResources.Alert_BackupComplete_Title,
-                AppResources.Alert_BackupComplete_Message + backupPath,
-                AppResources.AlertOption_OK
-            ));
+                "Backup Existing?",
+                "If you don't, any notes, folders or style sheets you have currently will be lost.",
+                "Backup",
+                "Delete"
+            );
+            popup.BackgroundClicked += CancelBackupRestore;
+            popup.HardwareBackClicked += CancelBackupRestore;
+            popup.LeftOptionClicked += ProceedBackupExistingThenRestore;
+            popup.RightOptionClicked += ProceedRestoreWithoutBackupExisting;
+
+            await PopupNavigation.Instance.PushAsync(popup);
         }
 
-        private static void ClosePopupCancelBackup()
+        public static async void ProceedBackupExistingThenRestore()
         {
-            PopupNavigation.Instance.PopAsync();
-        }
-
-        private static async Task<string> QueryBackupExisting(Page page, string option_cancel, string option_deletePermanently, string option_createBackup)
-        {
-            string option;
-
-            bool certain = false;
-            do
+            await PopupNavigation.Instance.PopAsync();
+            try
             {
-                option = await page.DisplayActionSheet
-                (
-                    AppResources.ActionSheetTitle_QueryBackupExisting,
-                    option_cancel,
-                    option_deletePermanently,
-                    option_createBackup
-                );
-
-                if (option == option_deletePermanently)
+                PermissionStatus status = await CheckAndRequestStorageWritePermission();
+                if (status != PermissionStatus.Granted)
                 {
-                    certain = await page.DisplayAlert
+                    await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                     (
-                        AppResources.Alert_ConfirmDeleteExisting_Title,
-                        AppResources.Alert_ConfirmDeleteExisting_Message,
-                        AppResources.Alert_ConfirmDeleteExisting_OptionDelete,
-                        AppResources.Alert_ConfirmDeleteExisting_OptionCancel
-                    );
+                        AppResources.Alert_CreateBackupPermissionDenied_Title,
+                        AppResources.Alert_CreateBackupPermissionDenied_Message,
+                        AppResources.AlertOption_OK
+                    ));
                 }
                 else
                 {
-                    certain = true;
+                    await CreateBackupDatabase();
+                    ProceedRestore();
                 }
             }
-            while (!certain);
-
-            return option;
+            catch (Exception e)
+            {
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage("Error Encountered", e.Message, "OK"));
+            }
         }
 
-        public static async Task GetPermissionAndRestoreBackup(Page page)
+        public static async void ProceedRestoreWithoutBackupExisting()
         {
-            string option_cancel = AppResources.ActionSheetOption_Cancel;
-            string option_deletePermanently = AppResources.ActionSheetOption_LocalBackup_DeletePermanently;
-            string option_createBackup = AppResources.ActionSheetOption_LocalBackup_CreateBackup;
+            await PopupNavigation.Instance.PopAsync();
+            ProceedRestore();
+        }
 
-            string backupExistingOption = await QueryBackupExisting(page, option_cancel, option_deletePermanently, option_createBackup);
-            if (backupExistingOption == option_createBackup)
-            {
-                bool backupSuccessful = await GetPermissionAndCreateBackup(page);
-                if (!backupSuccessful) return;
-            }
-            else if (backupExistingOption == option_cancel || string.IsNullOrEmpty(backupExistingOption))
-            {
-                return;
-            }
-
+        public static async void ProceedRestore()
+        {
+            
             PermissionStatus status = await CheckAndRequestStorageReadPermission();
             if (status != PermissionStatus.Granted)
             {
-                await page.DisplayAlert
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                 (
-                    AppResources.Alert_RestoreBackupPermissionDenied_Title, 
-                    AppResources.Alert_RestoreBackupPermissionDenied_Message, 
+                    AppResources.Alert_RestoreBackupPermissionDenied_Title,
+                    AppResources.Alert_RestoreBackupPermissionDenied_Message,
                     AppResources.AlertOption_OK
-                );
-
-                return;
-            }
-
-            string chosenBackupPath = await ChooseBackupFile(page);
-
-            if (chosenBackupPath == null) return;
-
-            bool restoreSuccessful;
-            string fileExt = Path.GetExtension(chosenBackupPath);
-            if (JsonFileExtensions.Contains(fileExt))
-            {
-                restoreSuccessful = await RestoreBackupJson(chosenBackupPath, page);
+                ));
             }
             else
             {
-                restoreSuccessful = await RestoreBackupDatabase(chosenBackupPath, page);
+                ChooseBackupFile();
             }
-
-            if (restoreSuccessful)
-            {
-                await page.DisplayAlert
-                (
-                    AppResources.Alert_BackupRestoreComplete_Title, 
-                    AppResources.Alert_BackupRestoreComplete_Message, 
-                    AppResources.AlertOption_OK
-                );
-            }
-            return;
         }
 
         public static async Task<PermissionStatus> CheckAndRequestStorageWritePermission()
