@@ -7,7 +7,11 @@
 
     <ContentPage.ToolbarItems>
         <!--<ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />-->
-        <ToolbarItem Text="Save" Clicked="OnSaveButtonClicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
+        <ToolbarItem Text="Save" 
+                     Clicked="Save_Clicked"
+                     Order="Primary"
+                     IconImageSource="{StaticResource FontImageSource_Floppy}"
+                     />
         <ToolbarItem Text="Markdown View" Clicked="MarkdownView_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
         <ToolbarItem Text="{x:Static resources:AppResources.PageTitle_MarkdownPreview}" Clicked="MarkdownPreview_Clicked" Order="Secondary" />
         <ToolbarItem Text="{x:Static resources:AppResources.PageTitle_HtmlPreview}" Clicked="HtmlPreview_Clicked" Order="Secondary" />
@@ -19,18 +23,19 @@
             <Button Text="{StaticResource IconGlyph_Close}" 
                     FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
                     TextColor="White"
-                    Clicked="Cancel_Clicked"
+                    Clicked="Close_Clicked"
                     BackgroundColor="Transparent"
                     BorderWidth="0"
                     FontSize="24"
                     />
             <Entry x:Name="NameEntry"
-               Text="{Binding Name}" 
+               Text="{Binding CurrentNote.Name, Mode=TwoWay}" 
                HorizontalOptions="Fill"
                Placeholder="{x:Static resources:AppResources.NoteEntryPage_NamePlaceholder}"
                TextColor="{DynamicResource NavigationBarTextColor}"
                PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
                IsSpellCheckEnabled="False"
+               TextChanged="NameEntry_TextChanged"
                />
         </StackLayout>
     </NavigationPage.TitleView>
@@ -39,9 +44,10 @@
         <StackLayout>
             <Editor x:Name="MainEditor" 
                     Placeholder="{x:Static resources:AppResources.NoteEntryPage_TextPlaceholder}"
-                    Text="{Binding Text}"
+                    Text="{Binding CurrentNote.Text, Mode=TwoWay}"
                     AutoSize="TextChanges"
                     FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
+                    TextChanged="MainEditor_TextChanged"
                     Margin="10, 10, 10, 10"/>
             <Label HeightRequest="500"/>
         </StackLayout>
