@@ -6,6 +6,7 @@ using System.Threading;
 using Notes.Resources;
 using Rg.Plugins.Popup.Services;
 using Notes.PopupPages;
+using System.Threading.Tasks;
 
 namespace Notes.Pages
 {
@@ -14,6 +15,8 @@ namespace Notes.Pages
         string InitialName;
         string InitialText;
         bool NewSheet = false;
+        public CSS CurrentSheet { get; set; }
+        public bool UnsavedChangesExist { get; set; }
 
         public StyleSheetEntryPage(CSS sheet)
         {
@@ -36,7 +39,9 @@ namespace Notes.Pages
                 InitialName = string.Copy(sheet.Name);
             }
 
-            BindingContext = sheet;
+            CurrentSheet = sheet;
+            BindingContext = this;
+            UnsavedChangesExist = false;
         }
 
         public StyleSheetEntryPage()
@@ -52,7 +57,9 @@ namespace Notes.Pages
             InitialText = string.Copy(sheet.Text);
             InitialName = string.Copy(sheet.Name);
 
-            BindingContext = sheet;
+            CurrentSheet = sheet;
+            BindingContext = this;
+            UnsavedChangesExist = false;
         }
 
         void UnfocusAll()
@@ -65,40 +72,30 @@ namespace Notes.Pages
 
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
-            var sheet = (CSS)BindingContext;
-            sheet.DateModified = DateTime.UtcNow;
-            if (NewSheet)
-            {
-                sheet.DateCreated = sheet.DateModified;
-            }
-            await App.Database.SaveSheetAsync(sheet);
-            ChangesSaved?.Invoke();
-            UnfocusAll();
-            await Navigation.PopModalAsync();
+            if (UnsavedChangesExist)
+                await Save();
         }
 
-        async void Cancel_Clicked(object sender, EventArgs e)
+        async void Close_Clicked(object sender, EventArgs e)
         {
-            CSS sheet = (CSS)BindingContext;
-
-            if (sheet.IsReadOnly)
+            if (CurrentSheet.IsReadOnly)
             {
                 await Navigation.PopModalAsync();
             }
-            else if (sheet.Name != InitialName || sheet.Text != InitialText)
+            else if (UnsavedChangesExist)
             {
-                bool answer = await DisplayAlert
+                var popup = new TwoOptionPopupPage
                 (
-                    AppResources.Alert_ExitWithoutSaving_Title,
-                    AppResources.Alert_ExitWithoutSaving_Message,
-                    AppResources.AlertOption_Yes,
-                    AppResources.AlertOption_No
+                    "Save Changes?",
+                    "Unsaved changes exist, would you like to save them?",
+                    "Yes",
+                    "No"
                 );
-                if (answer)
-                {
-                    UnfocusAll();
-                    await Navigation.PopModalAsync();
-                }
+                popup.BackgroundClicked += CancelClose;
+                popup.HardwareBackClicked += CancelClose;
+                popup.LeftOptionClicked += SaveThenClose;
+                popup.RightOptionClicked += CloseWithoutSaving;
+                await PopupNavigation.Instance.PushAsync(popup);
             }
             else
             {
@@ -107,10 +104,38 @@ namespace Notes.Pages
             }
         }
 
-        async void OnSettingsButtonClicked(object sender, EventArgs e)
+        async void CancelClose() { await PopupNavigation.Instance.PopAsync(); }
+
+        async void CloseWithoutSaving()
         {
-            await Navigation.PushAsync(new SettingsPage());
+            CurrentSheet.Name = InitialName;
+            CurrentSheet.Text = InitialText;
+            UnfocusAll();
+            await PopupNavigation.Instance.PopAsync();
+            await Navigation.PopModalAsync();
         }
+
+        async void SaveThenClose()
+        {
+            await PopupNavigation.Instance.PopAsync();
+            await Save();
+            UnfocusAll();
+            await Navigation.PopModalAsync();
+        }
+
+        async Task Save()
+        {
+            CurrentSheet.DateModified = DateTime.UtcNow;
+            if (NewSheet)
+            {
+                CurrentSheet.DateCreated = CurrentSheet.DateModified;
+            }
+            await App.Database.SaveSheetAsync(CurrentSheet);
+            ChangesSaved?.Invoke();
+            UnsavedChangesExist = false;
+            return;
+        }
+        
 
         async void QuickTest_Clicked(object sender, EventArgs e)
         {
@@ -144,6 +169,16 @@ namespace Notes.Pages
             );
 
             await PopupNavigation.Instance.PushAsync(popup);
+        }
+
+        private void TextEditor_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UnsavedChangesExist = true;
+        }
+
+        private void NameEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UnsavedChangesExist = true;
         }
     }
 }

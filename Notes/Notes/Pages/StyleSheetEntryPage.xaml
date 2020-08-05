@@ -11,18 +11,19 @@
             <Button Text="{StaticResource IconGlyph_Close}" 
                     FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
                     TextColor="White"
-                    Clicked="Cancel_Clicked"
+                    Clicked="Close_Clicked"
                     BackgroundColor="Transparent"
                     BorderWidth="0"
                     FontSize="24"
                     />
             <Entry x:Name="NameEntry"
-               Text="{Binding Name}" 
-               Placeholder="{x:Static resources:AppResources.StyleSheetEntryPage_NamePlaceholder}"
-               TextColor="{DynamicResource NavigationBarTextColor}"
-               PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
-               IsSpellCheckEnabled="False"
-               />
+                   Text="{Binding CurrentSheet.Name}" 
+                   TextChanged="NameEntry_TextChanged"
+                   Placeholder="{x:Static resources:AppResources.StyleSheetEntryPage_NamePlaceholder}"
+                   TextColor="{DynamicResource NavigationBarTextColor}"
+                   PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
+                   IsSpellCheckEnabled="False"
+                   />
         </StackLayout>
     </NavigationPage.TitleView>
 
@@ -47,12 +48,13 @@
             <StackLayout>
                 <Editor x:Name="TextEditor" 
                         Placeholder="{x:Static resources:AppResources.StyleSheetEntryPage_TextPlaceholder}"
-                        Text="{Binding Text}"
+                        Text="{Binding CurrentSheet.Text}"
                         AutoSize="TextChanges"
                         FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
                         IsSpellCheckEnabled="False"
                         IsTextPredictionEnabled="False"
                         Margin="10, 0, 10, 10"
+                        TextChanged="TextEditor_TextChanged"
                         />
                 <Label HeightRequest="500"/>
             </StackLayout>

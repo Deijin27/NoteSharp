@@ -7,6 +7,8 @@ using System.Linq;
 using Xamarin.Forms;
 using System.Text.RegularExpressions;
 using Notes.Resources;
+using Rg.Plugins.Popup.Services;
+using Notes.PopupPages;
 
 namespace Notes.Data
 {
@@ -523,12 +525,12 @@ namespace Notes.Data
 
                     if (currentFolder == null)
                     {
-                        await currentPage.DisplayAlert
+                        await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                         (
                             AppResources.Alert_TemplateError_Title, 
                             string.Format(AppResources.Alert_QuickAccessFolderNotFound_Message, currentFolder.Name), 
                             AppResources.AlertOption_OK
-                        );
+                        ));
                         return (null, ErrorEncountered.True);
                     }
                 }
@@ -536,12 +538,12 @@ namespace Notes.Data
                 {
                     if (currentFolder.ID == Guid.Empty) // current folder is root folder
                     {
-                        await currentPage.DisplayAlert
+                        await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                         (
                             AppResources.Alert_TemplateError_Title, 
                             AppResources.Alert_RootFolderHasNoParent_Message,
                             AppResources.AlertOption_OK
-                        );
+                        ));
                         return (null, ErrorEncountered.True);
                     }
                     // current folder is not root folder
@@ -564,12 +566,12 @@ namespace Notes.Data
 
                     if (newFolder == null)
                     {
-                        await currentPage.DisplayAlert
+                        await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                         (
                             AppResources.Alert_TemplateError_Title,
                             string.Format(AppResources.Alert_FolderNotFoundInFolder_Message, folderName, currentFolder.Name),
                             AppResources.AlertOption_OK
-                        );
+                        ));
                         return (null, ErrorEncountered.True);
                     }
 
@@ -625,12 +627,12 @@ namespace Notes.Data
 
                 if (noteFile == null)
                 {
-                    await currentPage.DisplayAlert
+                    await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                     (
                         AppResources.Alert_TemplateError_Title,
                         string.Format(AppResources.Alert_QuickAccessNoteNotFound_Message, noteName),
                         AppResources.AlertOption_OK
-                    );
+                    ));
                     return (null, ErrorEncountered.True);
                 }
             }
@@ -640,12 +642,12 @@ namespace Notes.Data
 
                 if (noteFile == null)
                 {
-                    await currentPage.DisplayAlert
+                    await PopupNavigation.Instance.PushAsync(new AlertPopupPage
                     (
                         AppResources.Alert_TemplateError_Title,
                         string.Format(AppResources.Alert_NoteNotFoundInFolder_Message, noteName, endFolder.Name),
                         AppResources.AlertOption_OK
-                    );
+                    ));
                     return (null, ErrorEncountered.True);
                 }
             }

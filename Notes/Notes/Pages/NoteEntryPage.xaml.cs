@@ -101,6 +101,8 @@ namespace Notes.Pages
                     "Yes",
                     "No"
                 );
+                popup.BackgroundClicked += CancelClose;
+                popup.HardwareBackClicked += CancelClose;
                 popup.LeftOptionClicked += SaveThenClose;
                 popup.RightOptionClicked += ProceedWithClose;
                 await PopupNavigation.Instance.PushAsync(popup);
@@ -110,8 +112,9 @@ namespace Notes.Pages
                 UnfocusAll();
                 await Navigation.PopModalAsync();
             }
-
         }
+
+        async void CancelClose() { await PopupNavigation.Instance.PopAsync(); }
 
         async void ProceedWithClose()
         {
@@ -143,7 +146,6 @@ namespace Notes.Pages
 
         async void Save()
         {
-            await DisplayAlert("Debug: Save Clicked", "", "Proceed");
             Note note = CurrentNote;
             if (NewNote)
             {

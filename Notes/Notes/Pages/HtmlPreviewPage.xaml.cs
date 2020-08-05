@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 using Notes.Data;
 using Xamarin.Essentials;
 using Notes.Resources;
+using Rg.Plugins.Popup.Services;
+using Notes.PopupPages;
 
 namespace Notes.Pages
 {
@@ -34,12 +36,12 @@ namespace Notes.Pages
         private async void CopyButton_Clicked(object sender, EventArgs e)
         {
             await Clipboard.SetTextAsync(HtmlEditor.Text);
-            await DisplayAlert
+            await PopupNavigation.Instance.PushAsync(new AlertPopupPage
             (
                 AppResources.Alert_HtmlCopied_Title, 
                 AppResources.Alert_HtmlCopied_Message, 
                 AppResources.AlertOption_OK
-            );
+            ));
         }
     }
 }

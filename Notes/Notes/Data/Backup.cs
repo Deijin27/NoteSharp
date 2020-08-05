@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 using Notes.Models;
-using System.Text.Json;
 using Notes.Resources;
 using Rg.Plugins.Popup.Services;
 using Notes.PopupPages;
-//using Newtonsoft.Json;
 
 namespace Notes.Data
 {
