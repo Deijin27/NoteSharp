@@ -38,16 +38,16 @@ namespace Notes.Pages
             else 
             {
                 HtmlText = MarkdownBuilder.BuildHtml(markdownFinal);
-                CSS sheet = await ((App)App.Current).GetStyleSheetAsync();
-                UpdateWebView(sheet);
+                UpdateWebView();
             }
         }
 
-        void UpdateWebView(CSS sheet)
+        async void UpdateWebView(CSS sheet = null)
         {
             activityIndicator.IsRunning = true;
             string html = HtmlText;
 
+            if (sheet == null) sheet = await((App)App.Current).GetStyleSheetAsync();
             string css = sheet.Text;
 
             html = "<style>\n" + css + "\n</style>\n" + html; // maybe add some <body> tags so that the user can affect the whole thing with styles.
