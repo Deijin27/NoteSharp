@@ -29,7 +29,7 @@
                     FontSize="24"
                     />
             <Entry x:Name="NameEntry"
-               Text="{Binding CurrentNote.Name, Mode=TwoWay}" 
+               Text="{Binding CurrentNoteName, Mode=TwoWay}" 
                HorizontalOptions="Fill"
                Placeholder="{x:Static resources:AppResources.NoteEntryPage_NamePlaceholder}"
                TextColor="{DynamicResource NavigationBarTextColor}"

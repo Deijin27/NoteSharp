@@ -35,8 +35,8 @@ namespace Notes.Pages
             else
             {
                 ToolbarItems.Remove(CopyButton);
-                InitialText = string.Copy(sheet.Text);
-                InitialName = string.Copy(sheet.Name);
+                InitialText = sheet.Text;
+                InitialName = sheet.Name;
             }
 
             CurrentSheet = sheet;
@@ -54,8 +54,8 @@ namespace Notes.Pages
 
             CSS sheet = new CSS() { IsReadOnly = false };
 
-            InitialText = string.Copy(sheet.Text);
-            InitialName = string.Copy(sheet.Name);
+            InitialText = sheet.Text;
+            InitialName = sheet.Name;
 
             CurrentSheet = sheet;
             BindingContext = this;
@@ -73,7 +73,13 @@ namespace Notes.Pages
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             if (UnsavedChangesExist)
+            {
                 await Save();
+                InitialName = CurrentSheet.Name;
+                InitialText = CurrentSheet.Text;
+                // No need to notify change of CurrentSheet.Name since in this case save doesn't prompt you for a name
+                // For style sheets name conflicts don't matter.
+            }
         }
 
         async void Close_Clicked(object sender, EventArgs e)
@@ -139,19 +145,16 @@ namespace Notes.Pages
 
         async void QuickTest_Clicked(object sender, EventArgs e)
         {
-            var sheet = (CSS)BindingContext;
-            string css = sheet.Text;
-
             string html = "<h1>Test Heading</h1><p>Hello I am a testing robot bleep bloop</p>";
 
-            html = "<style>\n" + css + "\n</style>\n" + html;
+            html = "<style>\n" + CurrentSheet.Text + "\n</style>\n" + html;
 
             await Navigation.PushAsync(new MarkdownViewPage(html, Guid.Empty, true) { Title = "CSS Test View" });
         }
 
         private async void CopyButton_Clicked(object sender, EventArgs e)
         {
-            await Clipboard.SetTextAsync(TextEditor.Text);
+            await Clipboard.SetTextAsync(CurrentSheet.Text);
 
             // maybe a popup here that disappears on it's own
         }

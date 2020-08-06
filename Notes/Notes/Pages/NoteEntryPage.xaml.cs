@@ -16,9 +16,12 @@ namespace Notes.Pages
         public bool NewNote = false;
         private string InitialText;
         private string InitialName;
-        NotesPage PreviousPage;
 
         public Note CurrentNote { get; set; }
+
+        // The following property wrapper needs to exist so that it can be updated visually when it is changed inside
+        // the save button dialog.
+        public string CurrentNoteName { get => CurrentNote.Name; set => CurrentNote.Name = value; }
 
         public bool UnsavedChangesExist { get; set; }
 
@@ -27,12 +30,10 @@ namespace Notes.Pages
         /// Use when loading an existing note
         /// </summary>
         /// <param name="note"></param>
-        /// <param name="previousPage"></param>
-        public NoteEntryPage(Note note, NotesPage previousPage)
+        public NoteEntryPage(Note note)
         {
-            PreviousPage = previousPage;
-            InitialText = string.Copy(note.Text);
-            InitialName = string.Copy(note.Name);
+            InitialText = note.Text;
+            InitialName = note.Name;
 
             InitializeComponent();
             ApplySettings();
@@ -58,17 +59,16 @@ namespace Notes.Pages
         /// </summary>
         /// <param name="folderID"></param>
         /// <param name="previousPage"></param>
-        public NoteEntryPage(Guid folderID, NotesPage previousPage)
+        public NoteEntryPage(Guid folderID)
         {
-            PreviousPage = previousPage;
 
             Note note = new Note()
             {
                 FolderID = folderID 
             };
 
-            InitialText = string.Copy(note.Text);
-            InitialName = string.Copy(note.Name);
+            InitialText = note.Text;
+            InitialName = note.Name;
             NewNote = true;
 
             InitializeComponent();
@@ -187,9 +187,7 @@ namespace Notes.Pages
                         }
                         else
                         {
-                            InitialName = note.Name;
-                            InitialText = note.Text;
-                            UnsavedChangesExist = false;
+                            PostSaveUpdateWithoutClose();
                         }
                     }
                 }
@@ -258,9 +256,7 @@ namespace Notes.Pages
                     }
                     else
                     {
-                        InitialName = note.Name;
-                        InitialText = note.Text;
-                        UnsavedChangesExist = false;
+                        PostSaveUpdateWithoutClose();
                     }
                 }
             }
@@ -269,12 +265,11 @@ namespace Notes.Pages
         bool CloseAfter = false;
         public async void ProceedRenameAndSaveNote(PromptPopupOptionEventArgs e)
         {
-            Note note = CurrentNote;
-            note.Name = e.Text;
-            note.DateModified = DateTime.UtcNow;
-            note.DateCreated = note.DateModified;
+            CurrentNote.Name = e.Text;
+            CurrentNote.DateModified = DateTime.UtcNow;
+            CurrentNote.DateCreated = CurrentNote.DateModified;
             await PopupNavigation.Instance.PopAsync();
-            await App.Database.SaveAsync(note);
+            await App.Database.SaveAsync(CurrentNote);
             ChangesSaved?.Invoke();
 
             if (CloseAfter)
@@ -283,10 +278,17 @@ namespace Notes.Pages
             }
             else
             {
-                InitialName = note.Name;
-                InitialText = note.Text;
-                UnsavedChangesExist = false;
+                PostSaveUpdateWithoutClose();
             }
+        }
+
+        void PostSaveUpdateWithoutClose()
+        {
+            InitialName = CurrentNote.Name;
+            InitialText = CurrentNote.Text;
+            OnPropertyChanged("CurrentNoteName");
+            UnsavedChangesExist = false; // this must happen after property changed notification, because text changed event
+                                         // is triggered by it the update. And within the text changed this is set back to true.
         }
 
         public async void CancelSaveNote(PromptPopupOptionEventArgs e)

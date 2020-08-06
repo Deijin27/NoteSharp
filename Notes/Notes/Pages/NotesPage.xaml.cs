@@ -180,7 +180,7 @@ namespace Notes.Pages
 
         async void OnNoteAddedClicked(object sender, EventArgs e)
         {
-            var page = new NoteEntryPage(FolderID, this);
+            var page = new NoteEntryPage(FolderID);
             page.ChangesSaved += ChangesSavedHandler;
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
@@ -201,7 +201,7 @@ namespace Notes.Pages
                 }
                 else // Note
                 {
-                    var page = new NoteEntryPage(folderContentItem.ContentNote, this);
+                    var page = new NoteEntryPage(folderContentItem.ContentNote);
                     page.ChangesSaved += ChangesSavedHandler;
                     await Navigation.PushModalAsync(new NavigationPage(page));
                 }
