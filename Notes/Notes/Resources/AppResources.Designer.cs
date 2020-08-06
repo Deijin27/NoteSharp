@@ -637,6 +637,46 @@ namespace Notes.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to # Markdown Reference and Test
+        ///
+        ///Markdown is a syntax for describing rich-text components via clean and readable plaintext.
+        ///
+        ///Paragraphs are separated by an empty line.
+        ///
+        ///## Headings
+        ///
+        ///Headings are done with hash chars like this.
+        ///
+        ///``` 
+        ///# First Level Head
+        ///
+        ///## Second Level Head
+        ///
+        ///### Third Level Head
+        ///
+        ///#### Fourth Level Head
+        ///
+        ///##### Fifth Level Head
+        ///
+        ///###### Sixth Level Head
+        ///``` 
+        ///# First Level Head
+        ///
+        ///## Second Level Head
+        ///
+        ///### Third Level Head
+        ///
+        ///#### Fourth Level Head
+        ///
+        ///##### Fifth Level Hea [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MarkdownReferenceAndTest {
+            get {
+                return ResourceManager.GetString("MarkdownReferenceAndTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         public static string MasterOption_About {
@@ -669,6 +709,89 @@ namespace Notes.Resources {
         public static string MasterOption_StyleSheets {
             get {
                 return ResourceManager.GetString("MasterOption_StyleSheets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to body { 
+        ///  background: #1D1D1D; 
+        ///  color: #DDDDDD;
+        ///  line-height: 1.4;
+        ///  font-size: 16;
+        ///}
+        ///
+        ///hr{
+        ///  border: 0px;
+        ///  border-bottom: 1.2px solid #303030;
+        ///}
+        ///
+        ///blockquote {
+        ///  border-left: 4px solid #303030;
+        ///  font-style: italic;
+        ///  margin-left: 0;
+        ///  padding-left: 10;
+        ///  color: #BBBBBB
+        ///}
+        ///
+        ////* -- HEAD ------------------------ */
+        ///
+        ///h1, h2, h3, h4, h5, h6 {
+        ///  font-weight: 500;
+        ///  margin-top: 24px;
+        ///  margin-bottom: 16px;
+        ///}
+        ///
+        ///h1, h2 {
+        ///  padding-bottom: .3em;
+        ///  border-bottom: 1px solid #303030;
+        ///}
+        ///        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ModernDarkCSS {
+            get {
+                return ResourceManager.GetString("ModernDarkCSS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to body { 
+        ///  background: #F6F5F5; 
+        ///  color: #272727;
+        ///  line-height: 1.4;
+        ///  font-size: 16;
+        ///}
+        ///
+        ///hr{
+        ///  border: 0px;
+        ///  border-bottom: 1px solid #DDDDDD;
+        ///}
+        ///
+        ///blockquote {
+        ///  border-left: 4px solid #DDDDDD;
+        ///  font-style: italic;
+        ///  margin-left: 0;
+        ///  padding-left: 10;
+        ///  color: #666666;
+        ///}
+        ///
+        ////* -- HEAD ------------------------ */
+        ///
+        ///h1, h2, h3, h4, h5, h6 {
+        ///  font-weight: 500;
+        ///  margin-top: 24px;
+        ///  margin-bottom: 16px;
+        ///}
+        ///
+        ///h1, h2 {
+        ///  padding-bottom: .3em;
+        ///  border-bottom: 1px solid #DDDDDD;
+        ///}
+        ///
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ModernLightCSS {
+            get {
+                return ResourceManager.GetString("ModernLightCSS", resourceCulture);
             }
         }
         

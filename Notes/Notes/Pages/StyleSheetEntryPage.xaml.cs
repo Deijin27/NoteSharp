@@ -145,7 +145,7 @@ namespace Notes.Pages
 
         async void QuickTest_Clicked(object sender, EventArgs e)
         {
-            string html = "<h1>Test Heading</h1><p>Hello I am a testing robot bleep bloop</p>";
+            string html = AppResources.MarkdownReferenceAndTest;
 
             html = "<style>\n" + CurrentSheet.Text + "\n</style>\n" + html;
 

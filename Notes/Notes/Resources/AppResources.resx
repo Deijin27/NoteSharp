@@ -325,6 +325,10 @@
     <value>Toggle Quick Access</value>
     <comment>Context Action text (when icon is not displayed)</comment>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="MarkdownReferenceAndTest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>MarkdownReferenceAndTest.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="MasterOption_About" xml:space="preserve">
     <value>About</value>
   </data>
@@ -336,6 +340,12 @@
   </data>
   <data name="MasterOption_StyleSheets" xml:space="preserve">
     <value>Style Sheets</value>
+  </data>
+  <data name="ModernDarkCSS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ModernDarkCSS.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="ModernLightCSS" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>ModernLightCSS.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="NoteEntryPage_NamePlaceholder" xml:space="preserve">
     <value>Note Name...</value>

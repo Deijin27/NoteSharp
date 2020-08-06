@@ -10,6 +10,7 @@ using Notes.AccentColors;
 using Notes.Models;
 using System.Threading.Tasks;
 using System.Linq;
+using Notes.Resources;
 
 namespace Notes
 {
@@ -56,8 +57,7 @@ namespace Notes
         public static List<Guid> DefaultStyleSheetGuids = new List<Guid>()
         {
             Guid.Parse("ac67e818-73bd-4d85-a269-12f78a3f46d7"),
-            Guid.Parse("4ad15e4c-e1db-4ff5-a620-61af06060ff1"),
-            Guid.Parse("7270f57d-dfc5-49f3-b4cf-421d7fb6752c")
+            Guid.Parse("4ad15e4c-e1db-4ff5-a620-61af06060ff1")
         };
 
         void CreateDefaultStyleSheets()
@@ -68,24 +68,16 @@ namespace Notes
             {
                 ID = DefaultStyleSheetGuids[0],
                 IsReadOnly = true,
-                Name = "Default1 - Red",
-                Text = "h1 { color: red; }"
+                Name = "Modern Light",
+                Text = AppResources.ModernLightCSS
             });
 
             DefaultStyleSheets.Add(new CSS()
             {
                 ID = DefaultStyleSheetGuids[1],
                 IsReadOnly = true,
-                Name = "Default2 - Blue",
-                Text = "h1 { color: blue; }"
-            });
-
-            DefaultStyleSheets.Add(new CSS()
-            {
-                ID = DefaultStyleSheetGuids[2],
-                IsReadOnly = true,
-                Name = "Default3 - Green",
-                Text = "h1 { color: green; }"
+                Name = "Modern Dark",
+                Text = AppResources.ModernDarkCSS
             });
         }
 

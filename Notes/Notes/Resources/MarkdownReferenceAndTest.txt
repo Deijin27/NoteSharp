@@ -1,0 +1,314 @@
+# Markdown Reference and CSS Test
+
+Markdown is a syntax for describing rich-text components via clean and readable plaintext.
+
+Paragraphs are separated by an empty line.
+
+## Headings
+
+Headings are done with hash chars like this.
+
+``` 
+# First Level Head
+
+## Second Level Head
+
+### Third Level Head
+
+#### Fourth Level Head
+
+##### Fifth Level Head
+
+###### Sixth Level Head
+``` 
+# First Level Head
+
+## Second Level Head
+
+### Third Level Head
+
+#### Fourth Level Head
+
+##### Fifth Level Head
+
+###### Sixth Level Head
+
+## Soft Linebreak
+
+In markdown a single newline is normally ignored. For a soft linebreak (e.g. for dialoges in literature), add two spaces at the end of the line before adding the newline.
+
+She said: "Hello"  
+He said: "again"
+
+## Emphasis
+
+``` 
+For italic text use one *asterix* or one _underscore_.
+``` 
+For italic text use one *asterix* or one _underscore_.
+``` 
+For bold text use two **asterix** or two __underscores__.
+``` 
+For bold text use two **asterix** or two __underscores__.
+
+## Lists
+
+``` 
+For an unordered list use a dash
+
+- like 
+- this
+
+For an ordered list use whatever number you want and add a dot:
+
+1. like
+1. this
+
+Also ordered lists using an alphabetic incrementor:
+
+a. hi
+a. hi
+
+A. hi
+B. hi
+
+And with roman numerals:
+
+i. hi
+ii. hi
+
+I. hi
+I. hi
+``` 
+
+For an unordered list use a dash
+
+- like 
+- this
+
+For an ordered list use whatever number you want and add a dot:
+
+1. like
+1. this
+
+Also ordered lists using an alphabetic incrementor:
+
+a. hi
+a. hi
+
+A. hi
+B. hi
+
+And with roman numerals:
+
+i. hi
+ii. hi
+
+I. hi
+I. hi
+
+## Task Lists
+
+``` 
+- [ ] Item1 
+- [x] Item2 
+- [ ] Item3 
+``` 
+
+- [ ] Item1 
+- [x] Item2
+- [ ] Item3 
+
+## Horizontal Rule
+
+Created with three dashes:
+
+``` 
+Hello
+
+---
+
+I am a line
+``` 
+Hello
+
+---
+
+I am a line
+
+## Links
+
+A web link is automatically converted into a link.
+
+```
+https://pokemonshowdown.com/
+``` 
+
+https://pokemonshowdown.com/
+
+Or you can have text function as the link.
+
+```
+[Pokémon Showdown](https://pokemonshowdown.com/) 
+``` 
+[Pokémon Showdown](https://pokemonshowdown.com/)
+
+## Images
+
+The same rules as with links, but with an `!`. These can be links to web image files, or files on your device (`/storage/emulated/0/` is the path to the folder usually called _Internal Storage_). The width or height of the image can also be specified - width as a percentage (of the page width) is often easiest.
+
+``` 
+![](https://www.serebii.net/pokedex-dp/icon/330.gif){width=15%}
+``` 
+
+![](https://www.serebii.net/pokedex-dp/icon/330.gif){width=15%}
+
+You can have an image also function as a link:
+
+``` 
+[![](/storage/emulated/0/Snapseed/img.jpg){width=50%}](https://serebii.net)
+``` 
+
+[![alt-text](/storage/emulated/0/Snapseed/img.jpg){width=50%}](https://serebii.net)
+
+You can also embed video links!
+
+``` 
+![](https://youtu.be/RmHkx9P19hg){width=100%}
+``` 
+
+![youtube.com](https://youtu.be/RmHkx9P19hg){width=100%}
+
+## Blockquote
+
+Blockquotes are done using a greater-than sign at the start of the line.
+
+``` 
+> "My flexible friend" - Mr. Bean
+``` 
+> "My flexible friend" - Mr. Bean
+
+## Footnotes
+
+Define footnotes and it will be automatically put at the end of the document, then use them anywhere.
+
+``` 
+You can write footnotes[^1] with markdown. 
+
+Scroll down to the end of the page[^2] and look for the footnotes. 
+
+[^1]: Thank you for scrolling.
+[^2]: This is the end of the page.
+``` 
+
+You can write footnotes[^1] with markdown. 
+
+Scroll down to the end of the page[^2] and look for the footnotes. 
+
+[^1]: Thank you for scrolling.
+[^2]: This is the end of the page.
+
+## Definition List
+
+To create a definition list put the word, then each definition starts with a colon and three spaces.
+
+``` 
+Apple
+:   Pomaceous fruit of plants of the genus Malus in 
+the family Rosaceae.
+
+Orange
+:   The fruit of an evergreen tree of the genus Citrus.
+``` 
+Apple
+:   Pomaceous fruit of plants of the genus Malus in 
+the family Rosaceae.
+
+Orange
+:   The fruit of an evergreen tree of the genus Citrus.
+
+## Tables
+
+``` 
+| Name | Species |
+| --- | --- |
+| Storm | White Cloud Mountain Minnow | 
+| Alphonse | Leopard Danio |
+``` 
+
+| Name | Species |
+| --- | --- |
+| Storm | White Cloud Mountain Minnow |
+| Alphonse | Leopard Danio |
+
+You can control the alignment of data in a table column using colons.
+
+``` 
+| Left Aligned | Right Aligned | Centre Aligned |
+| :--- | ---: | :---: |
+| 10 | 10 | 10 |
+| 1111 | 1111 | 1111 |
+``` 
+
+| Left Aligned | Right Aligned | Centre Aligned |
+| :--- | ---: | :---: |
+| 10 | 10 | 10 |
+| 1111 | 1111 | 1111 |
+
+
+## Code
+
+Backticks are key to making code.
+
+
+    Let us create some `<?php inlineCode(); ?>` and now let us check, if a codeblock works:
+
+    ```
+    using System; 
+    class Program 
+    { 
+        public static void Main(string[] args) 
+        { 
+            Console.WriteLine("Hello, world! How are you on this fine evening?"); 
+        } 
+    }
+    ```
+
+Let us create some `<?php inlineCode(); ?>` and now let us check, if a codeblock works:
+
+```
+using System; 
+class Program 
+{ 
+    public static void Main(string[] args) 
+    { 
+        Console.WriteLine("Hello, world! How are you on this fine evening?"); 
+    } 
+}
+```
+
+## Other Stuff
+
+Deleted
+:   `~~strikethrough~~` 
+:   ~~strikethrough~~
+
+Inserted 
+:   `++underline++`
+:   ++underline++
+
+Marked
+:   `==highlight==`
+:   ==highlight==
+
+Superscript
+:   `x^ax^ + 3` 
+:   x^ax^ + 3
+
+Subscript
+:   `H~2~O` 
+:   H~2~O
+
+Keyboard Key
+:   `<kbd>Ctrl</kbd> + <kbd>C</kbd>` 
+:   <kbd>Ctrl</kbd> + <kbd>C</kbd> 
