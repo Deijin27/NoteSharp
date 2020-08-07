@@ -289,6 +289,7 @@ namespace Notes.Pages
             OnPropertyChanged("CurrentNoteName");
             UnsavedChangesExist = false; // this must happen after property changed notification, because text changed event
                                          // is triggered by it the update. And within the text changed this is set back to true.
+            NewNote = false; // No Longer a new note after it has been saved, avoids weird behaviour of asking you to rename it when it's already named
         }
 
         public async void CancelSaveNote(PromptPopupOptionEventArgs e)
