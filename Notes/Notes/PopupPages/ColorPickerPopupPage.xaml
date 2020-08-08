@@ -5,10 +5,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:base="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+             xmlns:local="clr-namespace:Notes.PopupPages;assembly=Notes"
              mc:Ignorable="d"
              Padding="0,20,0,20"
              x:Class="Notes.PopupPages.ColorPickerPopupPage"
              >
+    <base:PopupPage.Resources>
+        <ResourceDictionary>
+            <local:DoubleTo256Converter x:Key="doubleTo256Converter" />
+            <local:AlphaConverter x:Key="alphaConverter" />
+        </ResourceDictionary>
+    </base:PopupPage.Resources>
     <base:PopupPage.Animation>
         <animations:ScaleAnimation 
             PositionIn="Center"
@@ -36,7 +43,9 @@
                        TextColor="{DynamicResource PrimaryContentTextColor}"
                        FontSize="Small"
                        />
+            <Button Text="Import Hex/Rgba From Clipboard" Clicked="SetFromClipboard"/>
 
+            <ScrollView>
             <Grid>
                 <Grid.Resources>
                     <Style TargetType="Label">
@@ -52,6 +61,9 @@
                     <RowDefinition/>
                     <RowDefinition/>
                     <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -60,22 +72,35 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0" Grid.Row="0" Text="R"/>
-                <Entry Grid.Column="1" Grid.Row="0" Text="{Binding RedText, Mode=TwoWay}" Keyboard="Numeric"/>
+                <Entry Grid.Column="1" Grid.Row="0" Text="{Binding RedValue, Mode=TwoWay, Converter={StaticResource doubleTo256Converter}}" Keyboard="Numeric"/>
                 <Slider Grid.Column="2" Grid.Row="0" Value="{Binding RedValue, Mode=TwoWay}"/>
 
                 <Label Grid.Column="0" Grid.Row="1" Text="G"/>
-                <Entry Grid.Column="1"  Grid.Row="1" Text="{Binding GreenText, Mode=TwoWay}" Keyboard="Numeric"/>
+                <Entry Grid.Column="1"  Grid.Row="1" Text="{Binding GreenValue, Mode=TwoWay, Converter={StaticResource doubleTo256Converter}}" Keyboard="Numeric"/>
                 <Slider Grid.Column="2" Grid.Row="1" Value="{Binding GreenValue, Mode=TwoWay}"/>
 
                 <Label Grid.Column="0" Grid.Row="2" Text="B"/>
-                <Entry Grid.Column="1" Grid.Row="2" Text="{Binding BlueText, Mode=TwoWay}" Keyboard="Numeric"/>
+                <Entry Grid.Column="1" Grid.Row="2" Text="{Binding BlueValue, Mode=TwoWay, Converter={StaticResource doubleTo256Converter}}" Keyboard="Numeric"/>
                 <Slider Grid.Column="2" Grid.Row="2" Value="{Binding BlueValue, Mode=TwoWay}"/>
 
-                <Label Grid.Column="0" Grid.Row="3" Text="A"/>
-                <Entry Grid.Column="1" Grid.Row="3" Text="{Binding AlphaText, Mode=TwoWay}" Keyboard="Numeric"/>
-                <Slider Grid.Column="2" Grid.Row="3" Value="{Binding AlphaValue, Mode=TwoWay}"/>
+                <Label Grid.Column="0" Grid.Row="3" Text="H"/>
+                <Entry Grid.Column="1" Grid.Row="3" Text="{Binding HueValue, Mode=TwoWay, Converter={StaticResource doubleTo256Converter}}" Keyboard="Numeric"/>
+                <Slider Grid.Column="2" Grid.Row="3" Value="{Binding HueValue, Mode=TwoWay}"/>
+
+                <Label Grid.Column="0" Grid.Row="4" Text="S"/>
+                <Entry Grid.Column="1" Grid.Row="4" Text="{Binding SaturationValue, Mode=TwoWay, Converter={StaticResource doubleTo256Converter}}" Keyboard="Numeric"/>
+                <Slider Grid.Column="2" Grid.Row="4" Value="{Binding SaturationValue, Mode=TwoWay}"/>
+
+                <Label Grid.Column="0" Grid.Row="5" Text="L"/>
+                <Entry Grid.Column="1" Grid.Row="5" Text="{Binding LuminosityValue, Mode=TwoWay, Converter={StaticResource doubleTo256Converter}}" Keyboard="Numeric"/>
+                <Slider Grid.Column="2" Grid.Row="5" Value="{Binding LuminosityValue, Mode=TwoWay}"/>
+
+                <Label Grid.Column="0" Grid.Row="6" Text="A"/>
+                <Entry Grid.Column="1" Grid.Row="6" Text="{Binding AlphaValue, Mode=TwoWay, Converter={StaticResource alphaConverter}}" Keyboard="Numeric"/>
+                <Slider Grid.Column="2" Grid.Row="6" Value="{Binding AlphaValue, Mode=TwoWay}"/>
 
             </Grid>
+            </ScrollView>
 
             <Grid>
                 <Label Text="Transparency" HorizontalOptions="Center" VerticalOptions="Center" 

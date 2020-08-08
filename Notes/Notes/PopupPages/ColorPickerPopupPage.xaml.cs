@@ -6,9 +6,45 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Xamarin.Essentials;
 using System.ComponentModel;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Notes.PopupPages
 {
+
+    public class DoubleTo256Converter : IValueConverter
+    {
+        // number to string
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return ((int)((double)value * 255)).ToString();
+        }
+
+        // string to number
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return double.TryParse((string)value, out double i) ? i / 255 : 0;
+        }
+    }
+
+    public class AlphaConverter : IValueConverter
+    {
+        // number to string
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Math.Round((double)value, 2).ToString();
+        }
+
+        // string to number
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return double.TryParse((string)value, out double i) ? i : 1.0;
+        }
+    }
+
+
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ColorPickerPopupPage : PopupPage, INotifyPropertyChanged
     {
@@ -19,8 +55,7 @@ namespace Notes.PopupPages
             string message, 
             string cancelButtonText, 
             string copyHexButtonText,
-            string copyRgbaButtonText,
-            Color initialColor
+            string copyRgbaButtonText
         )
         {
             Title = title;
@@ -29,7 +64,8 @@ namespace Notes.PopupPages
             CopyRgbaButtonText = copyRgbaButtonText;
             CancelButtonText = cancelButtonText;
 
-            currentColorValue = initialColor;
+
+            currentColorValue = App.ColorPickerLastCopied;
 
             InitializeComponent();
 
@@ -121,6 +157,9 @@ namespace Notes.PopupPages
         #endregion
 
 
+        bool ValueIsChanging = false;
+
+
         #region Two way stuff
         Color currentColorValue;
         public Color CurrentColor
@@ -128,8 +167,20 @@ namespace Notes.PopupPages
             get => currentColorValue;
             set
             {
-                currentColorValue = value;
-                OnPropertyChanged(nameof(CurrentColor));
+                if (!ValueIsChanging)
+                {
+                    currentColorValue = value;
+                    ValueIsChanging = true;
+                    OnPropertyChanged(nameof(CurrentColor));
+                    OnPropertyChanged(nameof(RedValue));
+                    OnPropertyChanged(nameof(GreenValue));
+                    OnPropertyChanged(nameof(BlueValue));
+                    OnPropertyChanged(nameof(HueValue));
+                    OnPropertyChanged(nameof(SaturationValue));
+                    OnPropertyChanged(nameof(LuminosityValue));
+                    OnPropertyChanged(nameof(AlphaValue));
+                    ValueIsChanging = false;
+                }
             }
         }
 
@@ -137,19 +188,12 @@ namespace Notes.PopupPages
         {
             get => CurrentColor.R;
             set
-            {
-                CurrentColor = new Color(value, CurrentColor.G, CurrentColor.B, CurrentColor.A);
-                OnPropertyChanged(nameof(RedText));
-            }
-        }
-
-        public string RedText
-        {
-            get => ((int)(RedValue * 255)).ToString();
-            set
-            {
-                RedValue = double.TryParse(value, out double i) ? i / 255 : 0;
-                OnPropertyChanged(nameof(RedValue));
+            { 
+                if (RedValue != value)
+                {
+                    CurrentColor = new Color(value, CurrentColor.G, CurrentColor.B, CurrentColor.A);
+                    //OnPropertyChanged(nameof(RedValue));
+                }
             }
         }
 
@@ -158,18 +202,11 @@ namespace Notes.PopupPages
             get => CurrentColor.G;
             set
             {
-                CurrentColor = new Color(CurrentColor.R, value, CurrentColor.B, CurrentColor.A);
-                OnPropertyChanged(nameof(GreenText));
-            }
-        }
-
-        public string GreenText
-        {
-            get => ((int)(GreenValue * 255)).ToString();
-            set 
-            { 
-                GreenValue = double.TryParse(value, out double i) ? i / 255 : 0;
-                OnPropertyChanged(nameof(GreenValue));
+                if (GreenValue != value)
+                {
+                    CurrentColor = new Color(CurrentColor.R, value, CurrentColor.B, CurrentColor.A);
+                    //OnPropertyChanged(nameof(GreenValue));
+                }
             }
         }
 
@@ -178,18 +215,52 @@ namespace Notes.PopupPages
             get => CurrentColor.B;
             set
             {
-                CurrentColor = new Color(CurrentColor.R, CurrentColor.G, value, CurrentColor.A);
-                OnPropertyChanged(nameof(BlueText));
+                if (BlueValue != value)
+                {
+                    CurrentColor = new Color(CurrentColor.R, CurrentColor.G, value, CurrentColor.A);
+                    //OnPropertyChanged(nameof(BlueValue));
+                }
             }
         }
 
-        public string BlueText
+        public double HueValue
         {
-            get => ((int)(BlueValue * 255)).ToString();
+            get => CurrentColor.Hue;
             set
             {
-                BlueValue = double.TryParse(value, out double i) ? i / 255 : 0;
-                OnPropertyChanged(nameof(BlueValue));
+                if (HueValue != value)
+                {
+                    CurrentColor = CurrentColor.WithHue(value);
+                    //OnPropertyChanged(nameof(HueValue));
+                }
+            }
+        }
+
+
+        public double SaturationValue
+        {
+            get => CurrentColor.Saturation;
+            set
+            {
+                if (SaturationValue != value)
+                {
+                    CurrentColor = CurrentColor.WithSaturation(value);
+                    //OnPropertyChanged(nameof(SaturationValue));
+                }
+            }
+        }
+
+
+        public double LuminosityValue
+        {
+            get => CurrentColor.Luminosity;
+            set
+            {
+                if (LuminosityValue != value)
+                {
+                    CurrentColor = CurrentColor.WithLuminosity(value);
+                    //OnPropertyChanged(nameof(LuminosityValue));
+                }
             }
         }
 
@@ -198,23 +269,11 @@ namespace Notes.PopupPages
             get => CurrentColor.A;
             set
             {
-                CurrentColor = new Color(CurrentColor.R, CurrentColor.G, CurrentColor.B, value);
-                OnPropertyChanged(nameof(AlphaText));
-            }
-        }
-
-        public string AlphaText
-        {
-            get
-            {
-
-                string txt = Math.Round(AlphaValue, 2).ToString();
-                return txt;
-            }
-            set
-            {
-                AlphaValue = double.TryParse(value, out double i) ? i : 1;
-                OnPropertyChanged(nameof(AlphaValue));
+                if (AlphaValue != value)
+                {
+                    CurrentColor = new Color(CurrentColor.R, CurrentColor.G, CurrentColor.B, value);
+                }
+                //OnPropertyChanged(nameof(AlphaText));
             }
         }
 
@@ -297,25 +356,52 @@ namespace Notes.PopupPages
 
         #endregion
 
-        private void CopyHex_Clicked(object sender, EventArgs e)
+
+        private async void SetFromClipboard(object sender, EventArgs e)
         {
-            PopupNavigation.Instance.PopAsync();
+            string text = await Clipboard.GetTextAsync();
+            text = text.Trim();
+            if (Regex.IsMatch(text, @"^#([0-9A-F]{3}){1,2}$", RegexOptions.IgnoreCase))
+            {
+                CurrentColor = Color.FromHex(text);
+            }
+            else
+            {
+                var matches = Regex.Matches(text, @"^rgba\(\s*?(?<R>[01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\s*?,\s*?(?<G>[01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\s*?,\s*?(?<B>[01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\s*?,\s*?(?<A>(1(\.0+)?)|(0(\.\d+)?))\s*?\)$");
+                if (matches.Count > 0)
+                {
+                    var groups = matches[0].Groups;
+                    //Console.WriteLine("|{0}|{1}|{2}|{3}|{4}|", groups[0].Value, groups["R"].Value, groups["G"].Value, groups["B"].Value, groups["A"].Value);
+                    //Console.WriteLine("|{0}|{1}|{2}|{3}|{4}|", groups[0].Value, int.Parse(groups["R"].Value), int.Parse(groups["G"].Value), int.Parse(groups["B"].Value), double.Parse(groups["A"].Value));
+                    CurrentColor = new Color(double.Parse(groups["R"].Value)/255, double.Parse(groups["G"].Value)/255, double.Parse(groups["B"].Value)/255, double.Parse(groups["A"].Value));
+                }
+            }
+        }
+
+
+        private async void CopyHex_Clicked(object sender, EventArgs e)
+        {
             string hex = CurrentColor.ToHex().Remove(1, 2);
-            Clipboard.SetTextAsync(hex);
-            PopupNavigation.Instance.PopAsync();
+            await Clipboard.SetTextAsync(hex);
+            App.ColorPickerLastCopied = CurrentColor;
+            await PopupNavigation.Instance.PopAsync();
         }
 
-        private void CopyRgba_Clicked(object sender, EventArgs e)
+        private async void CopyRgba_Clicked(object sender, EventArgs e)
         {
-            PopupNavigation.Instance.PopAsync();
-            var rgba = $"rgba({RedText}, {GreenText}, {BlueText}, {AlphaText})";
-            Clipboard.SetTextAsync(rgba);
-            PopupNavigation.Instance.PopAsync();
+            var conv = new DoubleTo256Converter();
+
+            var rgba = $"rgba({(int)(RedValue * 255)}, {(int)(GreenValue * 255)}, {(int)(BlueValue * 255)}, {Math.Round(AlphaValue, 2)})";
+            await Clipboard.SetTextAsync(rgba);
+            App.ColorPickerLastCopied = CurrentColor;
+            await PopupNavigation.Instance.PopAsync();
         }
 
-        private void Cancel_Clicked(object sender, EventArgs e)
+
+
+        private async void Cancel_Clicked(object sender, EventArgs e)
         {
-            PopupNavigation.Instance.PopAsync();
+            await PopupNavigation.Instance.PopAsync();
         }
     }
 }

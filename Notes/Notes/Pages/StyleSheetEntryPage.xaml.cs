@@ -165,8 +165,7 @@ namespace Notes.Pages
                 "Note that to use transparency you need to use the Copy RGBA option.",
                 "Cancel",
                 "Copy Hex",
-                "Copy RGBA",
-                Color.IndianRed
+                "Copy RGBA"
             );
 
             await PopupNavigation.Instance.PushAsync(popup);

@@ -331,5 +331,25 @@ namespace Notes
         //    int defaultCount = DefaultStyleSheets.Where(i => i.Name == name).Count();
         //    return (defaultCount > 0) || (await Database.DoesCSSNameExist(name));
         //}
+
+        public static Color ColorPickerLastCopied
+        {
+            get
+            {
+                double red = Preferences.Get("ColorPickerLastCopied_Red", defaultValue: 0.5);
+                double green = Preferences.Get("ColorPickerLastCopied_Green", defaultValue: 0.5);
+                double blue = Preferences.Get("ColorPickerLastCopied_Blue", defaultValue: 0.5);
+                double alpha = Preferences.Get("ColorPickerLastCopied_Alpha", defaultValue: 0.5);
+                return new Color(red, green, blue, alpha);
+            }
+
+            set
+            {
+                Preferences.Set("ColorPickerLastCopied_Red", value.R);
+                Preferences.Set("ColorPickerLastCopied_Green", value.G);
+                Preferences.Set("ColorPickerLastCopied_Blue", value.B);
+                Preferences.Set("ColorPickerLastCopied_Alpha", value.A);
+            }
+        }
     }
 }
