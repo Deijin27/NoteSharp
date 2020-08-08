@@ -147,9 +147,7 @@ namespace Notes.Pages
         {
             string html = AppResources.MarkdownReferenceAndTest;
 
-            html = "<style>\n" + CurrentSheet.Text + "\n</style>\n" + html;
-
-            await Navigation.PushAsync(new MarkdownViewPage(html, Guid.Empty, true) { Title = "CSS Test View" });
+            await Navigation.PushAsync(new MarkdownViewPage(html, CurrentSheet) { Title = "CSS Test View" });
         }
 
         private async void CopyButton_Clicked(object sender, EventArgs e)

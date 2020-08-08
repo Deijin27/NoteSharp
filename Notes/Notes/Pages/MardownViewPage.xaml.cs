@@ -18,13 +18,18 @@ namespace Notes.Pages
         public MarkdownViewPage(string markdownText, Guid folderID, bool DisableCssSelector = false)
         {
             InitializeComponent();
-            if (DisableCssSelector)
-            {
-                ToolbarItems.Remove(SelectCSS);
-            }
 
             MarkdownText = markdownText;
             InitialiseHtml(folderID);
+        }
+
+        public MarkdownViewPage(string html, CSS css) // for testing css
+        {
+            InitializeComponent();
+            ToolbarItems.Remove(SelectCSS);
+
+            HtmlText = html;
+            UpdateWebView(css);
         }
 
         async void InitialiseHtml(Guid folderID)
