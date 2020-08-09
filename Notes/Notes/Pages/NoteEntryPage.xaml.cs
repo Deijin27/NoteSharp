@@ -163,9 +163,32 @@ namespace Notes.Pages
                             note.FolderID,
                             note.ID,
                             App.Database.DoesNoteNameExistAsync,
-                            "Name invalid, it contains one of" + " \"/*.~",
+                            "Name invalid, it contains one of [/] or [\"] or starts with [~] or [*] or is [.] or [..]",
                             "Name conflict encountered; try a different name",
-                            "",
+                            note.Name,
+                            "Input note name..."
+                        );
+                        popup.AcceptOptionClicked += ProceedRenameAndSaveNote;
+                        popup.CancelOptionClicked += CancelSaveNote;
+                        popup.BackgroundClicked += CancelSaveNote;
+                        popup.HardwareBackClicked += CancelSaveNote;
+
+                        await PopupNavigation.Instance.PushAsync(popup);
+                    }
+                    else if (UniqueNamePromptPopupPage.IsNameInvalid(note.Name))
+                    {
+                        var popup = new UniqueNamePromptPopupPage
+                        (
+                            "Note name invalid",
+                            "Input a different name for the note",
+                            "OK",
+                            "Cancel",
+                            note.FolderID,
+                            note.ID,
+                            App.Database.DoesNoteNameExistAsync,
+                            "Name invalid, it contains one of [/] or [\"] or starts with [~] or [*] or is [.] or [..]",
+                            "Name conflict encountered; try a different name",
+                            note.Name,
                             "Input note name..."
                         );
                         popup.AcceptOptionClicked += ProceedRenameAndSaveNote;
@@ -202,9 +225,9 @@ namespace Notes.Pages
                         note.FolderID,
                         note.ID,
                         App.Database.DoesNoteNameExistAsync,
-                        "Name invalid, it contains one of" + " \"/*.~",
+                        "Name invalid, it contains one of [/] or [\"] or starts with [~] or [*] or is [.] or [..]",
                         "Name conflict encountered; try a different name",
-                        "",
+                        note.Name,
                         "Input note name..."
                     );
                     popup.AcceptOptionClicked += ProceedRenameAndSaveNote;
@@ -233,9 +256,32 @@ namespace Notes.Pages
                         note.FolderID,
                         note.ID,
                         namechecker,
-                        "Name invalid, it contains one of" + " \"/*.~",
+                        "Name invalid, it contains one of [/] or [\"] or starts with [~] or [*] or is [.] or [..]",
                         "Name conflict encountered; try a different name",
-                        "",
+                        note.Name,
+                        "Input note name..."
+                    );
+                    popup.AcceptOptionClicked += ProceedRenameAndSaveNote;
+                    popup.CancelOptionClicked += CancelSaveNote;
+                    popup.BackgroundClicked += CancelSaveNote;
+                    popup.HardwareBackClicked += CancelSaveNote;
+
+                    await PopupNavigation.Instance.PushAsync(popup);
+                }
+                else if (note.Name != InitialName && UniqueNamePromptPopupPage.IsNameInvalid(note.Name))
+                {
+                    var popup = new UniqueNamePromptPopupPage
+                    (
+                        "Note name invalid",
+                        "Input a different name for the note",
+                        "OK",
+                        "Cancel",
+                        note.FolderID,
+                        note.ID,
+                        namechecker,
+                        "Name invalid, it contains one of [/] or [\"] or starts with [~] or [*] or is [.] or [..]",
+                        "Name conflict encountered; try a different name",
+                        note.Name,
                         "Input note name..."
                     );
                     popup.AcceptOptionClicked += ProceedRenameAndSaveNote;

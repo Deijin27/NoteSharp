@@ -315,7 +315,7 @@ namespace Notes.PopupPages
         {
             string name = e.NewTextValue;
 
-            if (!IsNameValid(name))
+            if (IsNameInvalid(name))
             {
                 WarningLabel.Text = NameInvalidWarningMessage;
                 AcceptButtonEnabled = false;
@@ -332,9 +332,9 @@ namespace Notes.PopupPages
             }
         }
 
-        private static bool IsNameValid(string name)
+        public static bool IsNameInvalid(string name)
         {
-            return !(name.Contains("/") || name.Contains("\"") || name.Contains("*") || name.Contains("~") || name.Contains("."));
+            return name.Contains("/") || name.Contains("\"") || name.StartsWith("*") || name.StartsWith("~") || name == "." || name == "..";
         }
     }
 }

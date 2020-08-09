@@ -37,7 +37,7 @@
                        FontSize="Small"
                        />
             </ScrollView>
-            <Label x:Name="WarningLabel" HeightRequest="20" TextColor="Red" /> 
+            <Label x:Name="WarningLabel" TextColor="Red" HeightRequest="40"/> 
             <Entry x:Name="InputEntry" HorizontalOptions="Fill"
                    TextChanged="InputEntry_TextChanged"
                    />
