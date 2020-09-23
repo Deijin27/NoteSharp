@@ -503,7 +503,7 @@ namespace Notes.Data
         public Task<(string result, bool errorEncountered)> InterpolateAndInputTemplatesAsync(string text, Guid folderID)
         {
             // first interpolate anything in this string, inputting the default values specified
-            text = InterpolateValues(text, new List<Dictionary<string, string>>());
+            text = InterpolateValues(text, new Dictionary<string, string>());
             // then input all templates
             return InputTemplates(text, folderID, folderID);
         }
@@ -647,7 +647,6 @@ namespace Notes.Data
 
         private Dictionary<string, string> LoadDatasetString(string datasetString)
         {
-
             var dataset = new Dictionary<string, string>();
 
             foreach (Match match in DiRegex.Matches(datasetString))
@@ -668,29 +667,35 @@ namespace Notes.Data
             bool errorEncountered;
             Note datasetFile;
             Note templateFile;
-            List<Dictionary<string, string>> datasets;
+            Dictionary<string, string> mergedDataset;
 
             foreach (Match match in TiRegex.Matches(text))
             {
                 templatePath = match.Groups["path"].Value;
-
-                IEnumerable<string> datasetPaths = DatasetPathRegex.Matches(match.Groups["datasets"].Value).OfType<Match>().Select(i => i.Groups["dataset"].Value);
 
                 (templateFile, errorEncountered) = await GetNoteByPath(templatePath, folderID, mainFolderID);
                 if (errorEncountered) return (null, errorEncountered);
 
                 template = templateFile.Text;
 
-                datasets = new List<Dictionary<string, string>>();
-                foreach (string datasetPath in datasetPaths)
+                IEnumerable<string> datasetPaths = DatasetPathRegex.Matches(match.Groups["datasets"].Value)
+                                                                   .OfType<Match>()
+                                                                   .Select(i => i.Groups["dataset"].Value)
+                                                                   .Reverse(); // reverse order so that the first dataset in the list has priority
+
+                mergedDataset = new Dictionary<string, string>();
+                foreach (string datasetPath in datasetPaths) 
                 {
                     (datasetFile, errorEncountered) = await GetNoteByPath(datasetPath, folderID, mainFolderID);
                     if (errorEncountered) return (null, errorEncountered);
 
-                    datasets.Add(LoadDatasetString(datasetFile.Text));
+                    foreach (KeyValuePair<string, string> kvp in LoadDatasetString(datasetFile.Text))
+                    {
+                        mergedDataset[kvp.Key] = kvp.Value;
+                    }
                 }
 
-                template = InterpolateValues(template, datasets);
+                template = InterpolateValues(template, mergedDataset);
 
                 (template, errorEncountered) = await InputTemplates(template, templateFile.FolderID, mainFolderID);
                 if (errorEncountered) return (null, errorEncountered);
@@ -701,27 +706,14 @@ namespace Notes.Data
             return (text, false);
         }
 
-        private static string InterpolateValues(string template, List<Dictionary<string, string>> datasets)
+        private static string InterpolateValues(string template, Dictionary<string, string> mergedDataset)
         {
             foreach (Match match in DiRegex.Matches(template))
             {
-                string replacement = "";
-
-                bool keyFound = false;
                 string key = match.Groups["key"].Value;
                 // take the value from the first dataset with a match
-                foreach (var dataset in datasets)
-                {
-                    if (dataset.ContainsKey(key))
-                    {
-                        replacement = dataset[key];
-                        keyFound = true;
-                        break;
-                    }
-                }
-
-                if (!keyFound)
-                {
+                if (!mergedDataset.TryGetValue(key, out string replacement))
+                { 
                     replacement = match.Groups["value"].Value;
                 }
 

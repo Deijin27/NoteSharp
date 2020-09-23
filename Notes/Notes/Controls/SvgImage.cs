@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Notes.Pages;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
@@ -86,7 +85,7 @@ namespace Notes.Controls
             float canvasMin = Math.Min(width, height);
             float svgMax = Math.Max(svg.Picture.CullRect.Width, svg.Picture.CullRect.Height);
             float scale = canvasMin / svgMax;
-            var matrix = SKMatrix.MakeScale(scale, scale);
+            var matrix = SKMatrix.CreateScale(scale, scale);
 
             // draw the svg
             canvas.DrawPicture(svg.Picture, ref matrix);
