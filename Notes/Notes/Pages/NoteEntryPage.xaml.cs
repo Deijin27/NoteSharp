@@ -43,6 +43,8 @@ namespace Notes.Pages
             CurrentNote = note;
             BindingContext = this;
             UnsavedChangesExist = false;
+            FindAndReplace.BoundEditor = MainEditor;
+            FindAndReplace.BoundNote = CurrentNote;
         }
 
         public void UnfocusAll() 
@@ -77,6 +79,8 @@ namespace Notes.Pages
             CurrentNote = note;
             BindingContext = this;
             UnsavedChangesExist = false;
+            FindAndReplace.BoundEditor = MainEditor;
+            FindAndReplace.BoundNote = CurrentNote;
         }
 
         public void ApplySettings()
@@ -370,6 +374,11 @@ namespace Notes.Pages
         private void MainEditor_TextChanged(object sender, TextChangedEventArgs e)
         {
             UnsavedChangesExist = true;
+        }
+
+        private void ToggleFindAndReplace_Clicked(object sender, EventArgs e)
+        {
+            FindAndReplace.IsVisible = !FindAndReplace.IsVisible;
         }
     }
 }

@@ -502,9 +502,9 @@ namespace Notes.Data
 
         #region Template Stuff
 
-        private static Regex DiRegex = new Regex(@"(?<!\\)<di\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*di\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
-        private static Regex TiRegex = new Regex(@"(?<!\\)<ti\s+""(?<path>[^>]*?)""\s*(?<datasets>[^>]*?)?/>");
-        private static Regex DatasetPathRegex = new Regex(@"\s*""(?<dataset>.*?)""\s*");
+        private static Regex DiRegex = new Regex(@"(?s)(?<!\\)<di\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*di\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
+        private static Regex TiRegex = new Regex(@"(?s)(?<!\\)<ti\s+""(?<path>[^>]*?)""\s*(?<datasets>[^>]*?)?/>");
+        private static Regex DatasetPathRegex = new Regex(@"(?s)\s*""(?<dataset>.*?)""\s*");
 
         public Task<(string, ErrorEncountered)> InterpolateAndInputTemplatesAsync(string text, Page currentPage, Guid folderID)
         {

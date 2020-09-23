@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+      xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      x:Class="Notes.Controls.FindAndReplaceControl"
+      x:Name="FindAndReplace" IsVisible="False" Padding="10" BackgroundColor="{DynamicResource NavigationBarColor}">
+    <Grid.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="{DynamicResource NavigationBarTextColor}"/>
+            <Setter Property="VerticalTextAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="Small"/>
+        </Style>
+    </Grid.Resources>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="30"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+
+    <Label Grid.Row="0" Grid.Column="0" Text="Find:"/>
+    <Entry x:Name="FindEntry" Grid.Row="0" Grid.Column="1" Placeholder="Find..." FontSize="Small" Text="{Binding TextToFind}" TextChanged="FindEntry_TextChanged"/>
+
+    <Label Grid.Row="1" Grid.Column="0" Text="Replace:"/>
+    <Entry Grid.Row="1" Grid.Column="1" Placeholder="Replace With..." FontSize="Small" Text="{Binding ReplaceWith}"/>
+
+    <StackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+        <Button Text="Next" FontSize="Small"  Padding="5,0,5,0" Clicked="Next_Clicked"/>
+        <Button Text="Previous" FontSize="Small"  Padding="5,0,5,0" Clicked="Previous_Clicked"/>
+        <Button Text="Replace" Padding="5,0,5,0" FontSize="Small" Clicked="Replace_Clicked"/>
+        <Button Text="Replace All" Padding="5,0,5,0" FontSize="Small" Clicked="ReplaceAll_Clicked"/>
+    </StackLayout>
+
+    <StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+        <CheckBox Color="{DynamicResource PrimaryAccentColor}" IsChecked="{Binding CaseSensitive}"/>
+        <Label Grid.Row="0" Grid.Column="0" Text="Case Sensitive"/>
+        <CheckBox Color="{DynamicResource PrimaryAccentColor}" IsChecked="{Binding UseRegex}"/>
+        <Label Text="Regex"/>
+        <Label Margin="20,0,0,0" Text="0 of 10"/>
+    </StackLayout>
+
+</Grid>
