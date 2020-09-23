@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using SQLite;
 using Notes.Models;
 using System.Linq;
-using Xamarin.Forms;
 using System.Text.RegularExpressions;
 using Notes.Resources;
 using Rg.Plugins.Popup.Services;
@@ -12,11 +11,6 @@ using Notes.PopupPages;
 
 namespace Notes.Data
 {
-    public enum ErrorEncountered
-    {
-        False,
-        True
-    }
 
     public class NoteDatabase
     {
@@ -506,15 +500,15 @@ namespace Notes.Data
         private static Regex TiRegex = new Regex(@"(?s)(?<!\\)<ti\s+""(?<path>[^>]*?)""\s*(?<datasets>[^>]*?)?/>");
         private static Regex DatasetPathRegex = new Regex(@"(?s)\s*""(?<dataset>.*?)""\s*");
 
-        public Task<(string, ErrorEncountered)> InterpolateAndInputTemplatesAsync(string text, Page currentPage, Guid folderID)
+        public Task<(string result, bool errorEncountered)> InterpolateAndInputTemplatesAsync(string text, Guid folderID)
         {
             // first interpolate anything in this string, inputting the default values specified
             text = InterpolateValues(text, new List<Dictionary<string, string>>());
             // then input all templates
-            return InputTemplates(text, currentPage, folderID, folderID);
+            return InputTemplates(text, folderID, folderID);
         }
 
-        private async Task<(Folder, ErrorEncountered)> FollowFolderPath(Folder currentFolder, IEnumerable<string> folderNameSequence, Page currentPage)
+        private async Task<(Folder finalFolder, bool errorEncountered)> FollowFolderPath(Folder currentFolder, IEnumerable<string> folderNameSequence)
         {
             foreach (string folderName in folderNameSequence)
             {
@@ -531,7 +525,7 @@ namespace Notes.Data
                             string.Format(AppResources.Alert_QuickAccessFolderNotFound_Message, currentFolder.Name), 
                             AppResources.AlertOption_OK
                         ));
-                        return (null, ErrorEncountered.True);
+                        return (null, true);
                     }
                 }
                 else if (folderName == "..") // step up a folder
@@ -544,7 +538,7 @@ namespace Notes.Data
                             AppResources.Alert_RootFolderHasNoParent_Message,
                             AppResources.AlertOption_OK
                         ));
-                        return (null, ErrorEncountered.True);
+                        return (null, true);
                     }
                     // current folder is not root folder
                     if (currentFolder.ParentID == Guid.Empty) // parent folder is root folder
@@ -572,16 +566,16 @@ namespace Notes.Data
                             string.Format(AppResources.Alert_FolderNotFoundInFolder_Message, folderName, currentFolder.Name),
                             AppResources.AlertOption_OK
                         ));
-                        return (null, ErrorEncountered.True);
+                        return (null, true);
                     }
 
                     currentFolder = newFolder;
                 }
             }
-            return (currentFolder, ErrorEncountered.False);
+            return (currentFolder, false);
         }
 
-        private async Task<(Note, ErrorEncountered)> GetNoteByPath(string path, Page currentPage, Guid folderID, Guid mainFolderID)
+        private async Task<(Note note, bool errorEncountered)> GetNoteByPath(string path, Guid folderID, Guid mainFolderID)
         {
             switch (path[0])
             {
@@ -609,12 +603,8 @@ namespace Notes.Data
 
             IEnumerable<string> folderNameSequence = pathSplit.Take(pathSplit.Length - 1);
 
-            Folder endFolder;
-            
-            ErrorEncountered errorEncountered;
-            (endFolder, errorEncountered) = await FollowFolderPath(startFolder, folderNameSequence, currentPage);
-            if (errorEncountered == ErrorEncountered.True)
-                return (null, errorEncountered);
+            (Folder endFolder, bool errorEncountered) = await FollowFolderPath(startFolder, folderNameSequence);
+            if (errorEncountered) return (null, errorEncountered);
 
             string noteName = pathSplit.Last();
 
@@ -633,7 +623,7 @@ namespace Notes.Data
                         string.Format(AppResources.Alert_QuickAccessNoteNotFound_Message, noteName),
                         AppResources.AlertOption_OK
                     ));
-                    return (null, ErrorEncountered.True);
+                    return (null, true);
                 }
             }
             else 
@@ -648,11 +638,11 @@ namespace Notes.Data
                         string.Format(AppResources.Alert_NoteNotFoundInFolder_Message, noteName, endFolder.Name),
                         AppResources.AlertOption_OK
                     ));
-                    return (null, ErrorEncountered.True);
+                    return (null, true);
                 }
             }
 
-            return (noteFile, ErrorEncountered.False);
+            return (noteFile, false);
         }
 
         private Dictionary<string, string> LoadDatasetString(string datasetString)
@@ -662,19 +652,20 @@ namespace Notes.Data
 
             foreach (Match match in DiRegex.Matches(datasetString))
             {
+                string key = match.Groups["key"].Value.Trim();
                 string value = match.Groups["value"].Value;
 
-                dataset.Add(match.Groups["key"].Value.Trim(), value);
+                dataset[key] = value;
             }
 
             return dataset;
         }
 
-        private async Task<(string, ErrorEncountered)> InputTemplates(string text, Page currentPage, Guid folderID, Guid mainFolderID)
+        private async Task<(string result, bool errorEncountered)> InputTemplates(string text, Guid folderID, Guid mainFolderID)
         { 
             string template;
             string templatePath;
-            ErrorEncountered errorEncountered;
+            bool errorEncountered;
             Note datasetFile;
             Note templateFile;
             List<Dictionary<string, string>> datasets;
@@ -683,37 +674,31 @@ namespace Notes.Data
             {
                 templatePath = match.Groups["path"].Value;
 
-                var datasetPaths = new List<string>();
+                IEnumerable<string> datasetPaths = DatasetPathRegex.Matches(match.Groups["datasets"].Value).OfType<Match>().Select(i => i.Groups["dataset"].Value);
 
-                foreach (Match dmatch in DatasetPathRegex.Matches(match.Groups["datasets"].Value))
-                {
-                    datasetPaths.Add(dmatch.Groups["dataset"].Value);
-                }
+                (templateFile, errorEncountered) = await GetNoteByPath(templatePath, folderID, mainFolderID);
+                if (errorEncountered) return (null, errorEncountered);
 
-                (templateFile, errorEncountered) = await GetNoteByPath(templatePath, currentPage, folderID, mainFolderID);
-                if (errorEncountered == ErrorEncountered.True) 
-                    return (null, ErrorEncountered.True);
                 template = templateFile.Text;
 
                 datasets = new List<Dictionary<string, string>>();
                 foreach (string datasetPath in datasetPaths)
                 {
-                    (datasetFile, errorEncountered) = await GetNoteByPath(datasetPath, currentPage, folderID, mainFolderID);
-                    if (errorEncountered == ErrorEncountered.True)
-                        return (null, ErrorEncountered.True);
+                    (datasetFile, errorEncountered) = await GetNoteByPath(datasetPath, folderID, mainFolderID);
+                    if (errorEncountered) return (null, errorEncountered);
+
                     datasets.Add(LoadDatasetString(datasetFile.Text));
                 }
 
                 template = InterpolateValues(template, datasets);
 
-                (template, errorEncountered) = await InputTemplates(template, currentPage, templateFile.FolderID, mainFolderID);
-                if (errorEncountered == ErrorEncountered.True)
-                    return (null, ErrorEncountered.True);
+                (template, errorEncountered) = await InputTemplates(template, templateFile.FolderID, mainFolderID);
+                if (errorEncountered) return (null, errorEncountered);
 
                 text = text.Replace(match.Value, template);
             }
 
-            return (text, ErrorEncountered.False);
+            return (text, false);
         }
 
         private static string InterpolateValues(string template, List<Dictionary<string, string>> datasets)

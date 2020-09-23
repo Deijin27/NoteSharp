@@ -1,18 +1,14 @@
 ﻿using Markdig;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace Notes.Data
 {
     static class MarkdownBuilder
     {
-        public static Task<(string, ErrorEncountered)> BuildMarkdown(string text, Page page, Guid folderID)
+        public static Task<(string result, bool errorEncountered)> BuildMarkdown(string text, Guid folderID)
         {
-            return App.Database.InterpolateAndInputTemplatesAsync(text, page, folderID);
+            return App.Database.InterpolateAndInputTemplatesAsync(text, folderID);
         }
 
         public static string BuildHtml(string text)

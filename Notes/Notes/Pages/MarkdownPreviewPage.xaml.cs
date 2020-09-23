@@ -19,9 +19,9 @@ namespace Notes.Pages
 
         async void InitialiseMarkdown(Guid folderID, string markdownText)
         {
-            (string markdownFinal, ErrorEncountered errorEncountered) = await MarkdownBuilder.BuildMarkdown(markdownText, this, folderID);
+            (string markdownFinal, bool errorEncountered) = await MarkdownBuilder.BuildMarkdown(markdownText, folderID);
 
-            if (errorEncountered == ErrorEncountered.True)
+            if (errorEncountered)
             {
                 await Navigation.PopAsync();
             }

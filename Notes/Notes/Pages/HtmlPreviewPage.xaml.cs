@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
 using Xamarin.Forms;
-using Notes.Models;
-using System.Text.RegularExpressions;
 using Notes.Data;
 using Xamarin.Essentials;
 using Notes.Resources;
@@ -22,9 +19,9 @@ namespace Notes.Pages
 
         async void InitialiseHtml(Guid folderID, string markdownText)
         {
-            (string markdownFinal, ErrorEncountered errorEncountered) = await MarkdownBuilder.BuildMarkdown(markdownText, this, folderID);
+            (string markdownFinal, bool errorEncountered) = await MarkdownBuilder.BuildMarkdown(markdownText, folderID);
 
-            if (errorEncountered == ErrorEncountered.True)
+            if (errorEncountered)
             {
                 await Navigation.PopAsync();
             }
