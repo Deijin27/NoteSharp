@@ -8,23 +8,24 @@ namespace Notes.Pages
 {
     public partial class MarkdownViewPage : ContentPage
     {
-        string MarkdownText;
+        readonly string MarkdownText;
         string HtmlText;
 
         public MarkdownViewPage(string markdownText, Guid folderID)
         {
             InitializeComponent();
-
+            activityIndicator.IsRunning = true;
             MarkdownText = markdownText;
             InitialiseHtml(folderID);
         }
 
-        public MarkdownViewPage(string html, CSS css) // for testing css
+        public MarkdownViewPage(string markdownText, CSS css) // for testing css
         {
             InitializeComponent();
+            activityIndicator.IsRunning = true;
             ToolbarItems.Remove(SelectCSS);
 
-            HtmlText = html;
+            HtmlText = MarkdownBuilder.BuildHtml(markdownText);
             UpdateWebView(css);
         }
 
@@ -35,6 +36,7 @@ namespace Notes.Pages
             if (errorEncountered)
             {
                 await Navigation.PopAsync();
+                activityIndicator.IsRunning = false;
             }
             else 
             {

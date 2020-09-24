@@ -2,7 +2,6 @@
 using Xamarin.Forms;
 using Notes.Models;
 using Xamarin.Essentials;
-using System.Threading;
 using Notes.Resources;
 using Rg.Plugins.Popup.Services;
 using Notes.PopupPages;
@@ -145,9 +144,9 @@ namespace Notes.Pages
 
         async void QuickTest_Clicked(object sender, EventArgs e)
         {
-            string html = AppResources.MarkdownReferenceAndTest;
+            string markdownText = AppResources.MarkdownReferenceAndTest;
 
-            await Navigation.PushAsync(new MarkdownViewPage(html, CurrentSheet) { Title = "CSS Test View" });
+            await Navigation.PushAsync(new MarkdownViewPage(markdownText, CurrentSheet) { Title = "CSS Test View" });
         }
 
         private async void CopyButton_Clicked(object sender, EventArgs e)
