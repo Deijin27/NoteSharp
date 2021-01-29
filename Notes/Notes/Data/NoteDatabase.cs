@@ -496,9 +496,10 @@ namespace Notes.Data
 
         #region Template Stuff
 
-        private static Regex DiRegex = new Regex(@"(?s)(?<!\\)<di\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*di\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
-        private static Regex TiRegex = new Regex(@"(?s)(?<!\\)<ti\s+""(?<path>[^>]*?)""\s*(?<datasets>[^>]*?)?/>");
-        private static Regex DatasetPathRegex = new Regex(@"(?s)\s*""(?<dataset>.*?)""\s*");
+        private static readonly Regex DiRegex = new Regex(@"(?s)(?<!\\)<di\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*di\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
+        private static readonly Regex TiRegex = new Regex(@"(?s)(?<!\\)<ti\s+""(?<path>[^""]*)""\s*(?<datasets>(\s*""([^""]*)""\s*)*?)\s*(?<loosekeys>(((\s*[^""\s]+?)|(\s*""[^""]*?""))=""[^""]*?""\s*)*?)\s*/>");
+        private static readonly Regex DatasetPathRegex = new Regex(@"(?s)""(?<dataset>.*?)"""); // i removed spaces either side of this
+        private static readonly Regex LooseKeyRegex = new Regex(@"(?s)((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))=""(?<value>[^""]*?)""");
 
         public Task<(string result, bool errorEncountered)> InterpolateAndInputTemplatesAsync(string text, Guid folderID)
         {
@@ -694,6 +695,11 @@ namespace Notes.Data
                         mergedDataset[kvp.Key] = kvp.Value;
                     }
                 }
+
+                foreach (Match lk in LooseKeyRegex.Matches(match.Groups["loosekeys"].Value))
+                {
+                    mergedDataset[lk.Groups["key"].Value] = lk.Groups["value"].Value;
+                }                       
 
                 template = InterpolateValues(template, mergedDataset);
 
