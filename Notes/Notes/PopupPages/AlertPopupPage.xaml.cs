@@ -2,9 +2,9 @@
 using Rg.Plugins.Popup.Pages;
 using System;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Notes.Data;
 
 namespace Notes.PopupPages
 {

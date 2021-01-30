@@ -4,15 +4,11 @@ using System.Threading.Tasks;
 using SQLite;
 using Notes.Models;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Notes.Resources;
-using Rg.Plugins.Popup.Services;
-using Notes.PopupPages;
 
 namespace Notes.Data
 {
 
-    public class NoteDatabase
+    public class NoteDatabase : INoteDatabase
     {
         readonly SQLiteAsyncConnection _database;
 
@@ -280,7 +276,7 @@ namespace Notes.Data
         {
             return _database.InsertAllAsync(enumerable);
         }
-        
+
         #endregion
 
         #region Delete Object
@@ -477,7 +473,7 @@ namespace Notes.Data
             List<Note> containedNotes = await _database.Table<Note>().Where(i => i.FolderID == folder.ID).ToListAsync();
             foreach (Note note in containedNotes)
             {
-                await DeleteAsync(note); 
+                await DeleteAsync(note);
             }
 
             await DeleteFolderNotContentAsync(folder);
@@ -493,242 +489,5 @@ namespace Notes.Data
 
             return;
         }
-
-        #region Template Stuff
-
-        private static readonly Regex DiRegex = new Regex(@"(?s)(?<!\\)<di\s+((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))\s*((>(?<value>.*?)(?<!\\)</\s*di\s*>)|(\s*(""(?<value>[^""]*?)"")?\s*/>))");
-        private static readonly Regex TiRegex = new Regex(@"(?s)(?<!\\)<ti\s+""(?<path>[^""]*)""\s*(?<datasets>(\s*""([^""]*)""\s*)*?)\s*(?<loosekeys>(((\s*[^""\s]+?)|(\s*""[^""]*?""))=""[^""]*?""\s*)*?)\s*/>");
-        private static readonly Regex DatasetPathRegex = new Regex(@"(?s)""(?<dataset>.*?)"""); // i removed spaces either side of this
-        private static readonly Regex LooseKeyRegex = new Regex(@"(?s)((?<key>[^""\s]+?)|(""(?<key>[^""]*?)""))=""(?<value>[^""]*?)""");
-
-        public Task<(string result, bool errorEncountered)> InterpolateAndInputTemplatesAsync(string text, Guid folderID)
-        {
-            // first interpolate anything in this string, inputting the default values specified
-            text = InterpolateValues(text, new Dictionary<string, string>());
-            // then input all templates
-            return InputTemplates(text, folderID, folderID);
-        }
-
-        private async Task<(Folder finalFolder, bool errorEncountered)> FollowFolderPath(Folder currentFolder, IEnumerable<string> folderNameSequence)
-        {
-            foreach (string folderName in folderNameSequence)
-            {
-                
-                if (folderName[0] == '*') // look for in quick access
-                {
-                    currentFolder = await GetQuickAccessFolderByNameAsync(folderName.Remove(0, 1));
-
-                    if (currentFolder == null)
-                    {
-                        await PopupNavigation.Instance.PushAsync(new AlertPopupPage
-                        (
-                            AppResources.Alert_TemplateError_Title, 
-                            string.Format(AppResources.Alert_QuickAccessFolderNotFound_Message, currentFolder.Name), 
-                            AppResources.AlertOption_OK
-                        ));
-                        return (null, true);
-                    }
-                }
-                else if (folderName == "..") // step up a folder
-                {
-                    if (currentFolder.ID == Guid.Empty) // current folder is root folder
-                    {
-                        await PopupNavigation.Instance.PushAsync(new AlertPopupPage
-                        (
-                            AppResources.Alert_TemplateError_Title, 
-                            AppResources.Alert_RootFolderHasNoParent_Message,
-                            AppResources.AlertOption_OK
-                        ));
-                        return (null, true);
-                    }
-                    // current folder is not root folder
-                    if (currentFolder.ParentID == Guid.Empty) // parent folder is root folder
-                    {
-                        currentFolder = new Folder() { ID = Guid.Empty, Name = AppResources.PageTitle_RootFolder };
-                    }
-                    else // parent folder is not root folder, i.e. it exists in database
-                    {
-                        currentFolder = await GetFolderAsync(currentFolder.ParentID);
-                    }
-                }
-                else if (folderName == ".") // stay same folder
-                {
-                    // do nothing
-                }
-                else // look for folder in current folder
-                {
-                    Folder newFolder = await GetFolderByNameAsync(currentFolder.ID, folderName);
-
-                    if (newFolder == null)
-                    {
-                        await PopupNavigation.Instance.PushAsync(new AlertPopupPage
-                        (
-                            AppResources.Alert_TemplateError_Title,
-                            string.Format(AppResources.Alert_FolderNotFoundInFolder_Message, folderName, currentFolder.Name),
-                            AppResources.AlertOption_OK
-                        ));
-                        return (null, true);
-                    }
-
-                    currentFolder = newFolder;
-                }
-            }
-            return (currentFolder, false);
-        }
-
-        private async Task<(Note note, bool errorEncountered)> GetNoteByPath(string path, Guid folderID, Guid mainFolderID)
-        {
-            switch (path[0])
-            {
-                case '/': // start in root folder
-                    {
-                        folderID = Guid.Empty;
-                        path = path.Remove(0, 1);
-                        break;
-                    }
-                case '~': // relative path, but relative to the folder of the file you press the preview button in
-                    {
-                        folderID = mainFolderID;
-                        path = path.Remove(0, 1);
-                        break;
-                    }
-            }
-
-            string[] pathSplit = path.Split('/');
-
-            Folder startFolder;
-            if (folderID == Guid.Empty) 
-                startFolder = new Folder() { ID = Guid.Empty, Name = AppResources.PageTitle_RootFolder };
-            else 
-                startFolder = await GetFolderAsync(folderID);
-
-            IEnumerable<string> folderNameSequence = pathSplit.Take(pathSplit.Length - 1);
-
-            (Folder endFolder, bool errorEncountered) = await FollowFolderPath(startFolder, folderNameSequence);
-            if (errorEncountered) return (null, errorEncountered);
-
-            string noteName = pathSplit.Last();
-
-            Note noteFile;
-
-            if (noteName[0] == '*')
-            {
-                noteName = noteName.Remove(0, 1);
-                noteFile = await GetQuickAccessNoteByNameAsync(noteName);
-
-                if (noteFile == null)
-                {
-                    await PopupNavigation.Instance.PushAsync(new AlertPopupPage
-                    (
-                        AppResources.Alert_TemplateError_Title,
-                        string.Format(AppResources.Alert_QuickAccessNoteNotFound_Message, noteName),
-                        AppResources.AlertOption_OK
-                    ));
-                    return (null, true);
-                }
-            }
-            else 
-            { 
-                noteFile = await GetNoteByNameAsync(endFolder.ID, noteName);
-
-                if (noteFile == null)
-                {
-                    await PopupNavigation.Instance.PushAsync(new AlertPopupPage
-                    (
-                        AppResources.Alert_TemplateError_Title,
-                        string.Format(AppResources.Alert_NoteNotFoundInFolder_Message, noteName, endFolder.Name),
-                        AppResources.AlertOption_OK
-                    ));
-                    return (null, true);
-                }
-            }
-
-            return (noteFile, false);
-        }
-
-        private Dictionary<string, string> LoadDatasetString(string datasetString)
-        {
-            var dataset = new Dictionary<string, string>();
-
-            foreach (Match match in DiRegex.Matches(datasetString))
-            {
-                string key = match.Groups["key"].Value.Trim();
-                string value = match.Groups["value"].Value;
-
-                dataset[key] = value;
-            }
-
-            return dataset;
-        }
-
-        private async Task<(string result, bool errorEncountered)> InputTemplates(string text, Guid folderID, Guid mainFolderID)
-        { 
-            string template;
-            string templatePath;
-            bool errorEncountered;
-            Note datasetFile;
-            Note templateFile;
-            Dictionary<string, string> mergedDataset;
-
-            foreach (Match match in TiRegex.Matches(text))
-            {
-                templatePath = match.Groups["path"].Value;
-
-                (templateFile, errorEncountered) = await GetNoteByPath(templatePath, folderID, mainFolderID);
-                if (errorEncountered) return (null, errorEncountered);
-
-                template = templateFile.Text;
-
-                IEnumerable<string> datasetPaths = DatasetPathRegex.Matches(match.Groups["datasets"].Value)
-                                                                   .OfType<Match>()
-                                                                   .Select(i => i.Groups["dataset"].Value)
-                                                                   .Reverse(); // reverse order so that the first dataset in the list has priority
-
-                mergedDataset = new Dictionary<string, string>();
-                foreach (string datasetPath in datasetPaths) 
-                {
-                    (datasetFile, errorEncountered) = await GetNoteByPath(datasetPath, folderID, mainFolderID);
-                    if (errorEncountered) return (null, errorEncountered);
-
-                    foreach (KeyValuePair<string, string> kvp in LoadDatasetString(datasetFile.Text))
-                    {
-                        mergedDataset[kvp.Key] = kvp.Value;
-                    }
-                }
-
-                foreach (Match lk in LooseKeyRegex.Matches(match.Groups["loosekeys"].Value))
-                {
-                    mergedDataset[lk.Groups["key"].Value] = lk.Groups["value"].Value;
-                }                       
-
-                template = InterpolateValues(template, mergedDataset);
-
-                (template, errorEncountered) = await InputTemplates(template, templateFile.FolderID, mainFolderID);
-                if (errorEncountered) return (null, errorEncountered);
-
-                text = text.Replace(match.Value, template);
-            }
-
-            return (text, false);
-        }
-
-        private static string InterpolateValues(string template, Dictionary<string, string> mergedDataset)
-        {
-            foreach (Match match in DiRegex.Matches(template))
-            {
-                string key = match.Groups["key"].Value;
-                // take the value from the first dataset with a match
-                if (!mergedDataset.TryGetValue(key, out string replacement))
-                { 
-                    replacement = match.Groups["value"].Value;
-                }
-
-                template = template.Replace(match.Value, replacement);
-            }
-
-            return template;
-        }
-
-        #endregion
     }
 }

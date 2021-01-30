@@ -19,10 +19,11 @@ namespace Notes.Pages
 
         async void InitialiseHtml(Guid folderID, string markdownText)
         {
-            (string markdownFinal, bool errorEncountered) = await MarkdownBuilder.BuildMarkdown(markdownText, folderID);
+            (string markdownFinal, ErrorDetails errorDetails) = await MarkdownBuilder.BuildMarkdown(markdownText, folderID, App.Database);
 
-            if (errorEncountered)
+            if (errorDetails.ErrorWasEncountered)
             {
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage(errorDetails.Title, errorDetails.Message, errorDetails.DismissButtonText));
                 await Navigation.PopAsync();
             }
             else

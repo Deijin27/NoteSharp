@@ -3,6 +3,8 @@ using Xamarin.Forms;
 using Notes.Models;
 using Xamarin.Essentials;
 using Notes.Data;
+using Notes.PopupPages;
+using Rg.Plugins.Popup.Services;
 
 namespace Notes.Pages
 {
@@ -31,10 +33,11 @@ namespace Notes.Pages
 
         async void InitialiseHtml(Guid folderID)
         {
-            (string markdownFinal, bool errorEncountered) = await MarkdownBuilder.BuildMarkdown(MarkdownText, folderID);
+            (string markdownFinal, ErrorDetails errorDetails) = await MarkdownBuilder.BuildMarkdown(MarkdownText, folderID, App.Database);
 
-            if (errorEncountered)
+            if (errorDetails.ErrorWasEncountered)
             {
+                await PopupNavigation.Instance.PushAsync(new AlertPopupPage(errorDetails.Title, errorDetails.Message, errorDetails.DismissButtonText));
                 await Navigation.PopAsync();
                 activityIndicator.IsRunning = false;
             }
