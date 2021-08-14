@@ -30,5 +30,13 @@ namespace Notes.Services
 
             return status;
         }
+
+        public async Task<PermissionStatus> CheckAndRequestStorageReadWritePermission()
+        {
+            var read = await CheckAndRequestStorageReadPermission();
+            var write = await CheckAndRequestStorageWritePermission();
+
+            return read == PermissionStatus.Granted && write == PermissionStatus.Granted ? PermissionStatus.Granted : PermissionStatus.Denied;
+        }
     }
 }

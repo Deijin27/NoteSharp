@@ -3,8 +3,10 @@ using Notes.RouteUtil;
 using Notes.Services;
 using Notes.ViewModels.Base;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Notes.ViewModels
@@ -15,6 +17,7 @@ namespace Notes.ViewModels
         {
             HtmlPreviewCommand = new Command(HtmlPreview);
             MarkdownPreviewCommand = new Command(MarkdownPreview);
+            InsertImageCommand = new Command(InsertImage);
 
             IsSpellCheckEnabled = Services.Preferences.IsSpellCheckEnabled;
         }
@@ -53,8 +56,9 @@ namespace Notes.ViewModels
             }
         }
 
-        public ICommand HtmlPreviewCommand { get; set; }
-        public ICommand MarkdownPreviewCommand { get; set; }
+        public ICommand HtmlPreviewCommand { get; }
+        public ICommand MarkdownPreviewCommand { get; }
+        public ICommand InsertImageCommand { get; }
 
         async void HtmlPreview()
         {
@@ -94,6 +98,52 @@ namespace Notes.ViewModels
             }
             RaisePropertyChanged(nameof(CurrentName));
             RaisePropertyChanged(nameof(CurrentText));
+        }
+
+        public async void InsertImage()
+        {
+            if ((await Services.Permissions.CheckAndRequestStorageReadWritePermission()) == PermissionStatus.Granted)
+            {
+                try
+                {
+                    var file = await MediaPicker.PickPhotoAsync();
+                    // canceled
+                    if (file == null)
+                    {
+                        return;
+                    }
+                    // save the file into local storage
+                    var folder = Services.FileSystem.Path.Combine(Services.ExternalStoragePath, "NoteSharp", "Images");
+                    Services.FileSystem.Directory.CreateDirectory(folder);
+                    var newFileTry = Path.Combine(folder, Path.GetFileNameWithoutExtension(file.FileName));
+                    var extension = Path.GetExtension(file.FileName);
+                    var newFile = newFileTry + extension;
+                    if (Services.FileSystem.File.Exists(newFile))
+                    {
+                        int count = 1;
+                        do
+                        {
+                            newFile = $"{newFileTry} [{count++}]{extension}";
+                        }
+                        while (Services.FileSystem.File.Exists(newFile));
+                    }
+                    using var stream = await file.OpenReadAsync();
+                    using var newStream = Services.FileSystem.File.Create(newFile);
+                    await stream.CopyToAsync(newStream);
+
+                    await Services.Clipboard.SetTextAsync($"<img src=\"{newFile}\" width=100% />");
+
+                    await Services.Popups.AlertPopup(
+                        "Image Copied", 
+                        $"A copy of the chosen image was made in '{folder}' and it's is ready on your clipboard to be pasted where you want it.",
+                        "OK");
+                }
+                catch (FeatureNotSupportedException)
+                {
+                    // Feature is not supported on the device
+                    await Services.Popups.AlertPopup("Not Supported", "Media Picker is not supported on this device.", "OK");
+                }
+            }
         }
     }
 }

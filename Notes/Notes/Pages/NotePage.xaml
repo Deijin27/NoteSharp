@@ -12,6 +12,7 @@
         <ToolbarItem Text="Markdown View" Command="{Binding RenderCommand}" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
         <ToolbarItem Text="Markdown Preview" Command="{Binding MarkdownPreviewCommand}" Order="Secondary" />
         <ToolbarItem Text="HTML Preview" Command="{Binding HtmlPreviewCommand}" Order="Secondary" />
+        <ToolbarItem Text="Insert Image" Command="{Binding InsertImageCommand}" Order="Secondary"/>
     </ContentPage.ToolbarItems>
 
     <Shell.BackButtonBehavior>

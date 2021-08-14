@@ -9,11 +9,11 @@ namespace Notes.Droid
     {
         public string GetExternalStoragePath()
         {
-            //return Android.OS.Environment.ExternalStorageDirectory.AbsolutePath; // depreceated, but this used to be what i needed for it to work
+            return Android.OS.Environment.ExternalStorageDirectory.AbsolutePath; // depreceated, but this used to be what i needed for it to work
 
-            Context context = Android.App.Application.Context;
-            var filePath = context.GetExternalFilesDir(null); // null for root of files directory
-            return filePath.AbsolutePath;
+            //Context context = Android.App.Application.Context;
+            //var filePath = context.getex//.GetExternalFilesDir(null); // null for root of files directory
+            //return filePath.AbsolutePath;
         }
     }
 }

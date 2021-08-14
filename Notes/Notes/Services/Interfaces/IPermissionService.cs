@@ -6,6 +6,7 @@ namespace Notes.Services
     public interface IPermissionService
     {
         Task<PermissionStatus> CheckAndRequestStorageReadPermission();
+        Task<PermissionStatus> CheckAndRequestStorageReadWritePermission();
         Task<PermissionStatus> CheckAndRequestStorageWritePermission();
     }
 }
