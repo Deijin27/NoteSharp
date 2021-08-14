@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Notes.Pages.CssRenderPage"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             x:DataType="vm:CssRenderPageViewModel"
+             Title="{x:Static resources:AppResources.PageTitle_MarkdownView}">
+
+    <ContentPage.Content>
+        <Grid>
+            <WebView Source="{Binding WebViewSource, Mode=OneWay}"
+                     Navigating="MarkdownWebView_Navigating"
+                     />
+            <ActivityIndicator x:Name="activityIndicator" IsRunning="{Binding ActivityIndicatorIsRunning}"
+                               HorizontalOptions="Center" VerticalOptions="Center" 
+                               Color="{DynamicResource PrimaryAccentColor}"/>
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>

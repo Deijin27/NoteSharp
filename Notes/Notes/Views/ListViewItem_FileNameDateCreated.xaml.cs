@@ -16,13 +16,5 @@ namespace Notes.Views
         {
             InitializeComponent();
         }
-
-        //public static BindableProperty Opacity
-        //{
-        //    set
-        //    {
-
-        //    }
-        //}
     }
 }

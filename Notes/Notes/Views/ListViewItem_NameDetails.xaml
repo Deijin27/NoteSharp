@@ -9,11 +9,12 @@
         <Grid Margin="10,10,10,10">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="18" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="24" />
+                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
@@ -25,22 +26,20 @@
                    Style="{StaticResource Style_ListViewItemIcon}"
                    />
             <Label x:Name="NameLabel"
-                   Grid.Column="1"
-                   Grid.Row="0"
-                   Margin="10,0,0,0"
-                   Style="{StaticResource Style_ListViewItemName}"
-                   />
-            <Label x:Name="DetailsLabel"
-                   Grid.Column="1"
-                   Grid.Row="1"
-                   Grid.ColumnSpan="2"
-                   Margin="10,0,0,0"
-                   Style="{StaticResource Style_ListViewItemDetails}"
-                   />
-            <Label x:Name="QuickAccessMarkerLabel"
                    Grid.Column="2"
                    Grid.Row="0"
+                   Style="{StaticResource Style_ListViewItemName}"
+                   />
+            <Label x:Name="QuickAccessMarkerLabel"
+                   Grid.Column="3"
+                   Grid.Row="0"
                    Style="{StaticResource Style_ListViewItemQuickAccessMarker}"
+                   />
+            <Label x:Name="DetailsLabel"
+                   Grid.Column="2"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="2"
+                   Style="{StaticResource Style_ListViewItemDetails}"
                    />
 
         </Grid>

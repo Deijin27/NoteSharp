@@ -9,19 +9,13 @@ namespace Notes.Views
         public ListViewItem_NameDetails()
         {
             InitializeComponent();
-            QuickAccessMarkerLabel.IsVisible = IsQuickAccess; // It's important not to forget to do this
+            
         }
 
         public string IconGlyph // only ever connected to a static resource so no need for bindable property
         {
-            get
-            {
-                return IconLabel.Text;
-            }
-            set
-            {
-                IconLabel.Text = value;
-            }
+            get => IconLabel.Text;
+            set => IconLabel.Text = value;
         }
 
         public static readonly BindableProperty IconColorProperty = BindableProperty.Create
@@ -35,14 +29,8 @@ namespace Notes.Views
 
         public Color IconColor
         {
-            get
-            {
-                return (Color)GetValue(IconColorProperty);
-            }
-            set
-            {
-                SetValue(IconColorProperty, value);
-            }
+            get => (Color)GetValue(IconColorProperty);
+            set => SetValue(IconColorProperty, value);
         }
 
         public static readonly BindableProperty NameProperty = BindableProperty.Create
@@ -56,14 +44,8 @@ namespace Notes.Views
 
         public string Name
         {
-            get
-            {
-                return (string)GetValue(NameProperty);
-            }
-            set
-            {
-                SetValue(NameProperty, value);
-            }
+            get => (string)GetValue(NameProperty);
+            set => SetValue(NameProperty, value);
         }
 
         public static readonly BindableProperty DetailsProperty = BindableProperty.Create
@@ -77,14 +59,8 @@ namespace Notes.Views
 
         public string Details
         {
-            get
-            {
-                return (string)GetValue(DetailsProperty);
-            }
-            set
-            {
-                SetValue(DetailsProperty, value);
-            }
+            get => (string)GetValue(DetailsProperty);
+            set => SetValue(DetailsProperty, value);
         }
 
         public static readonly BindableProperty IsQuickAccessProperty = BindableProperty.Create
@@ -92,42 +68,35 @@ namespace Notes.Views
             nameof(IsQuickAccess),
             typeof(bool),
             typeof(ListViewItem_NameOnly),
-            default(bool),
+            true, // important that this is true, since the default visibility is true
             BindingMode.OneWay
         );
 
         public bool IsQuickAccess
         {
-            get
-            {
-                return (bool)GetValue(IsQuickAccessProperty);
-            }
-            set
-            {
-                SetValue(IsQuickAccessProperty, value);
-            }
+            get => (bool)GetValue(IsQuickAccessProperty);
+            set => SetValue(IsQuickAccessProperty, value);
         }
 
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
 
-            if (propertyName == NameProperty.PropertyName)
+            switch (propertyName)
             {
-                NameLabel.Text = Name;
-            }
-            else if (propertyName == IsQuickAccessProperty.PropertyName)
-            {
-                QuickAccessMarkerLabel.IsVisible = IsQuickAccess;
-            }
-            else if (propertyName == IconColorProperty.PropertyName)
-            {
-                IconLabel.TextColor = IconColor;
-            }
-            else if (propertyName == DetailsProperty.PropertyName)
-            {
-                DetailsLabel.Text = Details;
-            }
+                case nameof(Name):
+                    NameLabel.Text = Name;
+                    break;
+                case nameof(IconColor):
+                    IconLabel.TextColor = IconColor;
+                    break;
+                case nameof(Details):
+                    DetailsLabel.Text = Details;
+                    break;
+                case nameof(IsQuickAccess):
+                    QuickAccessMarkerLabel.IsVisible = IsQuickAccess;
+                    break;
+            };
         }
     }
 }

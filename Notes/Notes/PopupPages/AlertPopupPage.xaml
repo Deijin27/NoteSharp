@@ -27,17 +27,17 @@
                      HorizontalOptions="Center" 
                      Padding="20, 20, 20, 20"
                      >
-            <Label x:Name="titleLabel"
+            <Label x:Name="TitleLabel"
                    TextColor="{DynamicResource PrimaryContentTextColor}"
                    FontSize="20"
                    />
             <ScrollView>
-                <Label x:Name="messageLabel"
+                <Label x:Name="MessageLabel"
                        TextColor="{DynamicResource PrimaryContentTextColor}"
                        FontSize="Small"
                        />
             </ScrollView>
-            <Button x:Name="dismissButton"
+            <Button x:Name="DismissButton"
                     HorizontalOptions="End"
                     TextColor="{DynamicResource PrimaryAccentColor}"
                     FontSize="Small"

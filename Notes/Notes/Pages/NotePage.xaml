@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Notes.Pages.NotePage"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             x:DataType="vm:NotePageViewModel">
+
+    <ContentPage.ToolbarItems>
+        <!--<ToolbarItem Text="Cancel" Clicked="Cancel_Clicked" Order="Primary" IconImageSource="{StaticResource FontImageSource_Close}" />-->
+        <ToolbarItem Text="Save" Command="{Binding SaveCommand}" Order="Primary"  IconImageSource="{StaticResource FontImageSource_Floppy}"/>
+        <ToolbarItem Text="Markdown View" Command="{Binding RenderCommand}" Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
+        <ToolbarItem Text="Markdown Preview" Command="{Binding MarkdownPreviewCommand}" Order="Secondary" />
+        <ToolbarItem Text="HTML Preview" Command="{Binding HtmlPreviewCommand}" Order="Secondary" />
+    </ContentPage.ToolbarItems>
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding CloseCommand}"
+                             />
+        <!--IconOverride="{StaticResource FontImageSource_Close}"-->
+    </Shell.BackButtonBehavior>
+
+    <Shell.TitleView>
+        <StackLayout Orientation="Horizontal" Padding="0">
+            <Entry Text="{Binding CurrentName, Mode=TwoWay}" 
+                   HorizontalOptions="Fill"
+                   Placeholder="{x:Static resources:AppResources.NoteEntryPage_NamePlaceholder}"
+                   TextColor="{DynamicResource NavigationBarTextColor}"
+                   PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
+                   IsSpellCheckEnabled="False"
+                   />
+        </StackLayout>
+    </Shell.TitleView>
+    <ContentPage.Content>
+        <Grid>
+            <!--<Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>-->
+
+            <!--<controls:FindAndReplaceControl x:Name="FindAndReplace" />-->
+
+            <ScrollView>
+                <StackLayout>
+                    <Editor IsSpellCheckEnabled="{Binding IsSpellCheckEnabled, Mode=OneTime}"
+                            IsTextPredictionEnabled="{Binding IsSpellCheckEnabled, Mode=OneTime}"
+                            Placeholder="{x:Static resources:AppResources.NoteEntryPage_TextPlaceholder}"
+                            Text="{Binding CurrentText, Mode=TwoWay}"
+                            AutoSize="TextChanges"
+                            FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
+                            Margin="10, 10, 10, 10"
+                            />
+                    <Label HeightRequest="500"/>
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

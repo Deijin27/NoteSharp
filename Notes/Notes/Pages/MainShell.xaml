@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:ru="clr-namespace:Notes.RouteUtil"
+       xmlns:pages="clr-namespace:Notes.Pages"
+       x:Class="Notes.Pages.MainShell"
+       Shell.BackgroundColor="{DynamicResource NavigationBarColor}"
+       FlyoutBackgroundColor="{DynamicResource AppBackgroundColor}"
+       >
+    <Shell.Resources>
+        <Style x:Key="FloutItemStyle" TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{DynamicResource FlyoutItemSelectedBackgroundColor}"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </Shell.Resources>
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Style="{StaticResource FloutItemStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.8*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding FlyoutIcon}"
+                    Margin="10"
+                    HeightRequest="24" />
+                <Label Grid.Column="1"
+                    Text="{Binding Title}"
+                       TextColor="{DynamicResource PrimaryContentTextColor}"
+                    VerticalTextAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <Grid Style="{StaticResource FloutItemStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.8*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding FlyoutIcon}"
+                    Margin="10"
+                    HeightRequest="24" />
+                <Label Grid.Column="1"
+                    Text="{Binding Title}"
+                       TextColor="{DynamicResource PrimaryContentTextColor}"
+                    VerticalTextAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>
+    <!--Shell.ForegroundColor="{DynamicResource NavigationBarTextColor}"-->
+    
+    <Shell.FlyoutHeader>
+        <StackLayout Orientation="Horizontal" Margin="10" HorizontalOptions="Center">
+            <!--<controls:SvgImage ResourceId="{DynamicResource IconResourceID}" 
+                                   WidthRequest="40" 
+                                   HeightRequest="40"
+                                   />-->
+            <Label Text="NoteSharp" 
+                       FontSize="30"
+                       TextColor="{DynamicResource PrimaryContentTextColor}"
+                       FontFamily="{StaticResource FontFamily_RobotoCondensed}"
+                       Margin="10,0,0,0"
+                       />
+        </StackLayout>
+    </Shell.FlyoutHeader>
+
+
+    <ShellContent Icon="{StaticResource FontImageSource_Shell_Notes}" 
+                  Title="Notes" 
+                  Route="{x:Static ru:Routes.RootFolder}"
+                  ContentTemplate="{DataTemplate pages:FolderPage}"
+                  />
+    <ShellContent Icon="{StaticResource FontImageSource_Shell_Css}" 
+                  Title="Style Sheets" 
+                  Route="{x:Static ru:Routes.CssFolder}"
+                  ContentTemplate="{DataTemplate pages:CssFolderPage}"
+                  />
+    <ShellContent Icon="{StaticResource FontImageSource_Shell_QuickAccess}" 
+                  Title="Quick Access" 
+                  Route="{x:Static ru:Routes.QuickAccess}"
+                  ContentTemplate="{DataTemplate pages:QuickAccessPage}"
+                  />
+    <ShellContent Icon="{StaticResource FontImageSource_Shell_Settings}" 
+                  Title="Settings" 
+                  Route="{x:Static ru:Routes.Settings}"
+                  ContentTemplate="{DataTemplate pages:SettingsPage}"
+                  />
+    <ShellContent Icon="{StaticResource FontImageSource_Shell_About}" 
+                  Title="About" 
+                  Route="{x:Static ru:Routes.About}"
+                  ContentTemplate="{DataTemplate pages:AboutPage}"
+                  />
+    
+
+</Shell>

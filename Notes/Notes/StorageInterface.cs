@@ -4,16 +4,8 @@ using System.Text;
 
 namespace Notes
 {
-    public interface IFileSystem
+    public interface IDeviceFileSystem
     {
         string GetExternalStoragePath();
-    }
-
-    public interface IExternalStoragePermission
-    {
-        bool IsPermissionGranted();
-
-
-        bool RequestPermission();
     }
 }

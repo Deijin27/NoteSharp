@@ -9,11 +9,12 @@
         <Grid Margin="10,10,10,10">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="24" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="24" />
-                <ColumnDefinition Width="Auto"/> 
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -22,12 +23,11 @@
                    Style="{StaticResource Style_ListViewItemIcon}"
                    />
             <Label x:Name="NameLabel"
-                   Grid.Column="1"
-                   Margin="10,0,0,0"
+                   Grid.Column="2"
                    Style="{StaticResource Style_ListViewItemName}"
                    />
             <Label x:Name="QuickAccessMarkerLabel" 
-                   Grid.Column="2"
+                   Grid.Column="3"
                    Style="{StaticResource Style_ListViewItemQuickAccessMarker}"/>
         </Grid>
     </ContentView.Content>

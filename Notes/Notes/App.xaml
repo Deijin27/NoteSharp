@@ -5,12 +5,12 @@
     <Application.Resources>
         
         <!-- Verision -->
-        <x:String x:Key="VersionNumber">Version: 0.5.0</x:String>
+        <x:String x:Key="VersionNumber">Version: 0.9.0</x:String>
 
         <Thickness x:Key="PageMargin" Left="15" Top="15" Right="15" Bottom="15" />
 
         <!-- Implicit styles -->
-        
+
         <Style TargetType="{x:Type NavigationPage}">
             <Setter Property="BarBackgroundColor" Value="{DynamicResource NavigationBarColor}" />
             <Setter Property="BarTextColor" Value="{DynamicResource NavigationBarTextColor}" />
@@ -87,7 +87,9 @@
         <x:String x:Key="IconGlyph_Star">&#xf27d;</x:String>
         <x:String x:Key="IconGlyph_FolderStar">&#xf227;</x:String>
         <x:String x:Key="IconGlyph_Search">&#xf1c3;</x:String>
-
+        <x:String x:Key="IconGlyph_Settings">&#xf1c6;</x:String>
+        <x:String x:Key="IconGlyph_Sort">&#xf1ce;</x:String>
+        <x:String x:Key="IconGlyph_About">&#xf1f8;</x:String>
         <!-- FontImageSources-->
         <FontImageSource x:Key="FontImageSource_FilePlus"  
                          FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
@@ -144,11 +146,47 @@
                          Glyph="{StaticResource IconGlyph_Eye}"
                          Size="24"
                          Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Palette"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Palette}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
         <FontImageSource x:Key="FontImageSource_Copy"
                          FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
                          Glyph="{StaticResource IconGlyph_Copy}"
                          Size="24"
                          Color="{DynamicResource ToolbarIconColor}"/>
+        <FontImageSource x:Key="FontImageSource_Sort"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Sort}"
+                         Size="24"
+                         Color="{DynamicResource ToolbarIconColor}"/>
+        
+        <FontImageSource x:Key="FontImageSource_Shell_Settings"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_Settings}"
+                         Size="24"
+                         Color="{DynamicResource PrimaryAccentColor}"/>
+        <FontImageSource x:Key="FontImageSource_Shell_Notes"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_File}"
+                         Size="24"
+                         Color="{DynamicResource PrimaryAccentColor}"/>
+        <FontImageSource x:Key="FontImageSource_Shell_Css"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_CSS}"
+                         Size="24"
+                         Color="{DynamicResource PrimaryAccentColor}"/>
+        <FontImageSource x:Key="FontImageSource_Shell_About"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_About}"
+                         Size="24"
+                         Color="{DynamicResource PrimaryAccentColor}"/>
+        <FontImageSource x:Key="FontImageSource_Shell_QuickAccess"
+                         FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                         Glyph="{StaticResource IconGlyph_FolderStar}"
+                         Size="24"
+                         Color="{DynamicResource PrimaryAccentColor}"/>
 
 
         <!-- Explicit styles -->

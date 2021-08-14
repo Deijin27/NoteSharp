@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
@@ -29,15 +29,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.21.1" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.5" />
+    <PackageReference Include="Markdig" Version="0.25.0" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.12" />
     <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
-    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
-    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1451" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+    <PackageReference Include="System.IO.Abstractions" Version="13.2.43" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -134,35 +135,38 @@
     <Compile Update="Controls\RadioCircle.xaml.cs">
       <DependentUpon>RadioCircle.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\MarkdownPreviewPage.xaml.cs">
-      <DependentUpon>MarkdownPreviewPage.xaml</DependentUpon>
+    <Compile Update="Pages\FolderPage.xaml.cs">
+      <DependentUpon>FolderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\MardownViewPage.xaml.cs">
-      <DependentUpon>MardownViewPage.xaml</DependentUpon>
+    <Compile Update="Pages\CssRenderPage.xaml.cs">
+      <DependentUpon>CssRenderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\HtmlPreviewPage.xaml.cs">
-      <DependentUpon>HtmlPreviewPage.xaml</DependentUpon>
+    <Compile Update="Pages\RenderPage.xaml.cs">
+      <DependentUpon>RenderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\NotesMovePage.xaml.cs">
-      <DependentUpon>NotesMovePage.xaml</DependentUpon>
+    <Compile Update="Pages\PreviewPage.xaml.cs">
+      <DependentUpon>PreviewPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\StyleSheetEntryPage.xaml.cs">
-      <DependentUpon>StyleSheetEntryPage.xaml</DependentUpon>
+    <Compile Update="Pages\NotePage.xaml.cs">
+      <DependentUpon>NotePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\StyleSheetSelectionPage.xaml.cs">
-      <DependentUpon>StyleSheetSelectionPage.xaml</DependentUpon>
+    <Compile Update="Pages\MovePage.xaml.cs">
+      <DependentUpon>MovePage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\StyleSheetsPage.xaml.cs">
-      <DependentUpon>StyleSheetsPage.xaml</DependentUpon>
+    <Compile Update="Pages\CssPage.xaml.cs">
+      <DependentUpon>CssPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\CssSelectionPage.xaml.cs">
+      <DependentUpon>CssSelectionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\CssFolderPage.xaml.cs">
+      <DependentUpon>CssFolderPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="PopupPages\ListPopupPage.xaml.cs">
       <DependentUpon>ListPopupPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="PopupPages\ColorPickerPopupPage.xaml.cs">
       <DependentUpon>ColorPickerPopupPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="PopupPages\UniqueNamePromptPopupPage.xaml.cs">
-      <DependentUpon>UniqueNamePromptPopupPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="PopupPages\TwoOptionPopupPage.xaml.cs">
       <DependentUpon>TwoOptionPopupPage.xaml</DependentUpon>
@@ -181,8 +185,8 @@
     <Compile Update="Themes\LightTheme.xaml.cs">
       <DependentUpon>LightTheme.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ListViewItem_FileNameDateCreated.xaml.cs">
-      <DependentUpon>ListViewItem_FileNameDateCreated.xaml</DependentUpon>
+    <Compile Update="Views\ListViewItem_FileNameDateModified.xaml.cs">
+      <DependentUpon>ListViewItem_FileNameDateModified.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ListViewItem_NameDetails.xaml.cs">
       <DependentUpon>ListViewItem_NameDetails.xaml</DependentUpon>
@@ -208,9 +212,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Controls\CustomSearchBar.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Controls\FindAndReplaceControl.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -220,16 +221,16 @@
     <EmbeddedResource Update="Pages\AboutPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\NoteEntryPage.xaml">
+    <EmbeddedResource Update="Pages\MainShell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\NotesMasterPage.xaml">
+    <EmbeddedResource Update="Pages\NotePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\NotesMasterPageMaster.xaml">
+    <EmbeddedResource Update="Pages\FolderPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\NotesPage.xaml">
+    <EmbeddedResource Update="Pages\QuickAccessPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\SettingsPage.xaml">
@@ -251,10 +252,10 @@
     <EmbeddedResource Update="Views\ListViewItem_CSSNameOnly.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ListViewItem_NameDetails.xaml">
+    <EmbeddedResource Update="Views\ListViewItem_FileNameDateCreated.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ListViewItem_FileNameDateModified.xaml">
+    <EmbeddedResource Update="Views\ListViewItem_NameDetails.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ListViewItem_FileNameOnly.xaml">

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Notes.Pages.PreviewPage"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             x:DataType="vm:PreviewPageViewModel"
+             Title="{Binding PageTitle, Mode=OneWay}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding CopyCommand}" Text="Copy" Order="Primary" IconImageSource="{StaticResource FontImageSource_Copy}"/>
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <ScrollView>
+            <Editor Text="{Binding EditorText, Mode=OneWay}"
+                    IsReadOnly="True"
+                    BackgroundColor="{DynamicResource AppBackgroundColor}"
+                    TextColor="{DynamicResource PrimaryContentTextColor}"
+                    VerticalOptions="FillAndExpand"
+                    FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
+                    Margin="10, 10, 10, 10"/>
+        </ScrollView>
+        <ActivityIndicator IsRunning="{Binding ActivityIndicatorIsRunning, Mode=OneWay}"
+                           HorizontalOptions="Center" VerticalOptions="Center"
+                           Color="{DynamicResource PrimaryAccentColor}"/>
+    </Grid>
+    
+
+</ContentPage>

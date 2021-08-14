@@ -5,6 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:Notes.Views;assembly=Notes"
              mc:Ignorable="d"
+             xmlns:vm="clr-namespace:Notes.Models"
+             x:DataType="vm:FolderContentItem"
              x:Class="Notes.Views.ListViewItem_FolderNameOnly">
   <ContentView.Content>
         <local:ListViewItem_NameOnly IconGlyph="{StaticResource IconGlyph_Folder}"

@@ -10,7 +10,7 @@ namespace Notes.Models
         File
     }
 
-    class FolderContentItem
+    public class FolderContentItem
     {
         public FolderContentItemIdentifier Identifier { get; set; }
         public Folder ContentFolder { get; set; }

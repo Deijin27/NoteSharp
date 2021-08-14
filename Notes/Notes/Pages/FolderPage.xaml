@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Notes.Pages"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             xmlns:views="clr-namespace:Notes.Views;assembly=Notes"
+             BackgroundColor="{DynamicResource AppBackgroundColor}"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             x:DataType="vm:FolderPageViewModel"
+             xmlns:dts="clr-namespace:Notes.DataTemplateSelectors"
+             Title="{Binding PageTitle}"
+             x:Name="folderPage"
+             x:Class="Notes.Pages.FolderPage">
+    <!--<Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}"
+                             />
+    </Shell.BackButtonBehavior>-->
+    <!-- WARNING!!!!!!!!! THE ABOVE WILL DISABLE THE FLYOUT ON THE HOME PAGE
+    need to make a separate home page if I'm going to do this -->
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="folderTemplate_NameOnly">
+                <ViewCell>
+                    <ViewCell.View>
+                        <views:ListViewItem_FolderNameOnly/>
+                    </ViewCell.View>
+                    <ViewCell.ContextActions>
+                        <MenuItem Command="{Binding BindingContext.RenameFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}"
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Command="{Binding BindingContext.MoveFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}"
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Command="{Binding BindingContext.DeleteFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                        <MenuItem Command="{Binding BindingContext.ToggleQuickAccessFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
+                    </ViewCell.ContextActions>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="folderTemplate_NameDateCreated">
+                <ViewCell>
+                    <ViewCell.View>
+                        <views:ListViewItem_FolderNameDateCreated/>
+                    </ViewCell.View>
+                    <ViewCell.ContextActions>
+                        <MenuItem Command="{Binding BindingContext.RenameFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Command="{Binding BindingContext.MoveFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Command="{Binding BindingContext.DeleteFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                        <MenuItem Command="{Binding BindingContext.ToggleQuickAccessFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
+                    </ViewCell.ContextActions>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="folderTemplate_NameDateModified">
+                <ViewCell>
+                    <ViewCell.View>
+                        <views:ListViewItem_FolderNameDateModified/>
+                    </ViewCell.View>
+                    <ViewCell.ContextActions>
+                        <MenuItem Command="{Binding BindingContext.RenameFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Command="{Binding BindingContext.MoveFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Command="{Binding BindingContext.DeleteFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                        <MenuItem Command="{Binding BindingContext.ToggleQuickAccessFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
+                    </ViewCell.ContextActions>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="folderTemplate_NameSize">
+                <ViewCell>
+                    <ViewCell.View>
+                        <views:ListViewItem_FolderNameSize/>
+                    </ViewCell.View>
+                    <ViewCell.ContextActions>
+                        <MenuItem Command="{Binding BindingContext.RenameFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Command="{Binding BindingContext.MoveFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Command="{Binding BindingContext.DeleteFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                        <MenuItem Command="{Binding BindingContext.ToggleQuickAccessFolderCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
+                    </ViewCell.ContextActions>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="fileTemplate_NameOnly">
+                <ViewCell>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameOnly/>
+                    </ViewCell.View>
+                    <ViewCell.ContextActions>
+                        <MenuItem Command="{Binding BindingContext.RenameNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Command="{Binding BindingContext.MoveNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Command="{Binding BindingContext.DeleteNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                        <MenuItem Command="{Binding BindingContext.ToggleQuickAccessNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
+                    </ViewCell.ContextActions>
+                    
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="fileTemplate_NameDateCreated">
+                <ViewCell>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameDateCreated/>
+                    </ViewCell.View>
+                    <ViewCell.ContextActions>
+                        <MenuItem Command="{Binding BindingContext.RenameNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Command="{Binding BindingContext.MoveNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Command="{Binding BindingContext.DeleteNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                        <MenuItem Command="{Binding BindingContext.ToggleQuickAccessNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
+                    </ViewCell.ContextActions>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="fileTemplate_NameDateModified">
+                <ViewCell>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameDateModified/>
+                    </ViewCell.View>
+                    <ViewCell.ContextActions>
+                        <MenuItem Command="{Binding BindingContext.RenameNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Command="{Binding BindingContext.MoveNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Command="{Binding BindingContext.DeleteNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                        <MenuItem Command="{Binding BindingContext.ToggleQuickAccessNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
+                    </ViewCell.ContextActions>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="fileTemplate_NameSize">
+                <ViewCell>
+                    <ViewCell.View>
+                        <views:ListViewItem_FileNameSize/>
+                    </ViewCell.View>
+                    <ViewCell.ContextActions>
+                        <MenuItem Command="{Binding BindingContext.RenameNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Rename}" 
+                                  IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem Command="{Binding BindingContext.MoveNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Move}" 
+                                  IconImageSource="{StaticResource FontImageSource_SquareRight}"/>
+                        <MenuItem Command="{Binding BindingContext.DeleteNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_Delete}" IsDestructive="True"
+                                  IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                        <MenuItem Command="{Binding BindingContext.ToggleQuickAccessNoteCommand, Source={x:Reference folderPage}}"
+                                  CommandParameter="{Binding .}"
+                                  Text="{x:Static resources:AppResources.ContextAction_ToggleQuickAccess}"
+                                  IconImageSource="{StaticResource FontImageSource_Star}"/>
+                    </ViewCell.ContextActions>
+                </ViewCell>
+            </DataTemplate>
+            <dts:FolderContentDataTemplateSelector x:Key="folderContentDataTemplateSelector"
+                                                     FolderTemplate_NameOnly="{StaticResource folderTemplate_NameOnly}"
+                                                     FolderTemplate_NameDateCreated="{StaticResource folderTemplate_NameDateCreated}"
+                                                     FolderTemplate_NameDateModified="{StaticResource folderTemplate_NameDateModified}"
+                                                     FolderTemplate_NameSize="{StaticResource folderTemplate_NameSize}"
+                                                     FileTemplate_NameOnly="{StaticResource fileTemplate_NameOnly}" 
+                                                     FileTemplate_NameDateModified="{StaticResource fileTemplate_NameDateModified}"
+                                                     FileTemplate_NameDateCreated="{StaticResource fileTemplate_NameDateCreated}"
+                                                     FileTemplate_NameSize="{StaticResource fileTemplate_NameSize}"
+                                                     />
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add Note" Command="{Binding AddNoteCommand}" 
+                     Order="Primary" IconImageSource="{StaticResource FontImageSource_FilePlus}"/>
+        <ToolbarItem Text="Add Folder" Command="{Binding AddFolderCommand}" 
+                     Order="Primary" IconImageSource="{StaticResource FontImageSource_Folder}"/>
+        <ToolbarItem Text="Order By" Command="{Binding OrderByCommand}"
+                     IconImageSource="{StaticResource FontImageSource_Sort}" Order="Primary"/>
+    </ContentPage.ToolbarItems>
+
+    <ListView ItemTemplate="{StaticResource folderContentDataTemplateSelector}"
+              SelectedItem="{Binding ListViewSelectedItem, Mode=TwoWay}"
+              ItemsSource="{Binding FolderContentItems, Mode=OneWay}"
+              HasUnevenRows="True"
+              SeparatorVisibility="None"
+              BackgroundColor="{DynamicResource AppBackgroundColor}"
+              Margin="0,0,0,0">
+        <ListView.Header>
+            <Label HeightRequest="250" BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}"/>
+        </ListView.Header>
+    </ListView>
+
+</ContentPage>

@@ -43,16 +43,16 @@
                          Orientation="Horizontal" 
                          Spacing="10"
                          >
-                <Button x:Name="LeftButton"
+                <Button x:Name="AcceptButton"
                         TextColor="{DynamicResource PrimaryAccentColor}"
                         FontSize="Small"
-                        Clicked="LeftButton_Clicked"
+                        Clicked="AcceptButton_Clicked"
                         BackgroundColor="Transparent"
                         />
-                <Button x:Name="RightButton"
+                <Button x:Name="CancelButton"
                         TextColor="{DynamicResource PrimaryAccentColor}"
                         FontSize="Small"
-                        Clicked="RightButton_Clicked"
+                        Clicked="CancelButton_Clicked"
                         BackgroundColor="Transparent"
                         />
             </StackLayout>

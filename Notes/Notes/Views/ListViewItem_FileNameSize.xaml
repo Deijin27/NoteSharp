@@ -5,13 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:Notes.Views;assembly=Notes"
              mc:Ignorable="d"
+             xmlns:models="clr-namespace:Notes.Models"
+             x:DataType="models:FolderContentItem"
              x:Class="Notes.Views.ListViewItem_FileNameSize">
     <ContentView.Content>
         <local:ListViewItem_NameDetails IconGlyph="{StaticResource IconGlyph_File}"
                                         IconColor="{DynamicResource PrimaryAccentColor}"
                                         Name="{Binding ContentNote.Name}"
                                         Details="{Binding ContentNote.ReadableSize}"
-                                        IsQuickAccess="{Binding ContentNote.IsQuickAccess}"
+                                        IsQuickAccess="{Binding ContentNote.IsQuickAccess, Mode=OneTime}"
                                         />
     </ContentView.Content>
 </ContentView>

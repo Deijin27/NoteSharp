@@ -5,6 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:resources="clr-namespace:Notes.Resources"
              mc:Ignorable="d"
+             xmlns:vm="clr-namespace:Notes.Models"
+             x:DataType="vm:CSS"
              x:Class="Notes.Views.ListViewItem_CSSReadonly">
   <ContentView.Content>
         <Grid Margin="10,10,10,10">

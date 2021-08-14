@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Notes.Views;assembly=Notes"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             x:Class="Notes.Pages.CssFolderPage"
+             xmlns:local="clr-namespace:Notes.Pages"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             x:DataType="vm:CssFolderPageViewModel"
+             xmlns:dts="clr-namespace:Notes.DataTemplateSelectors"
+             x:Name="cssFolderPage"
+             Title="{x:Static resources:AppResources.PageTitle_StyleSheets}">
+
+    <ContentPage.Resources>
+        
+        <ResourceDictionary>
+            <DataTemplate x:Key="cssTemplate_NameOnly">
+                <ViewCell>
+                    <views:ListViewItem_CSSNameOnly/>
+                    <ViewCell.ContextActions>
+                        <MenuItem 
+                            Command="{Binding RenameCssCommand, Source={x:Reference cssFolderPage}}"
+                                      CommandParameter="{Binding .}"
+                                      Text="Rename"
+                                      IconImageSource="{StaticResource FontImageSource_Edit}"/>
+                        <MenuItem 
+                            Command="{Binding DeleteCssCommand, Source={x:Reference cssFolderPage}}"
+                                      CommandParameter="{Binding .}"
+                                      Text="Delete" IsDestructive="True"
+                                      IconImageSource="{StaticResource FontImageSource_Delete}"/>
+                    </ViewCell.ContextActions>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="cssReadonlyTemplate">
+                <ViewCell>
+                    <views:ListViewItem_CSSReadonly/>
+                </ViewCell>
+            </DataTemplate>
+
+            <dts:StyleSheetDataTemplateSelector x:Key="styleSheetDataTemplateSelector"
+                                                  CSSTemplate_NameOnly="{StaticResource cssTemplate_NameOnly}"
+                                                  CSSTemplate_ReadOnly="{StaticResource cssReadonlyTemplate}"
+                                                     />
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add Css" Order="Primary" Command="{Binding AddCssCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                                 Glyph="{StaticResource IconGlyph_Plus}"
+                                 Size="24"
+                                 Color="{DynamicResource ToolbarIconColor}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ListView ItemsSource="{Binding ListViewItems, Mode=OneWay}"
+              SelectedItem="{Binding ListViewSelectedItem, Mode=TwoWay}"
+              ItemTemplate="{StaticResource styleSheetDataTemplateSelector}" 
+              HasUnevenRows="True"
+              SeparatorVisibility="None"
+              BackgroundColor="{DynamicResource AppBackgroundColor}"
+              Margin="0,0,0,0">
+        <ListView.Header>
+            <Label HeightRequest="250" BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}"/>
+        </ListView.Header>
+    </ListView>
+
+
+</ContentPage>

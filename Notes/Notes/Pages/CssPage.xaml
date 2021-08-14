@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             x:DataType="vm:CssPageViewModel"
+             x:Class="Notes.Pages.CssPage">
+
+    <Shell.TitleView>
+        <StackLayout Orientation="Horizontal" Padding="0">
+            <Entry Text="{Binding CurrentName, Mode=TwoWay}" 
+                   HorizontalOptions="Fill"
+                   Placeholder="{x:Static resources:AppResources.StyleSheetEntryPage_NamePlaceholder}"
+                   TextColor="{DynamicResource NavigationBarTextColor}"
+                   PlaceholderColor="{DynamicResource NavigationBarPaleTextColor}"
+                   IsSpellCheckEnabled="False"
+                   IsReadOnly="{Binding IsReadOnly, Mode=OneWay}"
+                   />
+        </StackLayout>
+    </Shell.TitleView>
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding CloseCommand}"
+                             />
+        <!--IconOverride="{StaticResource FontImageSource_Close}"-->
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding SaveCommand}" IsEnabled="{Binding IsReadOnly, Mode=OneWay}" Text="Save"  Order="Primary" IconImageSource="{StaticResource FontImageSource_Floppy}"/>
+        <ToolbarItem Command="{Binding CopyCommand}" Text="Copy"  Order="Primary" IconImageSource="{StaticResource FontImageSource_Copy}"/>
+        <ToolbarItem Command="{Binding ColorPickerCommand}" Text="Color Picker"  Order="Primary" IconImageSource="{StaticResource FontImageSource_Palette}"/>
+        <ToolbarItem Command="{Binding RenderCommand}" Text="Quick Test"  Order="Primary" IconImageSource="{StaticResource FontImageSource_Eye}"/>
+    </ContentPage.ToolbarItems>
+
+    <ScrollView >
+    <Grid>
+        
+            <StackLayout>
+                <Editor Placeholder="{x:Static resources:AppResources.StyleSheetEntryPage_TextPlaceholder}"
+                        Text="{Binding CurrentText, Mode=TwoWay}"
+                        AutoSize="TextChanges"
+                        FontFamily="{StaticResource FontFamily_QuikscriptRoboto}"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False"
+                        Margin="10, 0, 10, 10"
+                        IsReadOnly="{Binding IsReadOnly, Mode=OneWay}"
+                        />
+                <Label HeightRequest="500"/>
+            </StackLayout>
+        
+    </Grid>
+    </ScrollView>
+
+</ContentPage>

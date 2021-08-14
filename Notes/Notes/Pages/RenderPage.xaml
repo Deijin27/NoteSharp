@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Notes.Pages.RenderPage"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             x:DataType="vm:RenderPageViewModel"
+             Title="{x:Static resources:AppResources.PageTitle_MarkdownView}">
+
+    <ContentPage.Resources>
+        
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Select CSS" Command="{Binding SelectCssCommand}" Order="Primary" >
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                                 Glyph="{StaticResource IconGlyph_CSS}"
+                                 Size="24"
+                                 Color="{DynamicResource ToolbarIconColor}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <Grid>
+            <WebView Source="{Binding WebViewSource, Mode=OneWay}"
+                     Navigating="MarkdownWebView_Navigating"
+                     />
+            <ActivityIndicator x:Name="activityIndicator" IsRunning="{Binding ActivityIndicatorIsRunning}"
+                               HorizontalOptions="Center" VerticalOptions="Center" 
+                               Color="{DynamicResource PrimaryAccentColor}"/>
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>

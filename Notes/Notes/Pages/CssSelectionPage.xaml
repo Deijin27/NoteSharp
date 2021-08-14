@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Notes.Views;assembly=Notes"
+             xmlns:resources="clr-namespace:Notes.Resources"
+             x:Class="Notes.Pages.CssSelectionPage"
+             xmlns:local="clr-namespace:Notes.Pages"
+             xmlns:dts="clr-namespace:Notes.DataTemplateSelectors"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             x:DataType="vm:CssSelectionPageViewModel"
+             Title="{x:Static resources:AppResources.PageTitle_StyleSheetSelection}">
+
+    <ContentPage.Resources>
+
+        <ResourceDictionary>
+            <DataTemplate x:Key="cssTemplate_NameOnly">
+                <ViewCell>
+                    <views:ListViewItem_CSSNameOnly/>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="cssReadonlyTemplate">
+                <ViewCell>
+                    <views:ListViewItem_CSSReadonly/>
+                </ViewCell>
+            </DataTemplate>
+
+            <dts:StyleSheetDataTemplateSelector x:Key="styleSheetSelectionDataTemplateSelector"
+                                                  CSSTemplate_NameOnly="{StaticResource cssTemplate_NameOnly}"
+                                                  CSSTemplate_ReadOnly="{StaticResource cssReadonlyTemplate}"
+                                                     />
+        </ResourceDictionary>
+
+    </ContentPage.Resources>
+
+    <ListView ItemsSource="{Binding ListViewItems, Mode=OneWay}"
+              SelectedItem="{Binding ListViewSelectedItem, Mode=TwoWay}"
+              ItemTemplate="{StaticResource styleSheetSelectionDataTemplateSelector}"
+              SeparatorVisibility="None"
+              BackgroundColor="{DynamicResource AppBackgroundColor}"
+              Margin="0,0,0,0">
+        <ListView.Header>
+            <Label HeightRequest="250" BackgroundColor="{DynamicResource AppSecondaryBackgroundColor}"/>
+        </ListView.Header>
+    </ListView>
+
+
+</ContentPage>

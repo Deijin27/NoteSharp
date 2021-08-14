@@ -3,15 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:Notes.Views;assembly=Notes"
+             xmlns:local="clr-namespace:Notes.Views"
+             xmlns:vm="clr-namespace:Notes.Models"
+             x:DataType="vm:FolderContentItem"
              mc:Ignorable="d"
              x:Class="Notes.Views.ListViewItem_FileNameDateCreated">
     <ContentView.Content>
         <local:ListViewItem_NameDetails IconGlyph="{StaticResource IconGlyph_File}"
                                         IconColor="{DynamicResource PrimaryAccentColor}"
-                                        Name="{Binding ContentNote.Name}"
-                                        Details="{Binding ContentNote.DateCreatedLocal, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
-                                        IsQuickAccess="{Binding ContentNote.IsQuickAccess}"
+                                        Name="{Binding ContentNote.Name, Mode=OneTime}"
+                                        Details="{Binding ContentNote.DateCreatedLocal, Mode=OneTime, StringFormat='Created: {0:MM/dd/yy H:mm:ss}'}"
+                                        IsQuickAccess="{Binding ContentNote.IsQuickAccess, Mode=OneTime}"
                                         />
     </ContentView.Content>
 </ContentView>

@@ -10,4 +10,11 @@ namespace Notes.Models
 
         public object AssociatedObject { get; set; }
     }
+
+    public class ListPopupPageItem<T>
+    {
+        public string Name { get; set; }
+
+        public T AssociatedObject { get; set; }
+    }
 }

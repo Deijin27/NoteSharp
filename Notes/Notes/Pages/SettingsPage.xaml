@@ -5,24 +5,58 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:resources="clr-namespace:Notes.Resources"
              xmlns:controls="clr-namespace:Notes.Controls"
+             xmlns:vm="clr-namespace:Notes.ViewModels"
+             xmlns:ac="clr-namespace:Notes.AccentColors"
+             x:DataType="vm:SettingsPageViewModel"
              mc:Ignorable="d"
              x:Class="Notes.Pages.SettingsPage"
              Title="Settings">
     <ContentPage.Resources>
         <ResourceDictionary>
             
-            <Style TargetType="controls:RadioCircle">
-                <Setter Property="Radius" Value="15"/>
-                <Setter Property="CheckSize" Value="18"/>
-                <Setter Property="CheckColor" Value="White"/>
-            </Style>
-
+            <ControlTemplate x:Key="RadioCircleControlTemplate">
+                <Grid Margin="4" WidthRequest="30" HeightRequest="30">
+                    <Button x:Name="BackgroundButton"
+                            BackgroundColor="{TemplateBinding BorderColor}"
+                            BorderWidth="0"
+                            CornerRadius="15"
+                            />
+                    <Label x:Name="CheckLabel"
+                           FontSize="18"
+                           TextColor="{TemplateBinding TextColor}"
+                           FontFamily="{StaticResource FontFamily_MaterialDesignIconic}"
+                           Text="{StaticResource IconGlyph_Check}"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
+                           />
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroupList>
+                            <VisualStateGroup x:Name="CheckedStates">
+                                <VisualState x:Name="Checked">
+                                    <VisualState.Setters>
+                                        <Setter TargetName="CheckLabel" Property="Opacity" Value="1" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <VisualState.Setters>
+                                        <Setter TargetName="CheckLabel" Property="Opacity" Value="0" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </VisualStateManager.VisualStateGroups>
+                </Grid>
+            </ControlTemplate>
 
             <Style x:Key="DividerStyle" TargetType="BoxView">
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HorizontalOptions" Value="Fill" />
                 <Setter Property="HeightRequest" Value="1" />
                 <Setter Property="Color" Value="{DynamicResource SecondaryContentTextColor}" />
+            </Style>
+
+            <Style TargetType="RadioButton">
+                <Setter Property="ControlTemplate" Value="{StaticResource RadioCircleControlTemplate}" />
             </Style>
 
         </ResourceDictionary>
@@ -43,69 +77,37 @@
                        VerticalTextAlignment="Center" 
                        TextColor="{DynamicResource PrimaryContentTextColor}"/>
                 <Switch x:Name="ThemeSwitch"
-                        Grid.Column="1"/>
+                        Grid.Column="1" IsToggled="{Binding IsDarkTheme, Mode=TwoWay}"/>
             </Grid>
             
             <BoxView Style="{StaticResource DividerStyle}" />
-            
-            <StackLayout Orientation="Vertical" Margin="0,5,0,5">
+
+            <StackLayout RadioButtonGroup.GroupName="ColorRadioButtons" RadioButtonGroup.SelectedValue="{Binding AccentColor, Mode=TwoWay}" Orientation="Vertical" Margin="0,5,0,5">
+                
                 <Label Text="{x:Static resources:AppResources.Settings_AccentColorSelector_Title}" 
                        TextColor="{DynamicResource PrimaryContentTextColor}"/>
 
-                <StackLayout Orientation="Horizontal" Padding="0,0,0,5">
-
-                    <controls:RadioCircle x:Name="RedAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource RedAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="PinkAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource PinkAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="PurpleAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource PurpleAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="DeepPurpleAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource DeepPurpleAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="IndigoAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource IndigoAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="BlueAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource BlueAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="LightBlueAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource LightBlueAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="CyanAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource CyanAccentColor}"
-                                                  />
+                <StackLayout Orientation="Horizontal">
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Red}" TextColor="White" BorderColor="{DynamicResource RedAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Pink}" TextColor="White" BorderColor="{DynamicResource PinkAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Purple}" TextColor="White" BorderColor="{DynamicResource PurpleAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.DeepPurple}" TextColor="White" BorderColor="{DynamicResource DeepPurpleAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Indigo}" TextColor="White" BorderColor="{DynamicResource IndigoAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Blue}" TextColor="White" BorderColor="{DynamicResource BlueAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.LightBlue}" TextColor="White" BorderColor="{DynamicResource LightBlueAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Cyan}" TextColor="White" BorderColor="{DynamicResource CyanAccentColor}"/>
                 </StackLayout>
-                <StackLayout Orientation="Horizontal" Padding="0,0,0,5">
-                    
-                    <controls:RadioCircle x:Name="TealAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource TealAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="GreenAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource GreenAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="LightGreenAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource LightGreenAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="LimeAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource LimeAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="YellowAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource YellowAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="AmberAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource AmberAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="OrangeAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource OrangeAccentColor}"
-                                                  />
-                    <controls:RadioCircle x:Name="DeepOrangeAccentColorRadioCircle"
-                                                  BackgroundColor="{DynamicResource DeepOrangeAccentColor}"
-                                                  />
+                <StackLayout Orientation="Horizontal">
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Teal}" TextColor="White" BorderColor="{DynamicResource TealAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Green}" TextColor="White" BorderColor="{DynamicResource GreenAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.LightGreen}" TextColor="White" BorderColor="{DynamicResource LightGreenAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Lime}" TextColor="White" BorderColor="{DynamicResource LimeAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Yellow}" TextColor="White" BorderColor="{DynamicResource YellowAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Amber}" TextColor="White" BorderColor="{DynamicResource AmberAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.Orange}" TextColor="White" BorderColor="{DynamicResource OrangeAccentColor}"/>
+                    <RadioButton Value="{x:Static ac:AppAccentColor.DeepOrange}" TextColor="White" BorderColor="{DynamicResource DeepOrangeAccentColor}"/>
                 </StackLayout>
+                
             </StackLayout>
 
             <BoxView Style="{StaticResource DividerStyle}" />
@@ -124,7 +126,7 @@
                                TextColor="{DynamicResource PrimaryContentTextColor}"/>
                 <Switch x:Name="SpellCheckSwitch" 
                                 Grid.Column="1"
-                                Toggled="SpellCheckSwitch_Toggled"/>
+                                IsToggled="{Binding IsSpellCheckEnabled, Mode=TwoWay}"/>
             </Grid>
 
             <BoxView Style="{StaticResource DividerStyle}" />
@@ -140,11 +142,11 @@
                 </Grid.ColumnDefinitions>
                 <Button x:Name="CreateBackupButton" 
                         Text="{x:Static resources:AppResources.Settings_CreateLocalBackup_Button}" 
-                        Clicked="CreateBackupButton_Clicked" 
+                        Command="{Binding CreateBackupCommand}"
                         Grid.Column="0"/>
                 <Button x:Name="RestoreBackupButton" 
                         Text="{x:Static resources:AppResources.Settings_RestoreLocalBackup_Button}" 
-                        Clicked="RestoreBackupButton_Clicked" 
+                        Command="{Binding RestoreBackupCommand}"
                         Grid.Column="1"/>
             </Grid>
             

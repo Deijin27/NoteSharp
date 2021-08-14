@@ -1,12 +1,20 @@
 ﻿using System;
-using System.Text.Json.Serialization;
-using Notes.Data;
 using SQLite;
 
 namespace Notes.Models
 {
-    public class Note : IChangeTracked
+    public class Note : IChangeTracked, IEntry
     {
+        public static Note New(Guid folderId)
+        {
+            return new Note()
+            {
+                ID = Guid.NewGuid(),
+                FolderID = folderId,
+                DateCreated = DateTime.UtcNow
+            };
+        }
+
         [PrimaryKey]
         public Guid ID { get; set; }
         public Guid FolderID { get; set; }
@@ -17,19 +25,16 @@ namespace Notes.Models
         public DateTime DateModified { get; set; }
         //public DateTime DateAccessed { get; set; }
 
-        [JsonIgnore]
         public DateTime DateCreatedLocal
         {
             get { return DateCreated.ToLocalTime(); }
         }
 
-        [JsonIgnore]
         public DateTime DateModifiedLocal
         {
             get { return DateModified.ToLocalTime(); }
         }
 
-        [JsonIgnore]
         public string ReadableSize => $"Size: {Text.ByteCount().ToReadableByteCountString()}";
 
     }

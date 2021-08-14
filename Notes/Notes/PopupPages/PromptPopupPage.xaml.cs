@@ -1,277 +1,60 @@
-﻿using Rg.Plugins.Popup.Services;
-using Rg.Plugins.Popup.Pages;
+﻿using Rg.Plugins.Popup.Pages;
 using System;
 using System.Threading.Tasks;
-
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Notes.Services;
 
 namespace Notes.PopupPages
 {
-
-    //public enum PromptPopupOption
-    //{
-    //    Left,
-    //    Right,
-    //    Background,
-    //    HardwareBack
-    //}
-
-    public class PromptPopupOptionEventArgs
-    {
-        public PromptPopupOptionEventArgs(string text)
-        {
-            Text = text;
-        }
-
-        public readonly string Text;
-        //public readonly PromptPopupOption Option;
-    }
-
-    
-
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PromptPopupPage : PopupPage
     {
-        public delegate void OptionClicked(PromptPopupOptionEventArgs e);
-
-        public PromptPopupPage
-        (
-            string title, 
-            string message, 
-            string leftButtonText, 
-            string rightButtonText,
-            string initialEntryText = "", 
-            string placeholderText = ""
-        )
+        public PromptPopupPage(string title, string message, string leftButtonText, string rightButtonText, 
+            string initialEntryText = "", string placeholderText = "")
         {
             InitializeComponent();
 
-            Title = title;
-            Message = message;
-            LeftButtonText = leftButtonText;
-            RightButtonText = rightButtonText;
-            EntryText = initialEntryText;
-            EntryPlaceholder = placeholderText;
+            TitleLabel.Text = title;
+            MessageLabel.Text = message;
+            AcceptButton.Text = leftButtonText;
+            CancelButton.Text = rightButtonText;
+            InputEntry.Text = initialEntryText;
+            InputEntry.Placeholder = placeholderText;
+            Result = new TaskCompletionSource<(TwoOptionPopupResult Selected, string Text)>();
         }
 
-        public static new readonly BindableProperty TitleProperty = BindableProperty.Create
-        (
-            nameof(Title),
-            typeof(string),
-            typeof(PromptPopupPage),
-            default(string),
-            BindingMode.TwoWay
-        );
-
-        public new string Title
+        protected override bool OnBackButtonPressed()
         {
-            get { return (string)GetValue(TitleProperty); }
-
-            set { SetValue(TitleProperty, value); }
+            ReturnValue = TwoOptionPopupResult.HardwareBack;
+            return base.OnBackButtonPressed();
         }
 
-        public static readonly BindableProperty MessageProperty = BindableProperty.Create
-        (
-            nameof(Message),
-            typeof(string),
-            typeof(PromptPopupPage),
-            default(string),
-            BindingMode.TwoWay
-        );
-
-        public string Message
+        protected override bool OnBackgroundClicked()
         {
-            get { return (string)GetValue(MessageProperty); }
-
-            set { SetValue(MessageProperty, value); }
+            ReturnValue = TwoOptionPopupResult.Background;
+            return base.OnBackgroundClicked();
         }
 
-        public static readonly BindableProperty LeftButtonTextProperty = BindableProperty.Create
-        (
-            nameof(LeftButtonText),
-            typeof(string),
-            typeof(PromptPopupPage),
-            default(string),
-            BindingMode.TwoWay
-        );
-
-        public string LeftButtonText
+        private async void CancelButton_Clicked(object sender, EventArgs e)
         {
-            get { return (string)GetValue(LeftButtonTextProperty); }
-
-            set { SetValue(LeftButtonTextProperty, value); }
+            ReturnValue = TwoOptionPopupResult.RightButton;
+            await AppServiceProvider.Instance.Popups.PopAsync();
         }
 
-        public static readonly BindableProperty RightButtonTextProperty = BindableProperty.Create
-        (
-            nameof(RightButtonText),
-            typeof(string),
-            typeof(PromptPopupPage),
-            default(string),
-            BindingMode.TwoWay
-        );
-
-        public string RightButtonText
+        private async void AcceptButton_Clicked(object sender, EventArgs e)
         {
-            get { return (string)GetValue(RightButtonTextProperty); }
-
-            set { SetValue(RightButtonTextProperty, value); }
-        }
-
-        public static readonly BindableProperty EntryTextProperty = BindableProperty.Create
-        (
-            nameof(EntryText),
-            typeof(string),
-            typeof(PromptPopupPage),
-            default(string),
-            BindingMode.TwoWay
-        );
-
-        public string EntryText
-        {
-            get { return (string)GetValue(EntryTextProperty); }
-
-            set { SetValue(EntryTextProperty, value); }
-        }
-
-        public static readonly BindableProperty EntryPlaceholderProperty = BindableProperty.Create
-        (
-            nameof(EntryPlaceholder),
-            typeof(string),
-            typeof(PromptPopupPage),
-            default(string),
-            BindingMode.TwoWay
-        );
-
-        public string EntryPlaceholder
-        {
-            get { return (string)GetValue(EntryPlaceholderProperty); }
-
-            set { SetValue(EntryPlaceholderProperty, value); }
-        }
-
-        protected override void OnPropertyChanged(string propertyName = null)
-        {
-            base.OnPropertyChanged(propertyName);
-
-            if (propertyName == TitleProperty.PropertyName)
-            {
-                TitleLabel.Text = Title;
-            }
-            else if (propertyName == MessageProperty.PropertyName)
-            {
-                MessageLabel.Text = Message;
-            }
-            else if (propertyName == EntryTextProperty.PropertyName)
-            {
-                InputEntry.Text = EntryText;
-            }
-            else if (propertyName == LeftButtonTextProperty.PropertyName)
-            {
-                LeftButton.Text = LeftButtonText;
-            }
-            else if (propertyName == RightButtonTextProperty.PropertyName)
-            {
-                RightButton.Text = RightButtonText;
-            }
-            else if (propertyName == EntryPlaceholderProperty.PropertyName)
-            {
-                InputEntry.Placeholder = EntryPlaceholder;
-            }
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
+            ReturnValue = TwoOptionPopupResult.LeftButton;
+            await AppServiceProvider.Instance.Popups.PopAsync();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            Result.SetResult((ReturnValue, InputEntry.Text));
         }
 
-        // ### Methods for supporting animations in your popup page ###
+        TwoOptionPopupResult ReturnValue;
 
-        // Invoked before an animation appearing
-        protected override void OnAppearingAnimationBegin()
-        {
-            base.OnAppearingAnimationBegin();
-        }
-
-        // Invoked after an animation appearing
-        protected override void OnAppearingAnimationEnd()
-        {
-            base.OnAppearingAnimationEnd();
-        }
-
-        // Invoked before an animation disappearing
-        protected override void OnDisappearingAnimationBegin()
-        {
-            base.OnDisappearingAnimationBegin();
-        }
-
-        // Invoked after an animation disappearing
-        protected override void OnDisappearingAnimationEnd()
-        {
-            base.OnDisappearingAnimationEnd();
-        }
-
-        protected override Task OnAppearingAnimationBeginAsync()
-        {
-            return base.OnAppearingAnimationBeginAsync();
-        }
-
-        protected override Task OnAppearingAnimationEndAsync()
-        {
-            return base.OnAppearingAnimationEndAsync();
-        }
-
-        protected override Task OnDisappearingAnimationBeginAsync()
-        {
-            return base.OnDisappearingAnimationBeginAsync();
-        }
-
-        protected override Task OnDisappearingAnimationEndAsync()
-        {
-            return base.OnDisappearingAnimationEndAsync();
-        }
-
-        // ### Overrided methods which can prevent closing a popup page ###
-
-        // Invoked when a hardware back button is pressed
-        protected override bool OnBackButtonPressed()
-        {
-            PromptPopupOptionEventArgs argsOut = new PromptPopupOptionEventArgs(EntryText);
-            HardwareBackClicked?.Invoke(argsOut);
-            // Return true if you don't want to close this popup page when a back button is pressed
-            return true; //base.OnBackButtonPressed();
-        }
-
-        // Invoked when background is clicked
-        protected override bool OnBackgroundClicked()
-        {
-            PromptPopupOptionEventArgs argsOut = new PromptPopupOptionEventArgs(EntryText);
-            BackgroundClicked?.Invoke(argsOut);
-            // Return false if you don't want to close this popup page when a background of the popup page is clicked
-            return false; //base.OnBackgroundClicked();
-        }
-
-        public event OptionClicked LeftOptionClicked;
-        public event OptionClicked RightOptionClicked;
-        public new event OptionClicked BackgroundClicked;
-        public event OptionClicked HardwareBackClicked;
-
-        private void RightButton_Clicked(object sender, EventArgs e)
-        {
-            PromptPopupOptionEventArgs argsOut = new PromptPopupOptionEventArgs(EntryText);
-            RightOptionClicked?.Invoke(argsOut);
-        }
-
-        private void LeftButton_Clicked(object sender, EventArgs e)
-        {
-            PromptPopupOptionEventArgs argsOut = new PromptPopupOptionEventArgs(EntryText);
-            LeftOptionClicked?.Invoke(argsOut);
-        }
+        public TaskCompletionSource<(TwoOptionPopupResult Selected, string Text)> Result { get; }
     }
 }

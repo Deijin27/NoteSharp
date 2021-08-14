@@ -12,6 +12,8 @@
     <Color x:Key="SecondaryContentTextColor">#484848</Color>
     <Color x:Key="FolderListIconColor">#3e3e42</Color>
     <Color x:Key="ToolbarIconColor">#FFFFFF</Color>
+    <Color x:Key="FlyoutItemSelectedBackgroundColor">#E1E2E1</Color>
+    <Color x:Key="FlyoutIconColor">#3e3e42</Color>
     <Color x:Key="SliderMinTrackColor">#1D1F21</Color>
     <Color x:Key="SliderMaxTrackColor">#1D1F21</Color>
     <Color x:Key="SliderThumbColor">#1D1F21</Color>

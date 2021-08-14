@@ -1,19 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <base:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:base="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
-             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
-             xmlns:local="clr-namespace:Notes.PopupPages;assembly=Notes"
-             mc:Ignorable="d"
-             Padding="0,20,0,20"
-             x:Class="Notes.PopupPages.ColorPickerPopupPage"
-             >
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:base="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                xmlns:vc="clr-namespace:Notes.ValueConverters"
+                xmlns:vm="clr-namespace:Notes.ViewModels"
+                x:DataType="vm:ColorPickerPopupPageViewModel"
+                mc:Ignorable="d"
+                Padding="0,20,0,20"
+                x:Class="Notes.PopupPages.ColorPickerPopupPage"
+                >
     <base:PopupPage.Resources>
         <ResourceDictionary>
-            <local:DoubleTo256Converter x:Key="doubleTo256Converter" />
-            <local:AlphaConverter x:Key="alphaConverter" />
+            <vc:DoubleTo256Converter x:Key="doubleTo256Converter" />
+            <vc:AlphaConverter x:Key="alphaConverter" />
         </ResourceDictionary>
     </base:PopupPage.Resources>
     <base:PopupPage.Animation>
@@ -35,15 +37,15 @@
                      HorizontalOptions="Center" 
                      Padding="20, 20, 20, 20"
                      >
-            <Label Text="{Binding Title}"
+            <Label Text="Color Picker"
                    TextColor="{DynamicResource PrimaryContentTextColor}"
                    FontSize="20"
                    />
-            <Label Text="{Binding Message}"
+            <Label Text="Note that to use transparency you need to use the 'Copy RGBA' option."
                        TextColor="{DynamicResource PrimaryContentTextColor}"
                        FontSize="Small"
                        />
-            <Button Text="Import Hex/Rgba From Clipboard" Clicked="SetFromClipboard"/>
+            <Button Text="Import Hex/Rgba From Clipboard" Command="{Binding SetFromClipboardCommand}"/>
 
             <ScrollView>
             <Grid>
@@ -117,22 +119,22 @@
                          Orientation="Horizontal" 
                          Spacing="10"
                          >
-                <Button Text="{Binding CancelButtonText}"
+                <Button Text="CLOSE"
                         TextColor="{DynamicResource PrimaryAccentColor}"
                         FontSize="Small"
-                        Clicked="Cancel_Clicked"
+                        Command="{Binding CloseCommand}"
                         BackgroundColor="Transparent"
                         />
-                <Button Text="{Binding CopyHexButtonText}"
+                <Button Text="COPY HEX"
                         TextColor="{DynamicResource PrimaryAccentColor}"
                         FontSize="Small"
-                        Clicked="CopyHex_Clicked"
+                        Command="{Binding CopyHexCommand}"
                         BackgroundColor="Transparent"
                         />
-                <Button Text="{Binding CopyRgbaButtonText}"
+                <Button Text="COPY RGBA"
                         TextColor="{DynamicResource PrimaryAccentColor}"
                         FontSize="Small"
-                        Clicked="CopyRgba_Clicked"
+                        Command="{Binding CopyRgbaCommand}"
                         BackgroundColor="Transparent"
                         />
             </StackLayout>
