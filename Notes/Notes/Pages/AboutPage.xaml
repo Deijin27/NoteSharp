@@ -22,7 +22,7 @@
                    Margin="0,20,0,20"
                    HorizontalOptions="Center"
                    />
-            <Label Text="{StaticResource VersionNumber}" 
+            <Label x:Name="VersionLabel" 
                    TextColor="{DynamicResource SecondaryContentTextColor}"
                    HorizontalOptions="Center"
                    />

@@ -4,9 +4,6 @@
              x:Class="Notes.App">
     <Application.Resources>
         
-        <!-- Verision -->
-        <x:String x:Key="VersionNumber">Version: 0.9.0</x:String>
-
         <Thickness x:Key="PageMargin" Left="15" Top="15" Right="15" Bottom="15" />
 
         <!-- Implicit styles -->

@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Xamarin.Essentials;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Notes.Pages
@@ -9,6 +10,7 @@ namespace Notes.Pages
         public AboutPage()
         {
             InitializeComponent();
+            VersionLabel.Text = $"Version: {AppInfo.VersionString}";
         }
     }
 }
