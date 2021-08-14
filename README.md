@@ -2,7 +2,7 @@
 
 Cross platform Markdown notes mobile application, programmed in C# and XAML using Xamarin.Forms.
 
-## Supports (as of 6 July 2020)
+## Supports (as of 14 August 2021)
 
 - Folder-File system
 - Viewing of rendered Markdown
