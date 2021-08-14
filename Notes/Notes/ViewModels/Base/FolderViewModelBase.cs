@@ -216,9 +216,9 @@ namespace Notes.ViewModels
             if (result == TwoOptionPopupResult.LeftButton)
             {
                 await Services.NoteDatabase.DeleteFolderAndAllContentsAsync(folder);
-                //UpdateListView();
-                FolderContentItems.Remove(folderContentItem);
-                RaisePropertyChanged(nameof(FolderContentItems));
+                UpdateListView();
+                //FolderContentItems.Remove(folderContentItem);
+                //RaisePropertyChanged(nameof(FolderContentItems));
             }
         }
 
@@ -269,9 +269,9 @@ namespace Notes.ViewModels
             if (result == TwoOptionPopupResult.LeftButton)
             {
                 await Services.NoteDatabase.DeleteAsync(note);
-                //UpdateListView();
-                FolderContentItems.Remove(folderContentItem);
-                RaisePropertyChanged(nameof(FolderContentItems));
+                UpdateListView();
+                //FolderContentItems.Remove(folderContentItem);
+                //RaisePropertyChanged(nameof(FolderContentItems));
             }
         }
 
